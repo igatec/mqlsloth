@@ -1,0 +1,53 @@
+_mode: DIFF           #Тип задан в режиме DIFF. Необязательное свойство, default: TARGET
+adminType: relationship
+name: IGAKBNBoardLane
+abstract: false
+dynamic: false
+compositional: false
+description: Connect Kanban board and lanes
+sparse: false
+attributes:
+  - IGAKBNIsDefault
+  - IGAKBNState
+  - IGAKBNIndex
+from:
+  types:
+    - IGAKBNBoard
+    - remtest_TypeFrom
+  rem!types:
+    - remtest_TypeFrom
+  relationships:
+    - none
+    - remtest_RelFrom
+  rem!relationships:
+    - remtest_RelFrom
+  meaning: ''
+  revision: none
+  clone: none
+  cardinality: one
+  propagateModify: false
+  propagateConnection: false
+to:
+  types:
+    - IGAKBNLane
+    - remtest_TypeTo
+  rem!types:
+    - remtest_TypeTo
+  relationships:
+    - none
+    - remtest_RelTo
+  rem!relationships:
+    - remtest_RelTo
+  meaning: ''
+  revision: none
+  clone: none
+  cardinality: many
+  propagateModify: false
+  propagateConnection: false
+hidden: false
+properties:
+  MxUpdate Sub Path: ''
+  file date: 05-22-2019 14:40:28.000
+  installed date: 03-07-2019
+  installer: The MxUpdate Team
+preventDuplicates: true

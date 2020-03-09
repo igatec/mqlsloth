@@ -1,0 +1,9 @@
+{
+  "remotes":[
+    {
+      "appUrl": "https:3dspace.mycompany.com/3dspace/api/sloth",
+      "userName": "user",
+      "password": "password"
+    }
+  ]
+}

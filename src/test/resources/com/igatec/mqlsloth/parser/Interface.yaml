@@ -1,0 +1,46 @@
+_mode: DIFF           #Тип задан в режиме DIFF. Необязательное свойство, default: TARGET
+adminType: interface
+name: IGAKBNExtension
+derived: Document
+rem!derived:        #Удаление свойства derived
+abstract: true
+description: ''
+attributes:
+  - IGAKBNUID
+  - IGAKBNPriority
+  - remtest_IGAKBNUID
+  - remtest_IGAKBNPriority
+rem!attributes:           # Перечисленные атрибуты будут удалены, если они есть
+  - remtest_IGAKBNUID
+  - remtest_IGAKBNPriority
+types:
+  - Task
+  - Inbox Task
+  - remtest_Task
+  - remtest_Inbox Task
+rem!types:              # Перечисленные типы будут удалены, если они есть
+  - remtest_Task
+  - remtest_Inbox Task
+relationships:
+  - Route Node
+  - Test Relationship
+  - remtest_Route Node
+  - remtest_Test Relationship
+rem!relationships:      # Перечисленные связи будут удалены, если они есть
+  - remtest_Route Node
+  - remtest_Test Relationship
+hidden: false
+properties:
+  MxUpdate Sub Path: ''
+  file date: 05-22-2019 15:35:54.000
+  installed date: 05-22-2019
+  installer: The MxUpdate Team
+  remtest_MxUpdate Sub Path: ''
+  remtest_file date: 05-22-2019 15:35:54.000
+  remtest_installed date: 05-22-2019
+  remtest_installer: The MxUpdate Team
+rem!properties:           # Перечисленные свойства будут удалены, если они есть
+  - remtest_MxUpdate Sub Path
+  - remtest_file date
+  - remtest_installed date
+  - remtest_installer

@@ -1,0 +1,11 @@
+.idea/*
+mqlsloth.iml
+test/*
+dbschema/*
+target
+.classpath
+.project
+.settings
+build
+*.iml
+/mqlsloth.iml

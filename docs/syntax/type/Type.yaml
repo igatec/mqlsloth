@@ -1,0 +1,49 @@
+_mode: DIFF           #Тип задан в режиме DIFF. Необязательное свойство, default: TARGET
+adminType: type
+name: ARCHDocument
+derived: Document
+rem!derived:        #Удаление свойства derived
+abstract: true
+composed: true
+description: Scanned sheet with inventory number
+attributes:
+  - ARCHStageOfProject
+  - ARCHSheetsNumber
+  - ARCHSheetNumber
+  - ARCHSheetFormat
+  - ARCHNotes
+  - ARCHChangeStatus
+  - ARCHChangeNumber
+  - ARCHApprovalNumber
+  - ARCHReferenceObject
+  - ARCHDocumentType
+  - remtest_ARCHStageOfProject
+  - remtest_ARCHSheetsNumber
+  - remtest_ARCHSheetNumber
+  - remtest_ARCHSheetFormat
+  - remtest_ARCHNotes
+  - remtest_ARCHChangeStatus
+  - remtest_ARCHChangeNumber
+  - remtest_ARCHApprovalNumber
+  - remtest_ARCHReferenceObject
+  - remtest_ARCHDocumentType
+rem!attributes:           # Перечисленные фтрибуты будут удалены, если они есть
+  - remtest_ARCHStageOfProject
+  - remtest_ARCHSheetsNumber
+  - remtest_ARCHSheetNumber
+  - remtest_ARCHSheetFormat
+  - remtest_ARCHNotes
+  - remtest_ARCHChangeStatus
+  - remtest_ARCHChangeNumber
+  - remtest_ARCHApprovalNumber
+  - remtest_ARCHReferenceObject
+  - remtest_ARCHDocumentType
+hidden: false
+properties:
+  Specializable: 'Yes'
+  UUID: 56284838-d843-11e8-9f8b-f2801f1b9fd1
+  remtest_Specializable: remtest_Specializable
+  remtest_UUID: remtest_UUID
+rem!properties:           # Перечисленные свойства будут удалены, если они есть
+  - remtest_Specializable
+  - remtest_UUID

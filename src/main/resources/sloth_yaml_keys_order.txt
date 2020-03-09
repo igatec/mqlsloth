@@ -1,0 +1,56 @@
+# High priority
+_mode
+adminType
+type
+name
+revision
+symbolicName
+description
+
+types
+relationships
+attributes
+value
+execute
+
+# Relationship
+from
+to
+preventDuplicates
+
+# Attribute
+defaultValue
+ranges
+multiline
+multivalue
+resetOnClone
+resetOnRevision
+
+# TypeLikeCIs
+abstract
+composed
+derived
+
+# Policy
+allStates
+states
+defaultFormat
+formats
+minorSequence
+store
+enforceLocking
+
+# UI
+label
+alt
+href
+settings
+commands
+children
+channels
+height
+users
+
+# Low priority
+hidden
+properties

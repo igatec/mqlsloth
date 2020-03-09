@@ -1,0 +1,118 @@
+_mode: DIFF           #Тип задан в режиме DIFF. Необязательное свойство, default: TARGET
+adminType: page
+name: IGAKBNStringResource_en.properties
+description: IGA Kanban widget
+content: |
+  # Do not override these items in other string resource files
+  Filters.Parameters.DueDate.Format = DD.MM.YY
+  # Do not override these items in other string resource files
+
+  Lane.Create.Title = Create
+  Lane.Assign.Title = Assign
+  Lane.Active.Title = Active
+  Lane.Review.Title = Review
+  Lane.Complete.Title = Complete
+
+  # COMMON
+  Button.Edit = Edit
+  Button.Delete = Delete
+
+  # FILTERS PANEL
+  Filters.SavedFilters.Label = Saved filters
+  Filters.SavedFilters.NoFiltersText = No saved filters yet...
+  Filters.SavedFilters.Input.Placeholder = Save current filter as ...
+  Filters.SavedFilters.Button.Save = Save
+  Filters.SavedFilters.Button.Add = Add
+  Filters.SavedFilters.Button.Add.Tooltip = Save current filter
+
+  Filters.TypeAhead.NotFound = Not found
+
+  Filters.Button.Filter = Filter
+  Filters.Button.ClearAll.Tooltip = Clear all filters
+
+  Filters.Parameters.Assignee = Assignee
+  Filters.Parameters.Assignee.Multiple = Assignees
+  Filters.Parameters.Assignee.Me = Me
+  Filters.Parameters.Assignee.Placeholder = Name...
+  Filters.Parameters.Department = Department
+  Filters.Parameters.Department.Multiple = Departments
+  Filters.Parameters.Department.My = My department
+  Filters.Parameters.Department.Placeholder = Department...
+  Filters.Parameters.Type = Type
+  Filters.Parameters.Type.Multiple = Types
+  Filters.Parameters.ExactTask = Exact task
+  Filters.Parameters.ExactTask.Multiple = Tasks
+  Filters.Parameters.ExactTask.Placeholder = Task...
+  Filters.Parameters.Tag = Tag
+  Filters.Parameters.Tag.Multiple = Tags
+  Filters.Parameters.Tag.Placeholder = Tag...
+  Filters.Parameters.Priority = Priority
+  Filters.Parameters.Priority.Multiple = Priorities
+  Filters.Parameters.Project = Project
+  Filters.Parameters.Project.Multiple = Projects
+  Filters.Parameters.Project.Placeholder = Project...
+  Filters.Parameters.DueDate = Due date
+  Filters.Parameters.DueDate.Option.Today = Today
+  Filters.Parameters.DueDate.Option.NextWeek = Next week
+  Filters.Parameters.DueDate.Option.NextMonth = Next month
+  Filters.Parameters.DueDate.Option.Passed = Passed
+
+
+  # BOARD
+  Board.NewTask.Input.Placeholder = Type task title...
+  Board.NewTask.Button.Create = Create
+  Board.Kard.TaskType.Tooltip = Task type
+  Board.Kard.Comments.Tooltip = comments
+  Board.Kard.Attachments.Tooltip = attachments
+
+
+  # TASK PAGE
+  TaskPage.Property.State = Current state
+  TaskPage.Property.Priority = Priority
+  TaskPage.Property.Priority.Normal = Normal
+  TaskPage.Property.Priority.Critical = Critical
+  TaskPage.Property.Percent = Complete percent
+  TaskPage.Property.Subscription = Subscription
+  TaskPage.Property.Subscription.Action.Subscribe = Subscribe
+  TaskPage.Property.Subscription.Action.Unubscribe = Unsubscribe
+  TaskPage.Property.Subscription.Action.Push = Push subscription
+  TaskPage.Property.Subscription.YouAre = You are
+  TaskPage.Property.Subscription.Not = not
+  TaskPage.Property.Subscription.Subscribed = subscribed
+  TaskPage.Property.DueDate = Due date
+  TaskPage.Property.CreationDate = Creation date
+  TaskPage.Property.Assignee = Assignees
+  TaskPage.Property.Assignee.NoAssigneesText = No assignee
+  TaskPage.Property.Tag = Tags
+  TaskPage.Property.Tag.NoTagsText = No tags
+  TaskPage.Property.Owner = Owner
+
+  # TASK PAGE: ATTACHMENTS
+  TaskPage.Att.Label = Attachments
+  TaskPage.Att.Label.Context = Context
+  TaskPage.Att.Label.Peferences = References
+  TaskPage.Att.Label.Deliverables = Deliverables
+  TaskPage.Att.NoAttText = No attachments
+
+
+  # TASK PAGE: HISTORY
+  TaskPage.History.Label = Task history
+
+
+  # TASK PAGE: COMMENTS
+  TaskPage.Comments.Label = Comments
+  TaskPage.Comments.Button.Comment = Comment
+
+
+  # VIEWS
+  View.DSpaceLink.Title = Show in 3DSpace
+  View.DueDate.NoDueDateText = no due date
+
+
+mime: ''
+hidden: false
+properties:
+  MxUpdate Sub Path: ''
+  file date: 02-08-2019 08:36:19.376
+  installed date: 02-08-2019
+  installer: The MxUpdate Team

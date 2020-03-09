@@ -1,0 +1,4 @@
+Valid flags are listed below. Flags marked as 'TASK' are main flags and
+represent tasks the application can perform. You can perform only one task
+per command. Most tasks need additional parameters defined by other flags.
+These flags are listed inside TASK blocks.

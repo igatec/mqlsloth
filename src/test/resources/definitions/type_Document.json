@@ -1,0 +1,11 @@
+{
+  "_mode": "diff",
+  "adminType": "type",
+  "name": "Document",
+  "description": "This is definition for Document type",
+  "attributes": [
+    "Title",
+    "Content"
+  ],
+  "hidden": false
+}

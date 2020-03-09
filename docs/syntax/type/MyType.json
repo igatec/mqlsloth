@@ -1,0 +1,24 @@
+{
+  "_mode": "DIFF", // Тип задан в режиме DIFF. Необязательное свойство, default: TARGET
+  "adminType": "type",
+  "name": "MyType",
+  "derived": null, // Свойство derived должно быть удалено, если оно есть
+  "description": "Description",
+  "hidden": false,
+  "properties": {
+    "oldProp": null, // Свойство oldProp должно быть удалено, если оно есть
+    "newProp": "newPropValue"
+  },
+  "attributes": [
+    "newAttr"
+  ],
+  "!rem!attributes": [
+    "oldAttr" // Атрибут oldAttr должен быть удален, если он есть
+  ]
+}
+
+{
+  "_mode": "DELETE", // Тип задан в режиме DELETE. Он должен быть удален, если он есть
+  "adminType": "type",
+  "name": "MyType2"
+}

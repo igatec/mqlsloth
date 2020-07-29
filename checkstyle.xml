@@ -34,12 +34,12 @@
     <module name="TreeWalker">
         <!--        &lt;!&ndash; Checks for Javadoc comments.                     &ndash;&gt;-->
         <!--        &lt;!&ndash; See https://checkstyle.org/config_javadoc.html &ndash;&gt;-->
-        <module name="InvalidJavadocPosition"/>
-        <module name="MissingJavadocType"/>
-        <module name="MissingJavadocMethod"/>
-        <module name="JavadocMethod">
-            <property name="scope" value="public"/>
-        </module>
+<!--        <module name="InvalidJavadocPosition"/>-->
+<!--        <module name="MissingJavadocType"/>-->
+<!--        <module name="MissingJavadocMethod"/>-->
+<!--        <module name="JavadocMethod">-->
+<!--            <property name="scope" value="public"/>-->
+<!--        </module>-->
 
         <!--        &lt;!&ndash; Checks for Naming Conventions.                  &ndash;&gt;-->
         <!--        &lt;!&ndash; See https://checkstyle.org/config_naming.html &ndash;&gt;-->
@@ -105,7 +105,7 @@
         <!--        &lt;!&ndash; See https://checkstyle.org/config_coding.html &ndash;&gt;-->
         <module name="EmptyStatement"/>
         <module name="EqualsHashCode"/>
-        <module name="HiddenField"/>
+<!--        <module name="HiddenField"/>-->
         <module name="IllegalInstantiation"/>
         <module name="InnerAssignment"/>
         <module name="MagicNumber"/>
@@ -116,7 +116,7 @@
 
         <!--        &lt;!&ndash; Checks for class design                         &ndash;&gt;-->
         <!--        &lt;!&ndash; See https://checkstyle.org/config_design.html &ndash;&gt;-->
-        <module name="DesignForExtension"/>
+<!--        <module name="DesignForExtension"/>-->
         <module name="FinalClass"/>
         <module name="HideUtilityClassConstructor"/>
         <module name="InterfaceIsType"/>

@@ -1,14 +1,8 @@
 package com.igatec.mqlsloth.parser.objects;
 
 import com.igatec.mqlsloth.ci.AbstractCI;
-import com.igatec.mqlsloth.ci.TypeLikeCI;
 import com.igatec.mqlsloth.ci.UserCombinationCI;
-import com.igatec.mqlsloth.parser.mql.MqlParser;
-import com.igatec.mqlsloth.util.SlothString;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -18,7 +12,7 @@ public abstract class UserCombinationObjectParser extends AdminObjectObjectParse
     }
 
     @Override
-    public Map<String, Function> getKeyWordsMQL(){
+    public Map<String, Function> getKeyWordsMQL() {
         Map<String, Function> keyWordsToValueMakers = super.getKeyWordsMQL();
 
         Function<String, String> isAbstractMaker = Function.identity();

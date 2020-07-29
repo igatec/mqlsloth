@@ -21,15 +21,15 @@ public class DiffSessionBuilder extends AbstractSessionBuilder {
         return session;
     }
 
-    public void setFileSystemAsOutput(String directory){
+    public void setFileSystemAsOutput(String directory) {
         this.outputLocation = new FileSystemPersistenceLocation(directory);
     }
 
-    public void setOutputLocation(String dir){
+    public void setOutputLocation(String dir) {
         outputLocation = new FileSystemPersistenceLocation(dir);
     }
 
-    public void setIsImport(boolean isImport){
+    public void setIsImport(boolean isImport) {
         this.isImport = isImport;
     }
 

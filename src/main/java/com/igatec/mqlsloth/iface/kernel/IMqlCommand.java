@@ -4,10 +4,7 @@ import com.igatec.mqlsloth.framework.Context;
 import com.igatec.mqlsloth.kernel.CommandExecutionException;
 import com.igatec.mqlsloth.kernel.SlothException;
 
-;
-
 public interface IMqlCommand {
-
     String execute(String... args) throws CommandExecutionException;
 
     String execute(boolean allowEmptyItems, String... args) throws CommandExecutionException;
@@ -19,5 +16,4 @@ public interface IMqlCommand {
     void close();
 
     Context getContext();
-
 }

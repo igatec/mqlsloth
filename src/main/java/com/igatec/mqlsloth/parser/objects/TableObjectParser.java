@@ -7,11 +7,14 @@ import com.igatec.mqlsloth.ci.constants.CIDiffMode;
 import com.igatec.mqlsloth.parser.ParserException;
 import com.igatec.mqlsloth.parser.mql.MqlParser;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
-public class TableObjectParser extends AdminObjectObjectParser{
+public class TableObjectParser extends AdminObjectObjectParser {
     public TableObjectParser(Format format) {
         super(format);
     }
@@ -58,7 +61,7 @@ public class TableObjectParser extends AdminObjectObjectParser{
     protected void setParsedYAMLValuesToObject(Map<String, Object> parsedValues, AbstractCI objectToParse) {
         super.setParsedYAMLValuesToObject(parsedValues, objectToParse);
         if (parsedValues.containsKey(Y_COLUMNS)) {
-            List<LinkedHashMap> columnMapList = (List<LinkedHashMap>)parsedValues.get(M_COLUMNS);
+            List<LinkedHashMap> columnMapList = (List<LinkedHashMap>) parsedValues.get(M_COLUMNS);
             for (LinkedHashMap columnMap : columnMapList) {
                 ((TableCI) objectToParse).setColumn(columnMap);
             }

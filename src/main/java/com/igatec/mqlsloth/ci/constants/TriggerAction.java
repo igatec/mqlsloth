@@ -20,16 +20,16 @@ public enum TriggerAction {
 
     private static Set<String> stringValues = Collections.unmodifiableSet(Arrays.stream(values()).map(TriggerAction::toString).collect(Collectors.toSet()));
 
-    public static TriggerAction get(String value){
+    public static TriggerAction get(String value) {
         return valueOf(value.toUpperCase());
     }
 
-    public static Set<String> stringValues(){
+    public static Set<String> stringValues() {
         return stringValues;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return super.toString().toLowerCase();
     }
 

@@ -11,38 +11,38 @@ public class StringComposition {
 
     private final Map<String, String> parts = new HashMap<>();
 
-    public void addPart(String key, String content){
-        parts.put(key, content);
-    }
-
-    public Map<String, String> getParts(){
-        return new HashMap<>(parts);
-    }
-
-    public static boolean isParsable(String string){
+    public static boolean isParsable(String string) {
         return string.startsWith(DELIMITER_KEY);
     }
 
-    public static StringComposition parse(String string){
+    public static StringComposition parse(String string) {
         if (!isParsable(string))
             throw new RuntimeException("StringComposition parsing error");
         StringComposition sc = new StringComposition();
         String delimiter = string.substring(DELIMITER_KEY.length(), string.indexOf(DELIMITER_END));
         String[] parts = string.split(delimiter);
-        for (int i=2; i<parts.length; i++){
+        for (int i = 2; i < parts.length; i++) {
             String key = parts[i++];
-            String value = i<parts.length ? parts[i] : "";
+            String value = i < parts.length ? parts[i] : "";
             sc.addPart(key, value);
         }
         return sc;
     }
 
+    public void addPart(String key, String content) {
+        parts.put(key, content);
+    }
+
+    public Map<String, String> getParts() {
+        return new HashMap<>(parts);
+    }
+
     @Override
-    public String toString(){
+    public String toString() {
         String delim = DEFAULT_DELIMITER;
-        while (true){
+        while (true) {
             boolean contains = false;
-            for (String text:parts.values()){
+            for (String text : parts.values()) {
                 if (text.contains(delim))
                     contains = true;
             }
@@ -54,7 +54,7 @@ public class StringComposition {
         content.append(DELIMITER_KEY);
         content.append(delim);
         content.append(DELIMITER_END);
-        for (String key:parts.keySet()){
+        for (String key : parts.keySet()) {
             content.append(delim);
             content.append(key);
             content.append(delim);

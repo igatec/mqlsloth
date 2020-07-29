@@ -6,11 +6,11 @@ public class SlothString implements ReversibleString {
 
     private final String value;
 
-    public SlothString(String value){
+    public SlothString(String value) {
         this.value = value;
     }
 
-    public SlothString(){
+    public SlothString() {
         value = null;
     }
 
@@ -25,7 +25,7 @@ public class SlothString implements ReversibleString {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return value();
     }
 

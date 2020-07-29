@@ -4,7 +4,6 @@ import com.igatec.mqlsloth.ci.AbstractCI;
 import com.igatec.mqlsloth.ci.ObjectGeneratorCI;
 import com.igatec.mqlsloth.ci.constants.CIDiffMode;
 import com.igatec.mqlsloth.parser.ParserException;
-import com.igatec.mqlsloth.parser.objects.AbstractBusObjectParser;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -45,7 +44,7 @@ public class ObjectGeneratorObjectParser extends AbstractBusObjectParser {
             throw new ParserException("Can't create " + M_OBJECT_GENERATOR + ". Revision not found");
         }
 
-        CIDiffMode mode = CIDiffMode .valueOf((String) fieldsValues.getOrDefault("_mode", "TARGET"));
+        CIDiffMode mode = CIDiffMode.valueOf((String) fieldsValues.getOrDefault("_mode", "TARGET"));
         ObjectGeneratorCI createdObject = new ObjectGeneratorCI(name, revision, mode);
         return createdObject;
     }
@@ -68,5 +67,4 @@ public class ObjectGeneratorObjectParser extends AbstractBusObjectParser {
         super.setParsedJSONValuesToObject(parsedValues, parsebleObject);
         return;
     }
-
 }

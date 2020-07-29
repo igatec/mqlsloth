@@ -4,14 +4,9 @@ import com.igatec.mqlsloth.ci.AbstractCI;
 import com.igatec.mqlsloth.ci.NumberGeneratorCI;
 import com.igatec.mqlsloth.ci.constants.CIDiffMode;
 import com.igatec.mqlsloth.parser.ParserException;
-import com.igatec.mqlsloth.parser.objects.AbstractBusObjectParser;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-
-import static com.igatec.mqlsloth.ci.NumberGeneratorCI.ATTR_NEXT_NUMBER;
 
 public class NumberGeneratorObjectParser extends AbstractBusObjectParser {
     public NumberGeneratorObjectParser(Format format) {
@@ -49,7 +44,7 @@ public class NumberGeneratorObjectParser extends AbstractBusObjectParser {
             throw new ParserException("Can't create " + M_NUMBER_GENERATOR + ". Revision not found");
         }
 
-        CIDiffMode mode = CIDiffMode .valueOf((String) fieldsValues.getOrDefault("_mode", "TARGET"));
+        CIDiffMode mode = CIDiffMode.valueOf((String) fieldsValues.getOrDefault("_mode", "TARGET"));
         NumberGeneratorCI createdObject = new NumberGeneratorCI(name, revision, mode);
         return createdObject;
     }

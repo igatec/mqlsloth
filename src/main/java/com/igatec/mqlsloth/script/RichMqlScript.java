@@ -4,7 +4,21 @@ import com.igatec.mqlsloth.ci.util.CIFullName;
 import com.igatec.mqlsloth.script.action.JPOCompileAction;
 import com.igatec.mqlsloth.script.action.ModSymbolicNameAction;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.ConcurrentModificationException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.NavigableMap;
+import java.util.NoSuchElementException;
+import java.util.Queue;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import static com.igatec.mqlsloth.script.MqlKeywords.M_ADD;
 import static com.igatec.mqlsloth.script.MqlKeywords.M_RANGE;

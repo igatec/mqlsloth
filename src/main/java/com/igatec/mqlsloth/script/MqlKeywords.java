@@ -1,5 +1,7 @@
 package com.igatec.mqlsloth.script;
 
+// todo remove checkstyle ignore and refactor
+// CHECKSTYLE.OFF: InterfaceIsType
 public interface MqlKeywords {
     String M_ABSTRACT = "abstract";
     String M_ADD = "add";
@@ -17,7 +19,7 @@ public interface MqlKeywords {
     String M_BUS = "bus";
     String M_CARDINALITY = "cardinality";
     String M_CHANNEL = "channel";
-    String M_CHECKOUT__HISTORY = "checkout history";
+    String M_CHECKOUT_HISTORY_WITH_SPACE = "checkout history";
     String M_CHECKOUT_HISTORY = "checkouthistory";
     String M_CHILDREN = "children";
     String M_CODE = "code";
@@ -68,7 +70,7 @@ public interface MqlKeywords {
     String M_MENU = "menu";
     String M_MIME = "mime";
     String M_MINOR_SEQUENCE = "minorsequence";
-    String M_MINOR__SEQUENCE = "minor sequence";
+    String M_MINOR_SEQUENCE_WITH_SPACE = "minor sequence";
     String M_MINOR_REVISION = "minorrevision";
     String M_MINOR_REVISIONABLE = "minorrevisionable";
     String M_MAJOR_REVISION = "majorrevision";
@@ -145,3 +147,4 @@ public interface MqlKeywords {
     String M_COLUMN = "column";
     String M_COLUMNS = "columns";
 }
+// CHECKSTYLE.ON InterfaceIsType

@@ -1,8 +1,7 @@
 package com.igatec.mqlsloth.util;
 
 public interface ReversibleString {
+    String value();
 
-    public String value();
-    public boolean isReversed();
-
+    boolean isReversed();
 }

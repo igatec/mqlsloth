@@ -19,11 +19,11 @@ public abstract class UserCombinationCI extends AdminObjectCI {
         }
     }
 
-    private void initTarget(){
+    private void initTarget() {
         parent = "";
     }
 
-    private void initDiff(){
+    private void initDiff() {
         parent = null;
     }
 
@@ -44,16 +44,16 @@ public abstract class UserCombinationCI extends AdminObjectCI {
         UserCombinationCI diffCastedCI = (UserCombinationCI) diffCI;
         {
             String value = newCastedCI.getParent();
-            if (value != null && !value.equals(getParent())){
+            if (value != null && !value.equals(getParent())) {
                 diffCastedCI.setParent(value);
             }
         }
     }
 
     @Override
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         if (!super.isEmpty()) return false;
-        return parent==null;
+        return parent == null;
     }
 
     @Override

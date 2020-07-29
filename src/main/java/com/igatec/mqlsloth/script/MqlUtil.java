@@ -24,8 +24,9 @@ public abstract class MqlUtil implements MqlKeywords {
     }
 
     public static String[] splitToLines(String queryResult) {
-        if (queryResult == null || queryResult.isEmpty())
+        if (queryResult == null || queryResult.isEmpty()) {
             return new String[0];
+        }
         return queryResult.split("\n");
     }
 

@@ -3,12 +3,11 @@ package com.igatec.mqlsloth.script;
 import com.igatec.mqlsloth.ci.util.CIFullName;
 
 public class ModSymbolicNameChunk extends ScriptChunk {
-
     private final String ciType;
     private final String ciName;
     private final String symbolicName;
 
-    public ModSymbolicNameChunk(CIFullName fullName, String symbolicName){
+    public ModSymbolicNameChunk(CIFullName fullName, String symbolicName) {
         super(fullName);
         ciType = fullName.getAdminType().getMqlKey();
         ciName = fullName.getCIName().toString();
@@ -31,5 +30,4 @@ public class ModSymbolicNameChunk extends ScriptChunk {
     public String[] getCommand() {
         return new String[0];
     }
-
 }

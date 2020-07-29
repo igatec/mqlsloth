@@ -3,9 +3,7 @@ package com.igatec.mqlsloth.ci;
 import com.igatec.mqlsloth.script.MqlKeywords;
 import com.igatec.mqlsloth.script.MqlUtil;
 import com.igatec.mqlsloth.util.CollectionComparator;
-import org.apache.tools.ant.util.CollectionUtils;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -16,7 +14,7 @@ public class StateRecordKey implements Comparable<StateRecordKey> {
     private String user;
     private String key;
 
-    public StateRecordKey(List<String> modifiers, String user, String key){
+    public StateRecordKey(List<String> modifiers, String user, String key) {
         this.modifiers = modifiers;
         this.user = user;
         this.key = key;
@@ -34,7 +32,7 @@ public class StateRecordKey implements Comparable<StateRecordKey> {
         return key;
     }
 
-    public List<String> toList(){
+    public List<String> toList() {
         List<String> result = new LinkedList<>(modifiers);
         if (user != null) {
             result.add(MqlKeywords.M_USER);
@@ -47,7 +45,7 @@ public class StateRecordKey implements Comparable<StateRecordKey> {
         return result;
     }
 
-    public String[] toArray(){
+    public String[] toArray() {
         return toList().toArray(new String[0]);
     }
 

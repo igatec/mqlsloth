@@ -15,10 +15,9 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-;
-
 public abstract class AbstractSession extends SessionWithContext {
-
+    public static final int MAX_PARAMS_NUMBER = 3;
+    public static final int NAME_PARAMETER_INDEX = 3;
     protected final PersistenceLocation sourceLocation;
     protected final PersistenceLocation targetLocation;
     protected final SearchLocation searchLocation;
@@ -38,6 +37,8 @@ public abstract class AbstractSession extends SessionWithContext {
         );
     }
 
+    // todo decrease number of args or create builder; remove checkstyle ignore.
+    // CHECKSTYLE.OFF: ParameterNumber
     protected AbstractSession(
             Context context,
             PersistenceLocation sourceLocation,
@@ -46,18 +47,21 @@ public abstract class AbstractSession extends SessionWithContext {
             String[] searchPattern,
             TransactionMode transactionMode
     ) throws SlothException {
-        if (targetLocation.isDatabase() && context == null)
+        if (targetLocation.isDatabase() && context == null) {
             throw new SlothException("Context was not provided for export session");
-        if (context == null)
+        }
+        if (context == null) {
             command = null;
-        else
+        } else {
             command = new GlobalCommand(context, transactionMode);
+        }
         this.sourceLocation = sourceLocation;
         this.targetLocation = targetLocation;
         this.searchLocation = searchLocation;
         extractPatterns(searchPattern);
         this.context = context;
     }
+    // CHECKSTYLE.ON: ParameterNumber
 
     @Override
     public Context getContext() {
@@ -68,7 +72,7 @@ public abstract class AbstractSession extends SessionWithContext {
         if (args == null) {
             throw new SlothException("Search condition are not specified");
         }
-        if (args.length > 3) {
+        if (args.length > MAX_PARAMS_NUMBER) {
             throw new SlothException("Invalid number of parameters");
         } else if (args.length == 1) {
             throw new SlothException("Invalid number of parameters");
@@ -76,11 +80,12 @@ public abstract class AbstractSession extends SessionWithContext {
             List<CIFullName> patterns = new LinkedList<>();
             int i = 0;
             SlothAdminType aType = SlothAdminType.getByAlias(args[i]);
-            if (aType == null)
+            if (aType == null) {
                 throw new SlothException("Invalid search condition");
+            }
             try {
                 String name = args[++i];
-                String revision = args.length == 3 ? args[++i] : "*";
+                String revision = args.length == NAME_PARAMETER_INDEX ? args[++i] : "*";
                 if (aType == SlothAdminType.NUMBER_GENERATOR) {
                     patterns.add(NumberGeneratorCI.createCIFullName(name, revision));
                 } else if (aType == SlothAdminType.OBJECT_GENERATOR) {

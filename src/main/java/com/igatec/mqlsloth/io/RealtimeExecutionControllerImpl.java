@@ -42,7 +42,7 @@ public class RealtimeExecutionControllerImpl implements RealtimeExecutionControl
 
     @Override
     public long getExecutionTime() {
-        if (state == ExecutionState.BUILDING_DIFF){
+        if (state == ExecutionState.BUILDING_DIFF) {
             return new Date().getTime() - startTime;
         } else {
             return endTime - startTime;

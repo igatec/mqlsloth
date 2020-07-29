@@ -44,7 +44,6 @@ public abstract class AdminObjectCI extends AbstractCI {
         symbolicName = "";
     }
 
-
     public String getName() {
         return getCIName().toString();
     }
@@ -84,7 +83,6 @@ public abstract class AdminObjectCI extends AbstractCI {
         return properties.containsKey(key);
     }
 
-
     @ModBooleanProvider(M_HIDDEN)
     public Boolean isHidden() {
         return hidden;
@@ -100,33 +98,33 @@ public abstract class AdminObjectCI extends AbstractCI {
         super.fillDiffCI(newCI, diffCI);
         AdminObjectCI newCastedCI = (AdminObjectCI) newCI;
         AdminObjectCI diffCastedCI = (AdminObjectCI) diffCI;
-        {
-            Boolean value = newCastedCI.isHidden();
-            if (value != null && !value.equals(isHidden())) {
-                diffCastedCI.setHidden(value);
-            }
+
+        Boolean isHidden = newCastedCI.isHidden();
+        if (isHidden != null && !isHidden.equals(isHidden())) {
+            diffCastedCI.setHidden(isHidden);
         }
-        {
-            String value = newCastedCI.getSymbolicName();
-            if (value != null && !value.equals(getSymbolicName())) {
-                diffCastedCI.setSymbolicName(value);
-            }
+
+        String symbolicName = newCastedCI.getSymbolicName();
+        if (symbolicName != null && !symbolicName.equals(getSymbolicName())) {
+            diffCastedCI.setSymbolicName(symbolicName);
         }
-        {
-            ReversibleMap<String> oldProps = getProperties();
-            ReversibleMap<String> newProps = newCastedCI.getProperties();
-            for (String key : SlothMapUtil.keysToRemove(oldProps, newProps))
-                diffCastedCI.setProperty(key, null);
-            for (Map.Entry<String, String> entry : SlothMapUtil.mapToAdd(oldProps, newProps).entrySet())
-                diffCastedCI.setProperty(entry.getKey(), entry.getValue());
+
+        ReversibleMap<String> oldProps = getProperties();
+        ReversibleMap<String> newProps = newCastedCI.getProperties();
+        for (String key : SlothMapUtil.keysToRemove(oldProps, newProps)) {
+            diffCastedCI.setProperty(key, null);
+        }
+        for (Map.Entry<String, String> entry : SlothMapUtil.mapToAdd(oldProps, newProps).entrySet()) {
+            diffCastedCI.setProperty(entry.getKey(), entry.getValue());
         }
     }
 
     public boolean isEmpty() {
-        if (!super.isEmpty()) return false;
+        if (!super.isEmpty()) {
+            return false;
+        }
         return hidden == null && properties.isEmpty();
     }
-
 
     @Override
     public List<ScriptChunk> buildUpdateScript() {
@@ -135,11 +133,13 @@ public abstract class AdminObjectCI extends AbstractCI {
 
         /* PROPERTIES */
         SlothDiffMap<String> props = (SlothDiffMap) getProperties();
-        for (String key : props.keysToRemove())
+        for (String key : props.keysToRemove()) {
             chunks.add(new ModChunk(fName, M_REMOVE, M_PROPERTY, MqlUtil.qWrap(key)));
+        }
         Map<String, String> mapToAdd = props.mapToAdd();
-        for (String key : mapToAdd.keySet())
+        for (String key : mapToAdd.keySet()) {
             chunks.add(new ModChunk(fName, M_PROPERTY, MqlUtil.qWrap(key), M_VALUE, MqlUtil.qWrap(mapToAdd.get(key))));
+        }
 
         /* SYMBOLIC NAME */
         String symbolicName = getSymbolicName();

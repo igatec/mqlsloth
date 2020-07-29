@@ -1,8 +1,34 @@
 package com.igatec.mqlsloth.ci.constants;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-import static com.igatec.mqlsloth.script.MqlKeywords.*;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_ATTRIBUTE;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_BUS;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_CHANNEL;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_COMMAND;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_EXPRESSION;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_FORM;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_GROUP;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_INTERFACE;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_MENU;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_NUMBER_GENERATOR;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_OBJECT_GENERATOR;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_PAGE;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_POLICY;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_PORTAL;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_PROGRAM;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_RELATIONSHIP;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_ROLE;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_TABLE;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_TRIGGER_INPUT;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_TYPE;
 
 public enum SlothAdminType {
     TYPE(0, M_TYPE, MqlAdminType.TYPE, "type"),

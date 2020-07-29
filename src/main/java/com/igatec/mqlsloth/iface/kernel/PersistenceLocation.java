@@ -1,9 +1,9 @@
 package com.igatec.mqlsloth.iface.kernel;
 
 public interface PersistenceLocation {
-
     boolean isDatabase();
-    boolean isFileSystem();
-    String getRootDirectory();
 
+    boolean isFileSystem();
+
+    String getRootDirectory();
 }

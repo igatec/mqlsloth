@@ -19,13 +19,15 @@ public class ProgramCI extends AdminObjectCI {
     private ExecutionBehaviour executionBehaviour;
 //    private String sourceCodeHash;
 
-    public ProgramCI(String name){
+    public ProgramCI(String name) {
         this(name, CIDiffMode.TARGET);
     }
+
     public ProgramCI(String name, CIDiffMode diffMode) {
         this(SlothAdminType.PROGRAM, name, diffMode);
     }
-    protected ProgramCI(SlothAdminType aType, String name, CIDiffMode diffMode){
+
+    protected ProgramCI(SlothAdminType aType, String name, CIDiffMode diffMode) {
         super(aType, name, diffMode);
         if (getDiffMode() == CIDiffMode.TARGET) {
             initTarget();
@@ -33,93 +35,78 @@ public class ProgramCI extends AdminObjectCI {
             initDiff();
         }
     }
-    private void initTarget(){
+
+    private void initTarget() {
         type = Type.MQL;
         code = "";
         executionBehaviour = ExecutionBehaviour.IMMEDIATE;
 //        updateSourceCodeHash();
     }
-    private void initDiff(){
+
+    private void initDiff() {
         type = null;
         code = null;
         executionBehaviour = null;
-//        sourceCodeHash = null;
     }
-
 
     public String getCode() {
         return code;
     }
+
     public void setCode(String code) {
         checkModeAssertion(code != null, CIDiffMode.TARGET);
         this.code = code;
     }
 
-
-//    public String getSourceCodeHash(){
-//        return sourceCodeHash;
-//    }
-//    public void setSourceCodeHash(String hash){
-//        checkModeAssertion(hash != null);
-//        sourceCodeHash = hash;
-//    }
-//    public void updateSourceCodeHash(){
-//        sourceCodeHash = DigestUtils.md2Hex(code);
-//    }
-
-
     @ModStringProvider(M_EXECUTE)
     public ExecutionBehaviour getExecutionBehaviour() {
         return executionBehaviour;
     }
+
     public void setExecutionBehaviour(ExecutionBehaviour executionBehaviour) {
         checkModeAssertion(executionBehaviour != null, CIDiffMode.TARGET);
         this.executionBehaviour = executionBehaviour;
     }
 
-
     @ModStandaloneStringProvider()
     public Type getProgramType() {
         return type;
     }
+
     public void setProgramType(Type type) {
         checkModeAssertion(type != null, CIDiffMode.TARGET);
         this.type = type;
     }
 
-
     @Override
-    protected void fillDiffCI(AbstractCI newCI, AbstractCI diffCI){
+    protected void fillDiffCI(AbstractCI newCI, AbstractCI diffCI) {
         super.fillDiffCI(newCI, diffCI);
         ProgramCI newCastedCI = (ProgramCI) newCI;
         ProgramCI diffCastedCI = (ProgramCI) diffCI;
-        {
-            Type value = newCastedCI.getProgramType();
-            if (value != null && !value.equals(getProgramType())){
-                diffCastedCI.setProgramType(value);
-            }
-        }{
-            String value = newCastedCI.getCode();
-            if (value != null && !value.equals(getCode())){
-                diffCastedCI.setCode(value);
-            }
-        }{
-            ExecutionBehaviour value = newCastedCI.getExecutionBehaviour();
-            if (value != null && !value.equals(getExecutionBehaviour())){
-                diffCastedCI.setExecutionBehaviour(value);
-            }
-        }{
-            Type value = newCastedCI.getProgramType();
-            if (value != null && (!value.equals(getProgramType()) || value == Type.JAVA)){ // Workaround
-                diffCastedCI.setProgramType(value);
-            }
+        Type type = newCastedCI.getProgramType();
+        if (type != null && !type.equals(getProgramType())) {
+            diffCastedCI.setProgramType(type);
+        }
+        String code = newCastedCI.getCode();
+        if (code != null && !code.equals(getCode())) {
+            diffCastedCI.setCode(code);
+        }
+        ExecutionBehaviour executionBehaviour = newCastedCI.getExecutionBehaviour();
+        if (executionBehaviour != null && !executionBehaviour.equals(getExecutionBehaviour())) {
+            diffCastedCI.setExecutionBehaviour(executionBehaviour);
+        }
+        Type programType = newCastedCI.getProgramType();
+        if (programType != null && (!programType.equals(getProgramType()) || programType == Type.JAVA)) { // Workaround
+            diffCastedCI.setProgramType(programType);
         }
     }
 
     @Override
-    public boolean isEmpty(){
-        if (!super.isEmpty()) return false;
-        return type==null && code==null && executionBehaviour==null;
+    public boolean isEmpty() {
+        if (!super.isEmpty()) {
+            return false;
+        }
+        return type == null && code == null && executionBehaviour == null;
     }
 
     @Override
@@ -131,42 +118,39 @@ public class ProgramCI extends AdminObjectCI {
     }
 
     @Override
-    public AbstractCI buildDefaultCI(){
+    public AbstractCI buildDefaultCI() {
         return new ProgramCI(getName());
     }
 
     @Override
-    public List<ScriptChunk> buildUpdateScript(){
+    public List<ScriptChunk> buildUpdateScript() {
         CIFullName fName = getCIFullName();
         List<ScriptChunk> chunks = super.buildUpdateScript();
 
         String code = getCode();
         if (code != null) {
-            if (getProgramType() == Type.JAVA)
+            if (getProgramType() == Type.JAVA) {
                 chunks.add(new JPOCompileChunk(this));
+            }
         }
-
         return chunks;
     }
 
-
     public enum Type {
-
-        JAVA (M_JAVA),
-        MQL (M_MQL),
-        EKL (M_EKL),
-        EXTERNAL (M_EXTERNAL),
-        ;
+        JAVA(M_JAVA),
+        MQL(M_MQL),
+        EKL(M_EKL),
+        EXTERNAL(M_EXTERNAL);
 
         private final String mqlKeyword;
 
-        Type(String mqlKeyword){
+        Type(String mqlKeyword) {
             this.mqlKeyword = mqlKeyword;
         }
 
         @Override
         @JsonValue
-        public String toString(){
+        public String toString() {
             return mqlKeyword;
         }
 
@@ -174,22 +158,20 @@ public class ProgramCI extends AdminObjectCI {
 
     public enum ExecutionBehaviour {
 
-        IMMEDIATE (M_IMMEDIATE),
-        DEFERRED (M_DEFERRED),
-        ;
+        IMMEDIATE(M_IMMEDIATE),
+        DEFERRED(M_DEFERRED);
 
         private final String mqlKeyword;
 
-        ExecutionBehaviour(String mqlKeyword){
+        ExecutionBehaviour(String mqlKeyword) {
             this.mqlKeyword = mqlKeyword;
         }
 
         @Override
         @JsonValue
-        public String toString(){
+        public String toString() {
             return mqlKeyword;
         }
-
     }
 
     @Override

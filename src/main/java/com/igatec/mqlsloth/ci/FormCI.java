@@ -10,7 +10,11 @@ import com.igatec.mqlsloth.script.ScriptChunk;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class FormCI extends AdminObjectCI {
@@ -47,10 +51,10 @@ public class FormCI extends AdminObjectCI {
             formField.setRange(fieldMap.get("range").toString());
         }
         if (fieldMap.get("href") != null) {
-            formField.setHref(fieldMap.get("href") .toString());
+            formField.setHref(fieldMap.get("href").toString());
         }
-        if (fieldMap.get("settings")  != null) {
-            formField.setSettings((LinkedHashMap)fieldMap.get("settings"));
+        if (fieldMap.get("settings") != null) {
+            formField.setSettings((LinkedHashMap) fieldMap.get("settings"));
         }
         fields.add(formField);
     }

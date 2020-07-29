@@ -10,9 +10,8 @@ import com.igatec.mqlsloth.kernel.session.ExportSessionBuilder;
 import com.igatec.mqlsloth.kernel.session.SlothApp;
 import org.apache.commons.cli.CommandLine;
 
-;
-
 public abstract class AbstractExportExecutor extends AbstractExecutor {
+    public static final int SLEEP_TIME = 200;
 
     public AbstractExportExecutor(SlothAppCLI cli) {
         super(cli);
@@ -28,48 +27,52 @@ public abstract class AbstractExportExecutor extends AbstractExecutor {
 
     @Override
     public void run(Context context, CommandLine cmd) throws SlothException {
-
         String dir = cmd.getOptionValue(TARGET_OPT);
-        if (dir == null)
+        if (dir == null) {
             dir = cmd.getOptionValue(LOCATION_OPT);
-        if (dir == null)
-            throw new SlothException("Export and Update tasks must have '"+TARGET_OPT+"' option");
+        }
+        if (dir == null) {
+            throw new SlothException("Export and Update tasks must have '" + TARGET_OPT + "' option");
+        }
         String[] pattern = cmd.getOptionValues(PATTERN_OPT);
         ExportSessionBuilder builder = SlothApp.getExportSessionBuilder();
         builder.setFileSystemAsTarget(dir);
         String srcDir = cmd.getOptionValue(SOURCE_OPT);
-        if (srcDir == null)
+        if (srcDir == null) {
             builder.setDatabaseAsSource();
-        else
+        } else {
             builder.setFileSystemAsSource(srcDir);
+        }
         builder.setSearchLocation(getSearchLocation());
         builder.setSearchPattern(pattern);
         provideContext(context, cmd, builder);
-        if (cmd.hasOption(VERBOSE_OPT))
+        if (cmd.hasOption(VERBOSE_OPT)) {
             verbose = true;
-        if (cmd.hasOption(SYNC_OPT)){
+        }
+        if (cmd.hasOption(SYNC_OPT)) {
             builder.setSyncronous(true);
             sync = true;
         } else {
             sync = false;
         }
-
         try {
             Session session = builder.build();
             RealtimeExecutionController controller = session.getExecutionController();
             session.run();
-
             while (controller.getExecutionState() != ExecutionState.FINISHED) {
-                if (!SlothAppCLI.isMql())
+                if (!SlothAppCLI.isMql()) {
                     printStatus(controller.getExecutedAmount(), controller.getExecutionTime());
-                else
+                } else {
                     cli.print(".");
-                Thread.sleep(200);
-                if (!SlothAppCLI.isMql())
+                }
+                Thread.sleep(SLEEP_TIME);
+                if (!SlothAppCLI.isMql()) {
                     cli.print("\r");
+                }
             }
-            if (SlothAppCLI.isMql())
+            if (SlothAppCLI.isMql()) {
                 cli.println("");
+            }
             printStatus(controller.getExecutedAmount(), controller.getExecutionTime());
             cli.println("");
             if (controller.isError()) {
@@ -77,12 +80,9 @@ public abstract class AbstractExportExecutor extends AbstractExecutor {
             } else {
                 printSuccess();
             }
-
-        } catch (Throwable ex){
+        } catch (Throwable ex) {
             printFailure();
             printError(ex);
         }
-
     }
-
 }

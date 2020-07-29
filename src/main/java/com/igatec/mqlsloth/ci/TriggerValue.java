@@ -9,7 +9,7 @@ public class TriggerValue {
     private final String input;
 
     public TriggerValue(String program, String input) {
-        this.program = program==null ? DEFAULT_PROGRAM : program;
+        this.program = program == null ? DEFAULT_PROGRAM : program;
         this.input = input;
     }
 

@@ -5,26 +5,26 @@ public class ObjectContainer<T> {
     private T value = null;
     private Exception ex = null;
 
-    public ObjectContainer(){
+    public ObjectContainer() {
     }
 
-    public ObjectContainer(T object){
+    public ObjectContainer(T object) {
         this.value = object;
     }
 
-    public ObjectContainer(Exception ex){
+    public ObjectContainer(Exception ex) {
         this.ex = ex;
     }
 
-    public T value(){
+    public T value() {
         return value;
     }
 
-    public boolean isStub(){
+    public boolean isStub() {
         return false;
     }
 
-    public Exception getException(){
+    public Exception getException() {
         return ex;
     }
 

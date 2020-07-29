@@ -6,7 +6,7 @@ public class StringCIName extends AbstractCIName {
 
     private final String name;
 
-    public StringCIName(String name){
+    public StringCIName(String name) {
         this.name = name;
     }
 

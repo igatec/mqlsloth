@@ -23,7 +23,7 @@ public class RelationshipObjectParser extends TypeLikeObjectParser {
     }
 
     @Override
-    public Map<String, Function> getKeyWordsMQL(){
+    public Map<String, Function> getKeyWordsMQL() {
         Map<String, Function> keyWordsToValueMakers = super.getKeyWordsMQL();
 
         Function<String, Boolean> preventDuplicatesMaker = Boolean::valueOf;
@@ -67,7 +67,7 @@ public class RelationshipObjectParser extends TypeLikeObjectParser {
             throw new ParserException("Can't create " + M_RELATIONSHIP + ". Name not found");
         }
 
-        CIDiffMode mode = CIDiffMode .valueOf((String) fieldsValues.getOrDefault(Y_MODE, CIDiffMode.TARGET.toString()));
+        CIDiffMode mode = CIDiffMode.valueOf((String) fieldsValues.getOrDefault(Y_MODE, CIDiffMode.TARGET.toString()));
         createdObject = new RelationshipCI(name, mode);
         return createdObject;
     }
@@ -93,15 +93,15 @@ public class RelationshipObjectParser extends TypeLikeObjectParser {
         return;
     }
 
-    private RelCIEnd makeRelCIEndFromMQL(String ciEndMql){
+    private RelCIEnd makeRelCIEndFromMQL(String ciEndMql) {
         return makeRelCIEndMQL(ciEndMql, RelationshipCI.End.FROM);
     }
 
-    private RelCIEnd makeRelCIEndToMQL(String ciEndMql){
+    private RelCIEnd makeRelCIEndToMQL(String ciEndMql) {
         return makeRelCIEndMQL(ciEndMql, RelationshipCI.End.TO);
     }
 
-    private RelCIEnd makeRelCIEndMQL(String ciEndMql, RelationshipCI.End end){
+    private RelCIEnd makeRelCIEndMQL(String ciEndMql, RelationshipCI.End end) {
         try {
             Parser<RelCIEnd> parser = MqlParser.fromStringAndObjectParser(ciEndMql, new RelObjectEndParser(format, end.toString()));
             RelCIEnd relCIEnd = parser.parse();
@@ -133,15 +133,15 @@ public class RelationshipObjectParser extends TypeLikeObjectParser {
         return;
     }
 
-    private RelCIEnd makeRelCIEndFromYAML(Map<String, Object> ciEndYAML){
+    private RelCIEnd makeRelCIEndFromYAML(Map<String, Object> ciEndYAML) {
         return makeRelCIEndYAML(ciEndYAML, RelationshipCI.End.FROM);
     }
 
-    private RelCIEnd makeRelCIEndToYAML(Map<String, Object> ciEndYAML){
+    private RelCIEnd makeRelCIEndToYAML(Map<String, Object> ciEndYAML) {
         return makeRelCIEndYAML(ciEndYAML, RelationshipCI.End.TO);
     }
 
-    private RelCIEnd makeRelCIEndYAML(Map<String, Object> ciEndYAML, RelationshipCI.End end){
+    private RelCIEnd makeRelCIEndYAML(Map<String, Object> ciEndYAML, RelationshipCI.End end) {
         try {
             Parser<RelCIEnd> parser = YAMLParser.fromMapAndObjectParser(ciEndYAML, new RelObjectEndParser(format, end.toString()));
             RelCIEnd relCIEnd = parser.parse();
@@ -171,7 +171,7 @@ public class RelationshipObjectParser extends TypeLikeObjectParser {
         }
 
         @Override
-        public final Map<String, Function> getKeyWordsToValueMakers(){
+        public final Map<String, Function> getKeyWordsToValueMakers() {
             switch (format) {
                 case MQL:
                     return getKeyWordsMQL();
@@ -249,12 +249,13 @@ public class RelationshipObjectParser extends TypeLikeObjectParser {
             setParsedValuesToObject(fieldsValues, createdObject);
             return createdObject;
         }
-        protected RelCIEnd createObject(Map<String, Object> fieldsValues){
+
+        protected RelCIEnd createObject(Map<String, Object> fieldsValues) {
             RelCIEnd relCIEnd = RelationshipObjectParser.this.createdObject.getEnd(RelationshipCI.End.valueOf(name.toUpperCase()));
             return relCIEnd;
         }
 
-        protected final void setParsedValuesToObject(Map<String, Object> parsedValues, RelCIEnd parsebleObject){
+        protected final void setParsedValuesToObject(Map<String, Object> parsedValues, RelCIEnd parsebleObject) {
             switch (format) {
                 case MQL:
                     setParsedMQLValuesToObject(parsedValues, parsebleObject);
@@ -335,7 +336,7 @@ public class RelationshipObjectParser extends TypeLikeObjectParser {
 
             if (parsedValues.containsKey(Y_REMOVE_PREFIX + Y_RELATIONSHIPS)) {
                 Collection<String> relationshipsToRemove = (Collection<String>) parsedValues.getOrDefault(Y_REMOVE_PREFIX + Y_RELATIONSHIPS, Collections.EMPTY_SET);
-                relationshipsToRemove.forEach( parsebleObject::reverseRelationship);
+                relationshipsToRemove.forEach(parsebleObject::reverseRelationship);
             }
 
             if (parsedValues.containsKey(Y_MEANING)) {
@@ -349,7 +350,7 @@ public class RelationshipObjectParser extends TypeLikeObjectParser {
             }
 
             if (parsedValues.containsKey(Y_CLONE)) {
-                RelationshipCI.CloneBehaviour cloneBehaviour =  RelationshipCI.CloneBehaviour.valueOf(((String) parsedValues.get(Y_CLONE)).toUpperCase());
+                RelationshipCI.CloneBehaviour cloneBehaviour = RelationshipCI.CloneBehaviour.valueOf(((String) parsedValues.get(Y_CLONE)).toUpperCase());
                 parsebleObject.setCloneBehaviour(cloneBehaviour);
             }
 

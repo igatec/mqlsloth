@@ -21,8 +21,7 @@ public class JPOCompileAction implements MqlAction {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Compile java program '" + progName + "'";
     }
-
 }

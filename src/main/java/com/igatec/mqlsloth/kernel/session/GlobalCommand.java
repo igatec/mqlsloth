@@ -20,11 +20,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-;
-
 public class GlobalCommand implements IMqlCommand {
-
-    private final static boolean SYNCHRONOUS = true;
+    private static final boolean SYNCHRONOUS = true;
 
     private final Map<Integer, String> templates = new HashMap<>();
     private static final int TIMEOUT = 3 * 60 * 1000;
@@ -82,9 +79,9 @@ public class GlobalCommand implements IMqlCommand {
                 com.executeCommand(context, cmd, args);
                 com.close(context);
                 String error = com.getError();
-                if (error == null || error.equals(""))
+                if (error == null || error.equals("")) {
                     result = com.getResult();
-                else {
+                } else {
                     throw new SlothException(error);
                 }
             } catch (Exception e) {
@@ -96,9 +93,9 @@ public class GlobalCommand implements IMqlCommand {
                 Callable<String> tCallable = () -> {
                     command.executeCommand(context, cmd, args);
                     String error = command.getError();
-                    if (error == null || error.equals(""))
+                    if (error == null || error.equals("")) {
                         return command.getResult();
-                    else {
+                    } else {
                         throw new SlothException(error);
                     }
                 };
@@ -114,7 +111,8 @@ public class GlobalCommand implements IMqlCommand {
                         Workaround is not to close (abort or commit) current transaction despite it causes resources leak
                      */
                     abortable = false;
-                    throw new CommandExecutionException("MQL command timeout " + TIMEOUT + " ms exceeded on command: \"" + cmdWithQuotes + "\"", e);
+                    throw new CommandExecutionException("MQL command timeout " + TIMEOUT
+                            + " ms exceeded on command: \"" + cmdWithQuotes + "\"", e);
                 }
             } catch (CommandExecutionException e) {
                 abort();
@@ -154,8 +152,9 @@ public class GlobalCommand implements IMqlCommand {
 
     @Override
     public void close() {
-        if (executorService != null)
+        if (executorService != null) {
             executorService.shutdown();
+        }
     }
 
     @Override
@@ -166,8 +165,9 @@ public class GlobalCommand implements IMqlCommand {
     private void unpackQuotes(String[] arr) {
         for (int i = 0; i < arr.length; i++) {
             String s = arr[i];
-            if (s.startsWith("'") && s.endsWith("'"))
+            if (s.startsWith("'") && s.endsWith("'")) {
                 arr[i] = s.substring(1, s.length() - 1);
+            }
         }
     }
 
@@ -175,8 +175,9 @@ public class GlobalCommand implements IMqlCommand {
         if (!templates.containsKey(count)) {
             StringBuilder sb = new StringBuilder();
             for (int i = 1; i <= count; i++) {
-                if (i != 1)
+                if (i != 1) {
                     sb.append(" ");
+                }
                 sb.append("$");
                 sb.append(i);
             }
@@ -188,10 +189,11 @@ public class GlobalCommand implements IMqlCommand {
     private String[] clean(String[] arr) {
         List<String> list = new LinkedList<>();
         for (String s : arr) {
-            if (s == null)
+            if (s == null) {
                 list.add(StringUtils.EMPTY);
-            else if (!"".equals(s))
+            } else if (!"".equals(s)) {
                 list.add(s);
+            }
         }
         return list.toArray(new String[0]);
     }

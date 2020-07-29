@@ -5,11 +5,11 @@ import java.util.Map;
 
 public class SlothTargetMap<V> extends HashMap<String, V> implements ReversibleMap<V> {
 
-    public SlothTargetMap(){
+    public SlothTargetMap() {
         super();
     }
 
-    public SlothTargetMap(Map<String, V> m){
+    public SlothTargetMap(Map<String, V> m) {
         super(m);
     }
 
@@ -19,7 +19,7 @@ public class SlothTargetMap<V> extends HashMap<String, V> implements ReversibleM
     }
 
     @Override
-    public ReversibleMap<V> clone(){
+    public ReversibleMap<V> clone() {
         return new SlothTargetMap<>(this);
     }
 }

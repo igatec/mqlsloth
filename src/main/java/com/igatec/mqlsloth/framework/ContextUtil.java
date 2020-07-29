@@ -1,6 +1,10 @@
 package com.igatec.mqlsloth.framework;
 
-public class ContextUtil {
+public final class ContextUtil {
+    private ContextUtil() {
+
+    }
+
     public static void startTransaction(Context context, boolean isWriteMode) {
         // todo
     }

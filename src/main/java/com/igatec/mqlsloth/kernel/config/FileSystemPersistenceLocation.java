@@ -6,7 +6,7 @@ public class FileSystemPersistenceLocation implements PersistenceLocation {
 
     private final String directory;
 
-    public FileSystemPersistenceLocation(String directory){
+    public FileSystemPersistenceLocation(String directory) {
         this.directory = directory;
     }
 

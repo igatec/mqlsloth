@@ -18,13 +18,13 @@ import com.igatec.mqlsloth.util.Workspace;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-;
-
 public class ExportSession extends AbstractSession {
-
+    public static final int SLEEP_TIME = 20;
     private FileSystemOutputProvider tOP = new FileSystemOutputProvider(targetLocation.getRootDirectory());
     private final boolean synchronous;
 
+    // todo remove checkstyle ignore and fix
+    // CHECKSTYLE.OFF: ParameterNumber
     ExportSession(
             Context context,
             PersistenceLocation sourceLocation,
@@ -36,6 +36,7 @@ public class ExportSession extends AbstractSession {
         super(context, sourceLocation, targetLocation, searchLocation, searchPattern, TransactionMode.READ);
         this.synchronous = synchronous;
     }
+    // CHECKSTYLE.ON: ParameterNumber
 
     @Override
     public RealtimeExecutionController getExecutionController() {
@@ -46,7 +47,9 @@ public class ExportSession extends AbstractSession {
     public void run() throws SlothException {
         try {
 
-            InputProvider sIP = sourceLocation.isDatabase() ? new DBInputProvider(this) : new FileSystemInputProvider(sourceLocation.getRootDirectory());
+            InputProvider sIP = sourceLocation.isDatabase()
+                    ? new DBInputProvider(this)
+                    : new FileSystemInputProvider(sourceLocation.getRootDirectory());
 
             ObjectStreamReader<AbstractCI> ciReader = null;
 
@@ -73,12 +76,14 @@ public class ExportSession extends AbstractSession {
             if (synchronous) {
                 tOP.saveCIDefinitionsSynchronously(ciReader);
                 boolean success = false;
-                if (controller.getExecutionState() == ExecutionState.FINISHED && !controller.isError())
+                if (controller.getExecutionState() == ExecutionState.FINISHED && !controller.isError()) {
                     success = true;
-                if (success)
+                }
+                if (success) {
                     commit();
-                else
+                } else {
                     abort();
+                }
             } else {
                 tOP.saveCIDefinitions(ciReader);
                 ExecutorService service = Executors.newSingleThreadExecutor();
@@ -86,28 +91,28 @@ public class ExportSession extends AbstractSession {
                     try {
                         boolean success = false;
                         while (controller.getExecutionState() != ExecutionState.FINISHED) {
-                            Thread.sleep(20);
+                            Thread.sleep(SLEEP_TIME);
                         }
-                        if (controller.getExecutionState() == ExecutionState.FINISHED && !controller.isError())
+                        if (controller.getExecutionState() == ExecutionState.FINISHED && !controller.isError()) {
                             success = true;
-                        if (success)
+                        }
+                        if (success) {
                             commit();
-                        else
+                        } else {
                             abort();
+                        }
                     } catch (SlothException | InterruptedException e) {
                         // This transaction is not writing, so commiting or aborting are just to close transaction
+                        e.printStackTrace();
                     }
                 });
                 service.shutdown();
             }
-
         } catch (Throwable ex) {
             throw new SlothException(ex);
         } finally {
             SlothApp.unregisterSession();
             Workspace.deleteAll(this);
         }
-
     }
-
 }

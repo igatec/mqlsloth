@@ -5,7 +5,12 @@ import com.igatec.mqlsloth.ci.AdminObjectCI;
 import com.igatec.mqlsloth.parser.mql.MqlParser;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 public abstract class AdminObjectObjectParser extends AbstractObjectParser {
@@ -75,12 +80,20 @@ public abstract class AdminObjectObjectParser extends AbstractObjectParser {
         super.setParsedMQLValuesToObject(parsedValues, parsebleObject);
         if (parsedValues.containsKey(M_HIDDEN)) {
             Function<Boolean, Boolean> isHiddenMaker = Function.identity();
-            ((AdminObjectCI)parsebleObject).setHidden(isHiddenMaker.apply((Boolean) parsedValues.get(M_HIDDEN)));
+            ((AdminObjectCI) parsebleObject).setHidden(isHiddenMaker.apply((Boolean) parsedValues.get(M_HIDDEN)));
         }
 
         if (parsedValues.containsKey(M_PROPERTY)) {
-            Function<Collection<Map.Entry<String, String>>, Collection<Map.Entry<String, String>>> propertiesMaker = Function.identity();
-            Collection<Map.Entry<String, String>> properties = propertiesMaker.apply((Collection<Map.Entry<String, String>>) parsedValues.getOrDefault(M_PROPERTY, Collections.EMPTY_MAP));
+            Function<
+                    Collection<Map.Entry<String, String>>,
+                    Collection<Map.Entry<String, String>>
+                    > propertiesMaker = Function.identity();
+            Collection<Map.Entry<String, String>> properties = propertiesMaker.apply(
+                    (Collection<Map.Entry<String, String>>) parsedValues.getOrDefault(
+                            M_PROPERTY,
+                            Collections.EMPTY_MAP
+                    )
+            );
             properties.forEach(((AdminObjectCI) parsebleObject)::setProperty);
         }
         return;
@@ -94,8 +107,14 @@ public abstract class AdminObjectObjectParser extends AbstractObjectParser {
         }
 
         if (parsedValues.containsKey(Y_PROPERTIES)) {
-            Map<String, Object> properties = (Map<String, Object>) parsedValues.getOrDefault(Y_PROPERTIES, Collections.EMPTY_MAP);
-            properties.forEach((key, value) -> ((AdminObjectCI) parsebleObject).setProperty(key, (value == null) ? null : value.toString()));
+            Map<String, Object> properties = (Map<String, Object>) parsedValues.getOrDefault(
+                    Y_PROPERTIES,
+                    Collections.EMPTY_MAP
+            );
+            properties.forEach((key, value) -> ((AdminObjectCI) parsebleObject).setProperty(
+                    key,
+                    (value == null) ? null : value.toString())
+            );
         }
 
         if (parsedValues.containsKey(Y_SYMBOLIC_NAME)) {
@@ -103,7 +122,10 @@ public abstract class AdminObjectObjectParser extends AbstractObjectParser {
         }
 
         if (parsedValues.containsKey(Y_REMOVE_PREFIX + Y_PROPERTIES)) {
-            List<String> propertiesToRemove = (List<String>) parsedValues.getOrDefault(Y_REMOVE_PREFIX + Y_PROPERTIES, Collections.EMPTY_LIST);
+            List<String> propertiesToRemove = (List<String>) parsedValues.getOrDefault(
+                    Y_REMOVE_PREFIX + Y_PROPERTIES,
+                    Collections.EMPTY_LIST
+            );
             propertiesToRemove.forEach(((AdminObjectCI) parsebleObject)::deleteProperty);
         }
 

@@ -8,7 +8,9 @@ import com.igatec.mqlsloth.parser.ParserException;
 import java.util.Map;
 import java.util.function.Function;
 
-import static com.igatec.mqlsloth.ci.ProgramCI.Type.*;
+import static com.igatec.mqlsloth.ci.ProgramCI.Type.EKL;
+import static com.igatec.mqlsloth.ci.ProgramCI.Type.JAVA;
+import static com.igatec.mqlsloth.ci.ProgramCI.Type.MQL;
 
 public class ProgramObjectParser extends AdminObjectObjectParser {
     public ProgramObjectParser(Format format) {
@@ -16,7 +18,7 @@ public class ProgramObjectParser extends AdminObjectObjectParser {
     }
 
     @Override
-    public Map<String, Function> getKeyWordsMQL(){
+    public Map<String, Function> getKeyWordsMQL() {
         Map<String, Function> keyWordsToValueMakers = super.getKeyWordsMQL();
 
         keyWordsToValueMakers.put(M_EXECUTE + " " + M_IMMEDIATE, value -> M_IMMEDIATE);
@@ -33,10 +35,9 @@ public class ProgramObjectParser extends AdminObjectObjectParser {
 
         Function<String, ProgramCI.Type> typeMaker = type -> ProgramCI.Type.valueOf(type.toUpperCase());
         keyWordsToValueMakers.put(Y_TYPE, typeMaker);
-
-        Function<String, ProgramCI.ExecutionBehaviour> executionMaker = execution -> ProgramCI.ExecutionBehaviour.valueOf(execution.toUpperCase());
+        Function<String, ProgramCI.ExecutionBehaviour> executionMaker =
+                execution -> ProgramCI.ExecutionBehaviour.valueOf(execution.toUpperCase());
         keyWordsToValueMakers.put(Y_EXECUTE, executionMaker);
-
         return keyWordsToValueMakers;
     }
 
@@ -66,6 +67,8 @@ public class ProgramObjectParser extends AdminObjectObjectParser {
             case JSON:
                 createdObject = createObjectMQL(name, mode, fieldsValues);
                 break;
+            default:
+                break;
         }
 
         return createdObject;
@@ -92,7 +95,7 @@ public class ProgramObjectParser extends AdminObjectObjectParser {
             return null;
         }
 
-        ProgramCI.Type type = ProgramCI.Type.valueOf(((String)fieldsValues.get(Y_TYPE)).toUpperCase());
+        ProgramCI.Type type = ProgramCI.Type.valueOf(((String) fieldsValues.get(Y_TYPE)).toUpperCase());
         switch (type) {
             case MQL:
                 return new ProgramCI(name, mode);
@@ -100,6 +103,8 @@ public class ProgramObjectParser extends AdminObjectObjectParser {
                 return new ProgramCI(name, mode);
             case JAVA:
                 return new ProgramCI(name, mode);
+            default:
+                break;
         }
 
         return null;
@@ -135,16 +140,20 @@ public class ProgramObjectParser extends AdminObjectObjectParser {
     @Override
     protected void setParsedYAMLValuesToObject(Map<String, Object> parsedValues, AbstractCI parsebleObject) {
         super.setParsedYAMLValuesToObject(parsedValues, parsebleObject);
-
         if (parsedValues.containsKey(Y_EXECUTE)) {
-            ((ProgramCI) parsebleObject).setExecutionBehaviour(ProgramCI.ExecutionBehaviour.valueOf(parsedValues.get(Y_EXECUTE).toString().toUpperCase()));
+            ((ProgramCI) parsebleObject).setExecutionBehaviour(
+                    ProgramCI.ExecutionBehaviour.valueOf(
+                            parsedValues.get(Y_EXECUTE).toString().toUpperCase()
+                    )
+            );
         }
-
         if (parsedValues.containsKey(Y_TYPE)) {
-            ((ProgramCI) parsebleObject).setProgramType(ProgramCI.Type.valueOf(parsedValues.get(Y_TYPE).toString().toUpperCase()));
+            ((ProgramCI) parsebleObject).setProgramType(
+                    ProgramCI.Type.valueOf(
+                            parsedValues.get(Y_TYPE).toString().toUpperCase()
+                    )
+            );
         }
-
-        return;
     }
 
     @Override

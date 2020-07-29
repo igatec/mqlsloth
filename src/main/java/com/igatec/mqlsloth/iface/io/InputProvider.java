@@ -8,11 +8,9 @@ import com.igatec.mqlsloth.util.ObjectStreamReader;
 import java.util.Collection;
 
 public interface InputProvider {
-
     AbstractCI getCIDefinition(CIFullName fullName) throws SlothException;
 
     boolean containsCIDefinition(CIFullName fullName);
-
 
     ObjectStreamReader<AbstractCI> getAllCIDefinitions();
 
@@ -26,7 +24,6 @@ public interface InputProvider {
 
     ObjectStreamReader<AbstractCI> getCIDefinitionsByPatterns(Collection<CIFullName> fullNamesPatterns) throws SlothException;
 
-
     ObjectStreamReader<CIFullName> getAllCINames();
 
     ObjectStreamReader<CIFullName> getCINamesByPattern(String namePattern) throws SlothException;
@@ -34,5 +31,4 @@ public interface InputProvider {
     ObjectStreamReader<CIFullName> getCINamesByPattern(CIFullName fullNamePattern) throws SlothException;
 
     ObjectStreamReader<CIFullName> getCINamesByPatterns(Collection<CIFullName> fullNamesPatterns) throws SlothException;
-
 }

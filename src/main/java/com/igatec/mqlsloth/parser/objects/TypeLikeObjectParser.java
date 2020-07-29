@@ -17,7 +17,7 @@ public abstract class TypeLikeObjectParser extends AdminObjectObjectParser {
     }
 
     @Override
-    public Map<String, Function> getKeyWordsMQL(){
+    public Map<String, Function> getKeyWordsMQL() {
         Map<String, Function> keyWordsToValueMakers = super.getKeyWordsMQL();
 
         Function<String, Boolean> isAbstractMaker = Boolean::valueOf;

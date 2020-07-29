@@ -2,8 +2,10 @@ package com.igatec.mqlsloth.ci;
 
 import com.igatec.mqlsloth.ci.annotation.ModBooleanProvider;
 import com.igatec.mqlsloth.ci.annotation.Unmodifiable;
-import com.igatec.mqlsloth.ci.constants.*;
-import java.util.*;
+import com.igatec.mqlsloth.ci.constants.CIDiffMode;
+import com.igatec.mqlsloth.ci.constants.SlothAdminType;
+
+import java.util.Map;
 
 public class TypeCI extends TypeLikeCI {
 
@@ -12,6 +14,7 @@ public class TypeCI extends TypeLikeCI {
     public TypeCI(String name) {
         this(name, CIDiffMode.TARGET);
     }
+
     public TypeCI(String name, CIDiffMode diffMode) {
         super(SlothAdminType.TYPE, name, diffMode);
         if (getDiffMode() == CIDiffMode.TARGET) {
@@ -20,10 +23,12 @@ public class TypeCI extends TypeLikeCI {
             initDiff();
         }
     }
-    private void initTarget(){
+
+    private void initTarget() {
         isComposed = false;
     }
-    private void initDiff(){
+
+    private void initDiff() {
         isComposed = null;
     }
 
@@ -32,44 +37,45 @@ public class TypeCI extends TypeLikeCI {
     public Boolean isComposed() {
         return isComposed;
     }
+
     public void setComposed(Boolean composed) {
         checkModeAssertion(composed != null, CIDiffMode.TARGET);
         isComposed = composed;
     }
 
     @Override
-    protected void fillDiffCI(AbstractCI newCI, AbstractCI diffCI){
+    protected void fillDiffCI(AbstractCI newCI, AbstractCI diffCI) {
         super.fillDiffCI(newCI, diffCI);
         TypeCI newCastedCI = (TypeCI) newCI;
         TypeCI diffCastedCI = (TypeCI) diffCI;
         {
             Boolean value = newCastedCI.isComposed();
-            if (value != null && !value.equals(isComposed())){
+            if (value != null && !value.equals(isComposed())) {
                 diffCastedCI.setComposed(value);
             }
         }
     }
 
     @Override
-    public TypeCI buildDiff(AbstractCI newCI){
+    public TypeCI buildDiff(AbstractCI newCI) {
         TypeCI ci = (TypeCI) newCI;
         TypeCI diff = new TypeCI(getName(), CIDiffMode.DIFF);
         fillDiffCI(ci, diff);
         return diff;
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         if (!super.isEmpty()) return false;
         return isComposed == null;
     }
 
     @Override
-    public AbstractCI buildDefaultCI(){
+    public AbstractCI buildDefaultCI() {
         return new TypeCI(getName());
     }
 
 
-    public Map<String, Object> toMap(){
+    public Map<String, Object> toMap() {
         Map<String, Object> fieldsValues = super.toMap();
         fieldsValues.put(Y_COMPOSED, isComposed());
 

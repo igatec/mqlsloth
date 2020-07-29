@@ -22,8 +22,7 @@ public class GroupCI extends UserCombinationCI {
     }
 
     @Override
-    public AbstractCI buildDefaultCI(){
+    public AbstractCI buildDefaultCI() {
         return new GroupCI(getName());
     }
-
 }

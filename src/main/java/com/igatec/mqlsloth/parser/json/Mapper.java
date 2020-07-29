@@ -10,7 +10,7 @@ public enum Mapper {
 
 //    TYPE(SlothAdminType.TYPE, AttributeObjectParser.class);
 //
-//    private final static Map<SlothAdminType, Class<? extends JsonConcreteParser>> classes;
+//    private static final Map<SlothAdminType, Class<? extends JsonConcreteParser>> classes;
 //
 //    static {
 //        classes = new HashMap<>();

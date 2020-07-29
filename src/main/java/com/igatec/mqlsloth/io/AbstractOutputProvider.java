@@ -5,6 +5,7 @@ import com.igatec.mqlsloth.iface.io.OutputProvider;
 import com.igatec.mqlsloth.iface.kernel.ExecutionState;
 import com.igatec.mqlsloth.iface.kernel.RealtimeExecutionController;
 import com.igatec.mqlsloth.util.ObjectStreamReader;
+
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -13,7 +14,7 @@ public abstract class AbstractOutputProvider implements OutputProvider {
 
     private final RealtimeExecutionControllerImpl controller = new RealtimeExecutionControllerImpl();
 
-    public RealtimeExecutionController getExecutionController(){
+    public RealtimeExecutionController getExecutionController() {
         return controller;
     }
 
@@ -31,15 +32,15 @@ public abstract class AbstractOutputProvider implements OutputProvider {
         saveCIDefs(ciIter);
     }
 
-    private void saveCIDefs(ObjectStreamReader<AbstractCI> ciIter){
+    private void saveCIDefs(ObjectStreamReader<AbstractCI> ciIter) {
         try {
             while (ciIter.hasNext()) {
                 AbstractCI ci = ciIter.next();
                 saveCIDefinition(ci);
                 controller.amount++;
             }
-        } catch (Throwable ex){
-            synchronized (controller){
+        } catch (Throwable ex) {
+            synchronized (controller) {
                 controller.ex = ex;
                 controller.isError = true;
             }

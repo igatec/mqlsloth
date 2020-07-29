@@ -41,8 +41,8 @@ public class RemoteConfig {
         this.name = name;
     }
 
-    public boolean validate(){
-        return name!=null && appUrl!=null && userName!=null && password!=null;
+    public boolean validate() {
+        return name != null && appUrl != null && userName != null && password != null;
     }
 
     @Override

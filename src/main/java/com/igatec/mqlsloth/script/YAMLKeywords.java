@@ -26,7 +26,7 @@ public interface YAMLKeywords {
     String Y_DEFERRED = "deferred";
     String Y_DELETE = "delete";
     String Y_DERIVED = "derived";
-    String Y_DESCRIPTION = "description";//+
+    String Y_DESCRIPTION = "description";
     String Y_DIMENSION = "dimension";
     String Y_EKL = "EKL";
     String Y_ENFORCE_LOCKING = "enforceLocking";

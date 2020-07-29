@@ -18,7 +18,7 @@ public class InterfaceObjectParser extends TypeLikeObjectParser {
     }
 
     @Override
-    public Map<String, Function> getKeyWordsMQL(){
+    public Map<String, Function> getKeyWordsMQL() {
         Map<String, Function> keyWordsToValueMakers = super.getKeyWordsMQL();
 
         Function<String, Collection> typeMaker = MqlParser::parseListValue;
@@ -56,7 +56,7 @@ public class InterfaceObjectParser extends TypeLikeObjectParser {
             throw new ParserException("Can't create " + M_INTERFACE + ". Name not found");
         }
 
-        CIDiffMode mode = CIDiffMode .valueOf((String) fieldsValues.getOrDefault("_mode", "TARGET"));
+        CIDiffMode mode = CIDiffMode.valueOf((String) fieldsValues.getOrDefault("_mode", "TARGET"));
         InterfaceCI createdObject = new InterfaceCI(name, mode);
         return createdObject;
     }
@@ -71,7 +71,10 @@ public class InterfaceObjectParser extends TypeLikeObjectParser {
         }
 
         if (parsedValues.containsKey(M_RELATIONSHIP)) {
-            Collection<String> relationships = (Collection<String>) parsedValues.getOrDefault(M_RELATIONSHIP, Collections.EMPTY_SET);
+            Collection<String> relationships = (Collection<String>) parsedValues.getOrDefault(
+                    M_RELATIONSHIP,
+                    Collections.EMPTY_SET
+            );
             relationships.forEach(((InterfaceCI) parsebleObject)::addRelationship);
         }
 
@@ -88,18 +91,27 @@ public class InterfaceObjectParser extends TypeLikeObjectParser {
         }
 
         if (parsedValues.containsKey(Y_REMOVE_PREFIX + Y_TYPES)) {
-            Collection<String> typesToRemove = (Collection<String>) parsedValues.getOrDefault(Y_REMOVE_PREFIX + Y_TYPES, Collections.EMPTY_SET);
+            Collection<String> typesToRemove = (Collection<String>) parsedValues.getOrDefault(
+                    Y_REMOVE_PREFIX + Y_TYPES,
+                    Collections.EMPTY_SET
+            );
             typesToRemove.forEach(((InterfaceCI) parsebleObject)::reverseType);
         }
 
         if (parsedValues.containsKey(Y_RELATIONSHIPS)) {
-            Collection<String> relationships = (Collection<String>) parsedValues.getOrDefault(Y_RELATIONSHIPS, Collections.EMPTY_SET);
+            Collection<String> relationships = (Collection<String>) parsedValues.getOrDefault(
+                    Y_RELATIONSHIPS,
+                    Collections.EMPTY_SET
+            );
             relationships.forEach(((InterfaceCI) parsebleObject)::addRelationship);
         }
 
 
         if (parsedValues.containsKey(Y_REMOVE_PREFIX + Y_RELATIONSHIPS)) {
-            Collection<String> relationshipsToRemove = (Collection<String>) parsedValues.getOrDefault(Y_REMOVE_PREFIX + Y_RELATIONSHIPS, Collections.EMPTY_SET);
+            Collection<String> relationshipsToRemove = (Collection<String>) parsedValues.getOrDefault(
+                    Y_REMOVE_PREFIX + Y_RELATIONSHIPS,
+                    Collections.EMPTY_SET
+            );
             relationshipsToRemove.forEach(((InterfaceCI) parsebleObject)::reverseRelationship);
         }
 

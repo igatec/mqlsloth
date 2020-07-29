@@ -11,7 +11,11 @@ import com.igatec.mqlsloth.script.ScriptChunk;
 import com.igatec.mqlsloth.util.ReversibleSet;
 import com.igatec.mqlsloth.util.SlothSet;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class RelationshipCI extends TypeLikeCI {
 
@@ -21,6 +25,7 @@ public class RelationshipCI extends TypeLikeCI {
     public RelationshipCI(String name) {
         this(name, CIDiffMode.TARGET);
     }
+
     public RelationshipCI(String name, CIDiffMode diffMode) {
         super(SlothAdminType.RELATIONSHIP, name, diffMode);
         ends.put(End.FROM, new RelCIEnd(isDiffMode()));
@@ -32,11 +37,11 @@ public class RelationshipCI extends TypeLikeCI {
         }
     }
 
-    private void initTarget(){
+    private void initTarget() {
         preventDuplicates = false;
     }
 
-    private void initDiff(){
+    private void initDiff() {
         preventDuplicates = null;
     }
 
@@ -44,74 +49,74 @@ public class RelationshipCI extends TypeLikeCI {
     public Boolean doesPreventDuplicates() {
         return preventDuplicates;
     }
+
     public void setPreventDuplicates(Boolean value) {
         checkModeAssertion(value != null, CIDiffMode.TARGET);
         preventDuplicates = value;
     }
 
-
     @Override
-    protected void fillDiffCI(AbstractCI newCI, AbstractCI diffCI){
+    protected void fillDiffCI(AbstractCI newCI, AbstractCI diffCI) {
         super.fillDiffCI(newCI, diffCI);
         RelationshipCI newCastedCI = (RelationshipCI) newCI;
         RelationshipCI diffCastedCI = (RelationshipCI) diffCI;
-        {
-            Boolean value = newCastedCI.doesPreventDuplicates();
-            if (value != null && !value.equals(doesPreventDuplicates()))
-                diffCastedCI.setPreventDuplicates(value);
+        Boolean isPreventDiplicates = newCastedCI.doesPreventDuplicates();
+        if (isPreventDiplicates != null && !isPreventDiplicates.equals(doesPreventDuplicates())) {
+            diffCastedCI.setPreventDuplicates(isPreventDiplicates);
         }
-
-        for (End end: new End[]{End.FROM, End.TO}){
+        for (End end : new End[]{End.FROM, End.TO}) {
             RelCIEnd thisEnd = getEnd(end);
             RelCIEnd newEnd = newCastedCI.getEnd(end);
             RelCIEnd diffEnd = diffCastedCI.getEnd(end);
-            {
-                ReversibleSet<String> oldValues = thisEnd.getTypes();
-                ReversibleSet<String> newValues = newEnd.getTypes();
-                for (String value:SlothSet.itemsToRemove(oldValues, newValues))
-                    diffEnd.reverseType(value);
-                for (String value:SlothSet.itemsToAdd(oldValues, newValues))
-                    diffEnd.addType(value);
-            }{
-                ReversibleSet<String> oldValues = thisEnd.getRelationships();
-                ReversibleSet<String> newValues = newEnd.getRelationships();
-                for (String value:SlothSet.itemsToRemove(oldValues, newValues))
-                    diffEnd.reverseRelationship(value);
-                for (String value:SlothSet.itemsToAdd(oldValues, newValues))
-                    diffEnd.addRelationship(value);
-            }{
-                String value = newEnd.getMeaning();
-                if (value != null && !value.equals(thisEnd.getMeaning()))
-                    diffEnd.setMeaning(value);
-            }{
-                CloneBehaviour value = newEnd.getRevisionBehaviour();
-                if (value != null && !value.equals(thisEnd.getRevisionBehaviour()))
-                    diffEnd.setRevisionBehaviour(value);
-            }{
-                CloneBehaviour value = newEnd.getCloneBehaviour();
-                if (value != null && !value.equals(thisEnd.getCloneBehaviour()))
-                    diffEnd.setCloneBehaviour(value);
-            }{
-                Boolean value = newEnd.getPropagateModify();
-                if (value != null && !value.equals(thisEnd.getPropagateModify()))
-                    diffEnd.setPropagateModify(value);
-            }{
-                Boolean value = newEnd.getPropagateConnection();
-                if (value != null && !value.equals(thisEnd.getPropagateConnection()))
-                    diffEnd.setPropagateConnection(value);
-            }{
-                Cardinality value = newEnd.getCardinality();
-                if (value != null && !value.equals(thisEnd.getCardinality()))
-                    diffEnd.setCardinality(value);
+            ReversibleSet<String> oldTypes = thisEnd.getTypes();
+            ReversibleSet<String> newTypes = newEnd.getTypes();
+            for (String value : SlothSet.itemsToRemove(oldTypes, newTypes)) {
+                diffEnd.reverseType(value);
+            }
+            for (String value : SlothSet.itemsToAdd(oldTypes, newTypes)) {
+                diffEnd.addType(value);
+            }
+            ReversibleSet<String> oldRelType = thisEnd.getRelationships();
+            ReversibleSet<String> newRelType = newEnd.getRelationships();
+            for (String value : SlothSet.itemsToRemove(oldRelType, newRelType)) {
+                diffEnd.reverseRelationship(value);
+            }
+            for (String value : SlothSet.itemsToAdd(oldRelType, newRelType)) {
+                diffEnd.addRelationship(value);
+            }
+            String meaning = newEnd.getMeaning();
+            if (meaning != null && !meaning.equals(thisEnd.getMeaning())) {
+                diffEnd.setMeaning(meaning);
+            }
+            CloneBehaviour revisionCloneBehaviour = newEnd.getRevisionBehaviour();
+            if (revisionCloneBehaviour != null && !revisionCloneBehaviour.equals(thisEnd.getRevisionBehaviour())) {
+                diffEnd.setRevisionBehaviour(revisionCloneBehaviour);
+            }
+            CloneBehaviour cloneBehaviour = newEnd.getCloneBehaviour();
+            if (cloneBehaviour != null && !cloneBehaviour.equals(thisEnd.getCloneBehaviour())) {
+                diffEnd.setCloneBehaviour(cloneBehaviour);
+            }
+            Boolean isPropagateModify = newEnd.getPropagateModify();
+            if (isPropagateModify != null && !isPropagateModify.equals(thisEnd.getPropagateModify())) {
+                diffEnd.setPropagateModify(isPropagateModify);
+            }
+            Boolean isPropagateConnection = newEnd.getPropagateConnection();
+            if (isPropagateConnection != null && !isPropagateConnection.equals(thisEnd.getPropagateConnection())) {
+                diffEnd.setPropagateConnection(isPropagateConnection);
+            }
+            Cardinality cardinality = newEnd.getCardinality();
+            if (cardinality != null && !cardinality.equals(thisEnd.getCardinality())) {
+                diffEnd.setCardinality(cardinality);
             }
         }
     }
 
-
     @Override
-    public boolean isEmpty(){
-        if (!super.isEmpty()) return false;
-        return preventDuplicates==null && ends.get(End.FROM).isEmpty() && ends.get(End.TO).isEmpty();
+    public boolean isEmpty() {
+        if (!super.isEmpty()) {
+            return false;
+        }
+        return preventDuplicates == null && ends.get(End.FROM).isEmpty() && ends.get(End.TO).isEmpty();
     }
 
     @Override
@@ -123,79 +128,114 @@ public class RelationshipCI extends TypeLikeCI {
     }
 
     @Override
-    public AbstractCI buildDefaultCI(){
+    public AbstractCI buildDefaultCI() {
         return new RelationshipCI(getName());
     }
 
     @Override
-    public List<ScriptChunk> buildUpdateScript(){
+    public List<ScriptChunk> buildUpdateScript() {
         CIFullName fName = getCIFullName();
         List<ScriptChunk> chunks = super.buildUpdateScript();
 
-        for (End end: new End[]{End.FROM, End.TO}) {
+        for (End end : new End[]{End.FROM, End.TO}) {
             RelCIEnd ciEnd = getEnd(end);
             String sEnd = end.toString();
-            {
-                Set<String> toRemove = ciEnd.getRelationships().getReversed();
-                for (String item:toRemove) {
-                    chunks.add(new ModChunk(fName, sEnd, M_REMOVE, M_RELATIONSHIP, item));
-                }
-                Set<String> toAdd = ciEnd.getRelationships().get();
-                for (String item:toAdd) {
-                    chunks.add(new ModChunk(fName, SP_ADD_REL_TO, sEnd, M_ADD, M_RELATIONSHIP, item));
-                }
-            }{
-                Set<String> toRemove = ciEnd.getTypes().getReversed();
-                for (String item:toRemove) {
-                    chunks.add(new ModChunk(fName, sEnd, M_REMOVE, M_TYPE, item));
-                }
-                Set<String> toAdd = ciEnd.getTypes().get();
-                for (String item:toAdd) {
-                    chunks.add(new ModChunk(fName, SP_ADD_TYPE_TO, sEnd, M_ADD, M_TYPE, item));
-                }
-            }{
-                String val = ciEnd.getMeaning();
-                if (val != null) {
-                    String[] param = new String[]{sEnd, "meaning", val};
-                    chunks.add(new ModChunk(fName, param));
-                }
-            }{
-                CloneBehaviour val = ciEnd.getRevisionBehaviour();
-                if (val != null) {
-                    String[] param = new String[]{sEnd, "revision", val.toString()};
-                    chunks.add(new ModChunk(fName, param));
-                }
-            }{
-                CloneBehaviour val = ciEnd.getCloneBehaviour();
-                if (val != null) {
-                    String[] param = new String[]{sEnd, "clone", val.toString()};
-                    chunks.add(new ModChunk(fName, param));
-                }
-            }{
-                Boolean val = ciEnd.getPropagateModify();
-                if (val != null) {
-                    String[] param = new String[]{sEnd, (val?"":"not") + "propagatemodify"};
-                    chunks.add(new ModChunk(fName, param));
-                }
-            }{
-                Boolean val = ciEnd.getPropagateConnection();
-                if (val != null) {
-                    String[] param = new String[]{sEnd, (val?"":"not") + "propagateconnection"};
-                    chunks.add(new ModChunk(fName, param));
-                }
-            }{
-                Cardinality val = ciEnd.getCardinality();
-                if (val != null) {
-                    String[] param = new String[]{sEnd, "cardinality", val.toString()};
-                    chunks.add(new ModChunk(fName, param));
-                }
+
+            Set<String> relsToRemove = ciEnd.getRelationships().getReversed();
+            for (String item : relsToRemove) {
+                chunks.add(new ModChunk(fName, sEnd, M_REMOVE, M_RELATIONSHIP, item));
+            }
+            Set<String> relToAdd = ciEnd.getRelationships().get();
+            for (String item : relToAdd) {
+                chunks.add(new ModChunk(fName, SP_ADD_REL_TO, sEnd, M_ADD, M_RELATIONSHIP, item));
+            }
+            Set<String> typesToRemove = ciEnd.getTypes().getReversed();
+            for (String item : typesToRemove) {
+                chunks.add(new ModChunk(fName, sEnd, M_REMOVE, M_TYPE, item));
+            }
+            Set<String> typeToAdd = ciEnd.getTypes().get();
+            for (String item : typeToAdd) {
+                chunks.add(new ModChunk(fName, SP_ADD_TYPE_TO, sEnd, M_ADD, M_TYPE, item));
+            }
+            String meaning = ciEnd.getMeaning();
+            if (meaning != null) {
+                String[] param = new String[]{sEnd, "meaning", meaning};
+                chunks.add(new ModChunk(fName, param));
+            }
+
+            CloneBehaviour revisionBehaviour = ciEnd.getRevisionBehaviour();
+            if (revisionBehaviour != null) {
+                String[] param = new String[]{sEnd, "revision", revisionBehaviour.toString()};
+                chunks.add(new ModChunk(fName, param));
+            }
+            CloneBehaviour cloneBehaviour = ciEnd.getCloneBehaviour();
+            if (cloneBehaviour != null) {
+                String[] param = new String[]{sEnd, "clone", cloneBehaviour.toString()};
+                chunks.add(new ModChunk(fName, param));
+            }
+            Boolean isPropagateModify = ciEnd.getPropagateModify();
+            if (isPropagateModify != null) {
+                String[] param = new String[]{sEnd, (isPropagateModify ? "" : "not") + "propagatemodify"};
+                chunks.add(new ModChunk(fName, param));
+            }
+            Boolean isPropagateConnection = ciEnd.getPropagateConnection();
+            if (isPropagateConnection != null) {
+                String[] param = new String[]{sEnd, (isPropagateConnection ? "" : "not") + "propagateconnection"};
+                chunks.add(new ModChunk(fName, param));
+            }
+            Cardinality cardinality = ciEnd.getCardinality();
+            if (cardinality != null) {
+                String[] param = new String[]{sEnd, "cardinality", cardinality.toString()};
+                chunks.add(new ModChunk(fName, param));
             }
         }
         return chunks;
     }
 
-    public RelCIEnd getEnd(End end){
+    public RelCIEnd getEnd(End end) {
         return ends.get(end);
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> fieldsValues = super.toMap();
+
+        fieldsValues.put(Y_PREVENT_DUPLICATES, doesPreventDuplicates());
+
+        ends.forEach((key, value) -> {
+            fieldsValues.put(key.toString().toLowerCase(), value.toMap());
+        });
+
+        return fieldsValues;
+    }
+
+    public enum End {
+        FROM, TO;
+
+        @Override
+        public String toString() {
+            return super.toString().toLowerCase();
+        }
+
+    }
+
+    public enum Cardinality {
+        ONE, MANY;
+
+        @Override
+        @JsonValue
+        public String toString() {
+            return super.toString().toLowerCase();
+        }
+    }
+
+    public enum CloneBehaviour {
+        NONE, REPLICATE, FLOAT;
+
+        @Override
+        @JsonValue
+        public String toString() {
+            return super.toString().toLowerCase();
+        }
     }
 
     public class RelCIEnd {
@@ -209,14 +249,15 @@ public class RelationshipCI extends TypeLikeCI {
         private Boolean propagateConnection;
         private Cardinality cardinality;
 
-        public RelCIEnd(boolean diffMode){
-            if (diffMode)
+        public RelCIEnd(boolean diffMode) {
+            if (diffMode) {
                 initDiff();
-            else
+            } else {
                 initTarget();
+            }
         }
 
-        private void initDiff(){
+        private void initDiff() {
             types = new SlothSet<>(true);
             relationships = new SlothSet<>(true);
             meaning = null;
@@ -226,7 +267,7 @@ public class RelationshipCI extends TypeLikeCI {
             propagateConnection = null;
         }
 
-        private void initTarget(){
+        private void initTarget() {
             types = new SlothSet<>(false);
             relationships = new SlothSet<>(false);
             meaning = "";
@@ -237,25 +278,29 @@ public class RelationshipCI extends TypeLikeCI {
         }
 
         @ModStringSetProvider(value = M_TYPE, addPriority = SP_ADD_TYPE_TO)
-        public ReversibleSet<String> getTypes(){
+        public ReversibleSet<String> getTypes() {
             return new SlothSet<>(types, isDiffMode());
         }
-        public boolean addType(String type){
+
+        public boolean addType(String type) {
             return types.add(type);
         }
-        public boolean reverseType(String type){
+
+        public boolean reverseType(String type) {
             checkModeAssertion(CIDiffMode.DIFF);
             return types.reverse(type);
         }
 
         @ModStringSetProvider(value = M_RELATIONSHIP, addPriority = SP_ADD_REL_TO)
-        public ReversibleSet<String> getRelationships(){
+        public ReversibleSet<String> getRelationships() {
             return new SlothSet<>(relationships, isDiffMode());
         }
-        public boolean addRelationship(String rel){
+
+        public boolean addRelationship(String rel) {
             return relationships.add(rel);
         }
-        public boolean reverseRelationship(String rel){
+
+        public boolean reverseRelationship(String rel) {
             checkModeAssertion(CIDiffMode.DIFF);
             return relationships.reverse(rel);
         }
@@ -308,14 +353,19 @@ public class RelationshipCI extends TypeLikeCI {
             return cardinality;
         }
 
-        public boolean isEmpty(){
-            return this.types.isEmpty() && relationships.isEmpty() && meaning==null && revisionBehaviour==null &&
-                    cloneBehaviour==null && propagateModify==null && propagateConnection==null && cardinality==null;
+        public boolean isEmpty() {
+            return this.types.isEmpty()
+                    && relationships.isEmpty()
+                    && meaning == null
+                    && revisionBehaviour == null
+                    && cloneBehaviour == null
+                    && propagateModify == null
+                    && propagateConnection == null
+                    && cardinality == null;
         }
 
         public Map<String, Object> toMap() {
             Map<String, Object> fieldsValues = new HashMap<>();
-
             fieldsValues.put(Y_TYPES, new TreeSet<>(getTypes()));
             fieldsValues.put(Y_RELATIONSHIPS, new TreeSet<>(getRelationships()));
             fieldsValues.put(Y_MEANING, getMeaning());
@@ -324,54 +374,7 @@ public class RelationshipCI extends TypeLikeCI {
             fieldsValues.put(Y_PROPAGATE_MODIFY, getPropagateModify());
             fieldsValues.put(Y_PROPAGATE_CONNECTION, getPropagateConnection());
             fieldsValues.put(Y_CARDINALITY, getCardinality());
-
             return fieldsValues;
         }
-    }
-
-    public enum End {
-        FROM, TO;
-
-        @Override
-        public String toString(){
-            return super.toString().toLowerCase();
-        }
-
-    }
-
-
-    public enum Cardinality {
-        ONE, MANY;
-
-        @Override
-        @JsonValue
-        public String toString(){
-            return super.toString().toLowerCase();
-        }
-
-    }
-
-
-    public enum CloneBehaviour {
-        NONE, REPLICATE, FLOAT;
-
-        @Override
-        @JsonValue
-        public String toString(){
-            return super.toString().toLowerCase();
-        }
-
-    }
-
-    public Map<String, Object> toMap(){
-        Map<String, Object> fieldsValues = super.toMap();
-
-        fieldsValues.put(Y_PREVENT_DUPLICATES, doesPreventDuplicates());
-
-        ends.forEach((key, value) -> {
-            fieldsValues.put(key.toString().toLowerCase(), value.toMap());
-        });
-
-        return fieldsValues;
     }
 }

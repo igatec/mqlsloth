@@ -1,6 +1,5 @@
 package com.igatec.mqlsloth.parser.yaml;
 
-import com.igatec.mqlsloth.script.MqlUtil;
 import org.apache.commons.io.IOUtils;
 
 import java.io.InputStream;
@@ -12,28 +11,22 @@ import java.util.stream.Collectors;
 
 public class YAMLKeysComparator implements Comparator<String> {
 
-    private final static YAMLKeysComparator instance;
+    private static final YAMLKeysComparator instance;
 
     static {
         instance = new YAMLKeysComparator();
     }
 
-    public static YAMLKeysComparator getInstance(){
-        return instance;
-    }
-
-    private final List<String> keys;
-
-    private YAMLKeysComparator(){
+    private YAMLKeysComparator() {
         String fileContent = null;
-        try (InputStream is = getClass().getResourceAsStream("/sloth_yaml_keys_order.txt")){
+        try (InputStream is = getClass().getResourceAsStream("/sloth_yaml_keys_order.txt")) {
             fileContent = IOUtils.toString(is);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("WARNING: File 'sloth_yaml_keys_sort.txt' not found");
             System.out.println("     " + ex.getClass());
             System.out.println("     " + ex.getMessage());
         }
-        if (fileContent != null){
+        if (fileContent != null) {
             String[] lines = fileContent.split("(\n|\r\n)");
             keys = Arrays.stream(lines)
                     .filter(k -> !k.isEmpty() && !k.startsWith("#"))
@@ -41,6 +34,12 @@ public class YAMLKeysComparator implements Comparator<String> {
         } else {
             keys = new LinkedList<>();
         }
+    }
+
+    private final List<String> keys;
+
+    public static YAMLKeysComparator getInstance() {
+        return instance;
     }
 
     @Override

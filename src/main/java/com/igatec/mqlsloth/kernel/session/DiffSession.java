@@ -30,8 +30,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
-;
-
 public class DiffSession extends AbstractSession {
 
     protected final OutputProvider oOP;
@@ -43,6 +41,8 @@ public class DiffSession extends AbstractSession {
     private final Controller controller = new Controller();
     private final boolean synchronous;
 
+    // todo remove checkstyle ignore and fix
+    // CHECKSTYLE.OFF: ParameterNumber
     protected DiffSession(
             Context context,
             PersistenceLocation sourceLocation,
@@ -61,16 +61,20 @@ public class DiffSession extends AbstractSession {
         shouldSaveScript = sessionConfig.shouldSaveUpdateScript();
         shouldBuildScript = shouldExecuteScript || shouldSaveScript;
     }
+    // CHECKSTYLE.ON: ParameterNumber
 
     @Override
     public void run() throws SlothException {
         try {
+            InputProvider sIP = sourceLocation.isDatabase()
+                    ? new DBInputProvider(this)
+                    : new FileSystemInputProvider(sourceLocation.getRootDirectory());
+            InputProvider tIP = targetLocation.isDatabase()
+                    ? new DBInputProvider(this)
+                    : new FileSystemInputProvider(targetLocation.getRootDirectory());
 
-            InputProvider sIP, tIP;
-            sIP = sourceLocation.isDatabase() ? new DBInputProvider(this) : new FileSystemInputProvider(sourceLocation.getRootDirectory());
-            tIP = targetLocation.isDatabase() ? new DBInputProvider(this) : new FileSystemInputProvider(targetLocation.getRootDirectory());
-
-            InputProvider masterProvider, slaveProvider;
+            InputProvider masterProvider;
+            InputProvider slaveProvider;
             if (searchLocation == SearchLocation.SOURCE) {
                 masterProvider = sIP;
                 slaveProvider = tIP;
@@ -103,11 +107,12 @@ public class DiffSession extends AbstractSession {
 
             ObjectStreamReader<AbstractCI> slaveCIReader = slaveProvider.getCIDefinitions(nameReader);
             RichMqlScript richScript = new RichMqlScript();
-            if (oOP != null)
+            if (oOP != null) {
                 oOP.clearAll();
-            if (synchronous)
+            }
+            if (synchronous) {
                 executeRun(slaveCIReader, richScript);
-            else {
+            } else {
                 ExecutorService service = Executors.newSingleThreadExecutor();
                 service.submit(() -> executeRun(slaveCIReader, richScript));
                 service.shutdown();
@@ -129,7 +134,8 @@ public class DiffSession extends AbstractSession {
             while (slaveCIReader.hasNext()) {
                 AbstractCI slaveCI = slaveCIReader.next(); // Can be null
                 AbstractCI masterCI = syncQueue.remove();
-                AbstractCI sourceCI, targetCI;
+                AbstractCI sourceCI;
+                AbstractCI targetCI;
                 if (searchLocation == SearchLocation.SOURCE) {
                     sourceCI = masterCI;
                     targetCI = slaveCI;
@@ -140,15 +146,18 @@ public class DiffSession extends AbstractSession {
                 if (targetCI == null) {
                     if (sourceCI == null) {
                         // Do nothing. But this should not happen
+                        System.out.println("This shouldn't happen. Check this line please!");
                     } else if (sourceCI.getDiffMode() == CIDiffMode.TARGET) {
-                        if (shouldBuildScript)
+                        if (shouldBuildScript) {
                             richScript.addChunks(sourceCI.buildCreateScript());
-                        if (shouldSaveDiff && oOP != null)
+                        }
+                        if (shouldSaveDiff && oOP != null) {
                             oOP.saveCIDefinition(sourceCI);
+                        }
                     } else if (sourceCI.getDiffMode() == CIDiffMode.DIFF) {
-
+                        System.out.println("Not implemented yet");
                     } else if (sourceCI.getDiffMode() == CIDiffMode.DELETE) {
-                        // TODO
+                        System.out.println("Not implemented yet");
                     } else {
                         throw new SlothException("Invalid diff mode: " + sourceCI.getDiffMode()); // This should not happen
                     }
@@ -156,23 +165,31 @@ public class DiffSession extends AbstractSession {
                     if (sourceCI == null) {
                         controller.addMessage("WARNING: CI '%s' skipped. Reason: it is not found in SOURCE location", targetCI);
                     } else if (
-                            sourceCI.getDiffMode() == CIDiffMode.TARGET ||
-                                    sourceCI.getDiffMode() == CIDiffMode.DIFF
+                            sourceCI.getDiffMode() == CIDiffMode.TARGET
+                                    | sourceCI.getDiffMode() == CIDiffMode.DIFF
                     ) {
                         AbstractCI diffCI = targetCI.buildDiff(sourceCI);
-                        if (shouldBuildScript)
+                        if (shouldBuildScript) {
                             richScript.addChunks(diffCI.buildUpdateScript());
-                        if (shouldSaveDiff && !diffCI.isEmpty() && oOP != null)
+                        }
+                        if (shouldSaveDiff && !diffCI.isEmpty() && oOP != null) {
                             oOP.saveCIDefinition(diffCI);
+                        }
                     } else if (sourceCI.getDiffMode() == CIDiffMode.DELETE) {
-                        // TODO
+                        System.out.println("Not implemented yet");
                     } else {
                         throw new SlothException("Invalid diff mode: " + sourceCI.getDiffMode()); // This should not happen
                     }
                 } else if (targetCI.getDiffMode() == CIDiffMode.DIFF) {
-                    controller.addMessage("WARNING: CI '%s' skipped. Reason: it is defined in DIFF mode in TARGET location", targetCI);
+                    controller.addMessage(
+                            "WARNING: CI '%s' skipped. Reason: it is defined in DIFF mode in TARGET location",
+                            targetCI
+                    );
                 } else if (targetCI.getDiffMode() == CIDiffMode.DELETE) {
-                    controller.addMessage("WARNING: CI '%s' skipped. Reason: it is defined in DELETE mode in TARGET location", targetCI);
+                    controller.addMessage(
+                            "WARNING: CI '%s' skipped. Reason: it is defined in DELETE mode in TARGET location",
+                            targetCI
+                    );
                 } else {
                     throw new SlothException("Invalid diff mode: " + targetCI.getDiffMode()); // This should not happen
                 }

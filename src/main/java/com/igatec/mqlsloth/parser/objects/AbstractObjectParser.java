@@ -3,7 +3,12 @@ package com.igatec.mqlsloth.parser.objects;
 import com.igatec.mqlsloth.ci.AbstractCI;
 import com.igatec.mqlsloth.parser.ParserException;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 public abstract class AbstractObjectParser implements ObjectParser<AbstractCI> {
@@ -18,7 +23,7 @@ public abstract class AbstractObjectParser implements ObjectParser<AbstractCI> {
     }
 
     @Override
-    public final Map<String, Function> getKeyWordsToValueMakers(){
+    public final Map<String, Function> getKeyWordsToValueMakers() {
         switch (format) {
             case MQL:
                 return getKeyWordsMQL();
@@ -63,9 +68,10 @@ public abstract class AbstractObjectParser implements ObjectParser<AbstractCI> {
         setParsedValuesToObject(fieldsValues, createdObject);
         return createdObject;
     }
+
     protected abstract AbstractCI createObject(Map<String, Object> fieldsValues) throws ParserException;
 
-    protected final void setParsedValuesToObject(Map<String, Object> parsedValues, AbstractCI parsebleObject){
+    protected final void setParsedValuesToObject(Map<String, Object> parsedValues, AbstractCI parsebleObject) {
         switch (format) {
             case MQL:
                 setParsedMQLValuesToObject(parsedValues, parsebleObject);

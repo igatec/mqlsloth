@@ -7,11 +7,18 @@ import com.igatec.mqlsloth.ci.constants.CIDiffMode;
 import com.igatec.mqlsloth.parser.ParserException;
 import com.igatec.mqlsloth.parser.mql.MqlParser;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class FormObjectParser extends AdminObjectObjectParser {
+
+    public static final int FORM_SELECT_PARTS_NUMBER = 3;
+
     public FormObjectParser(Format format) {
         super(format);
     }
@@ -57,7 +64,9 @@ public class FormObjectParser extends AdminObjectObjectParser {
 
     private void makeFormFieldFromMQL(String printedField) {
         FormField formField = formCI.addField();
-        List<String> fieldRecords = Arrays.asList(printedField.split("\n")).stream().map(s -> s.trim()).collect(Collectors.toList());
+        List<String> fieldRecords = Arrays.asList(
+                printedField.split("\n")
+        ).stream().map(s -> s.trim()).collect(Collectors.toList());
         String[] arr;
         String select = "";
         String expressionType = null;
@@ -79,8 +88,8 @@ public class FormObjectParser extends AdminObjectObjectParser {
             } else if (record.startsWith("expressiontype")) {
                 expressionType = record.trim().split("\\s+", 2)[1];
             } else if (record.matches("\\s*\\d+\\s+select\\s+.+")) {
-                arr = record.split("\\s+", 3);
-                if (arr.length == 3) {
+                arr = record.split("\\s+", FORM_SELECT_PARTS_NUMBER);
+                if (arr.length == FORM_SELECT_PARTS_NUMBER) {
                     select = arr[2];
                 }
             }

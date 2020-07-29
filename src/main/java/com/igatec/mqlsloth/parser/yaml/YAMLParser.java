@@ -9,10 +9,16 @@ import com.igatec.mqlsloth.parser.ParserException;
 import com.igatec.mqlsloth.parser.objects.AbstractObjectParser;
 import com.igatec.mqlsloth.parser.objects.ObjectParser;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.function.Function;
 
-public class YAMLParser extends Parser{
+public class YAMLParser extends Parser {
     private Map<String, Object> parsedValues;
     private ObjectMapper mapper;
 
@@ -39,7 +45,7 @@ public class YAMLParser extends Parser{
         initObjectMapper();
     }
 
-    private void initObjectMapper(){
+    private void initObjectMapper() {
         this.mapper = new ObjectMapper(new YAMLFactory().enable(YAMLGenerator.Feature.LITERAL_BLOCK_STYLE));
     }
 
@@ -54,7 +60,7 @@ public class YAMLParser extends Parser{
     @Override
     protected void makeObjectParserIfNotSet() throws Exception {
         parsedValues = mapper.readValue(ciData, Map.class);
-        String adminType  = (String) parsedValues.get(ADMIN_TYPE_KEY);
+        String adminType = (String) parsedValues.get(ADMIN_TYPE_KEY);
         String objectName = (String) parsedValues.get(ADMIN_TYPE_VALUE);
         if (adminType.equals(SlothAdminType.BUS.getKey())) {
             adminType = (String) parsedValues.get(M_TYPE);

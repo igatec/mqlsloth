@@ -22,7 +22,7 @@ public class RoleCI extends UserCombinationCI {
     }
 
     @Override
-    public AbstractCI buildDefaultCI(){
+    public AbstractCI buildDefaultCI() {
         return new RoleCI(getName());
     }
 

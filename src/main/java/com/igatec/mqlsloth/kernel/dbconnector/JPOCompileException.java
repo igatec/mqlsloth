@@ -4,16 +4,19 @@ import com.igatec.mqlsloth.kernel.SlothException;
 
 public class JPOCompileException extends SlothException {
 
-    public JPOCompileException(){
+    public JPOCompileException() {
         super();
     }
-    public JPOCompileException(String message){
+
+    public JPOCompileException(String message) {
         super(message);
     }
-    public JPOCompileException(String message, Throwable throwable){
+
+    public JPOCompileException(String message, Throwable throwable) {
         super(message, throwable);
     }
-    public JPOCompileException(Throwable throwable){
+
+    public JPOCompileException(Throwable throwable) {
         super(throwable);
     }
 

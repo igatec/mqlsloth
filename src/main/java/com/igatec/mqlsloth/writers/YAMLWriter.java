@@ -10,7 +10,6 @@ import com.igatec.mqlsloth.parser.ParserException;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static com.igatec.mqlsloth.script.YAMLKeywords.Y_MODE;
 
@@ -21,7 +20,7 @@ public class YAMLWriter implements WriterCI {
         initObjectMapper();
     }
 
-    private void initObjectMapper(){
+    private void initObjectMapper() {
         this.mapper = new ObjectMapper(new YAMLFactory()
                 .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
                 .disable(YAMLGenerator.Feature.SPLIT_LINES)

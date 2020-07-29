@@ -5,8 +5,11 @@ import com.igatec.mqlsloth.ci.annotation.ModReversibleStringProvider;
 import com.igatec.mqlsloth.ci.annotation.ModStringSetProvider;
 import com.igatec.mqlsloth.ci.constants.CIDiffMode;
 import com.igatec.mqlsloth.ci.constants.SlothAdminType;
-import com.igatec.mqlsloth.util.*;
-import java.util.*;
+import com.igatec.mqlsloth.util.ReversibleSet;
+import com.igatec.mqlsloth.util.SlothSet;
+import com.igatec.mqlsloth.util.SlothString;
+
+import java.util.Map;
 
 public abstract class TypeLikeCI extends AdminObjectCI {
 
@@ -22,22 +25,24 @@ public abstract class TypeLikeCI extends AdminObjectCI {
             initDiff();
         }
     }
-    private void initTarget(){
+
+    private void initTarget() {
         isAbstract = false;
         parentType = new SlothString();
         attributes = new SlothSet<>(false);
     }
-    private void initDiff(){
+
+    private void initDiff() {
         isAbstract = null;
         parentType = null;
         attributes = new SlothSet<>(true);
     }
 
-
     @ModBooleanProvider(value = M_ABSTRACT, useTrueFalse = true)
     public Boolean isAbstract() {
         return isAbstract;
     }
+
     public void setAbstract(Boolean anAbstract) {
         checkModeAssertion(anAbstract != null, CIDiffMode.TARGET);
         isAbstract = anAbstract;
@@ -47,68 +52,65 @@ public abstract class TypeLikeCI extends AdminObjectCI {
     public SlothString getParentType() {
         return parentType;
     }
+
     public void setParentType(SlothString parentType) {
         checkModeAssertion(parentType != null, CIDiffMode.TARGET);
         this.parentType = parentType;
     }
 
-    public void deleteParentType(){
+    public void deleteParentType() {
         setParentType(new SlothString(null));
     }
 
-
     @ModStringSetProvider(value = M_ATTRIBUTE, addPriority = SP_ADD_ATTRIBUTE_TO)
-    public ReversibleSet<String> getAttributes(){
+    public ReversibleSet<String> getAttributes() {
         return new SlothSet<>(attributes, isDiffMode());
     }
-    public boolean addAttribute(String attribute){
+
+    public boolean addAttribute(String attribute) {
         return attributes.add(attribute);
     }
-    public boolean reverseAttribute(String attribute){
+
+    public boolean reverseAttribute(String attribute) {
         checkModeAssertion(CIDiffMode.DIFF);
         return attributes.reverse(attribute);
     }
 
     @Override
-    protected void fillDiffCI(AbstractCI newCI, AbstractCI diffCI){
+    protected void fillDiffCI(AbstractCI newCI, AbstractCI diffCI) {
         super.fillDiffCI(newCI, diffCI);
         TypeLikeCI newCastedCI = (TypeLikeCI) newCI;
         TypeLikeCI diffCastedCI = (TypeLikeCI) diffCI;
-        {
-            Boolean value = newCastedCI.isAbstract();
-            if (value != null && !value.equals(isAbstract())){
-                diffCastedCI.setAbstract(value);
-            }
+        Boolean isAbstract = newCastedCI.isAbstract();
+        if (isAbstract != null && !isAbstract.equals(isAbstract())) {
+            diffCastedCI.setAbstract(isAbstract);
         }
-        {
-            SlothString value = newCastedCI.getParentType();
-            if (value != null && !value.equals(getParentType())){
-                diffCastedCI.setParentType(value);
-            }
+        SlothString parentType = newCastedCI.getParentType();
+        if (parentType != null && !parentType.equals(getParentType())) {
+            diffCastedCI.setParentType(parentType);
         }
-        {
-            ReversibleSet<String> oldValues = getAttributes();
-            ReversibleSet<String> newValues = newCastedCI.getAttributes();
-            for (String value:SlothSet.itemsToRemove(oldValues, newValues))
-                diffCastedCI.reverseAttribute(value);
-            for (String value:SlothSet.itemsToAdd(oldValues, newValues))
-                diffCastedCI.addAttribute(value);
+        ReversibleSet<String> attrOldValues = getAttributes();
+        ReversibleSet<String> attrNewValues = newCastedCI.getAttributes();
+        for (String value : SlothSet.itemsToRemove(attrOldValues, attrNewValues)) {
+            diffCastedCI.reverseAttribute(value);
+        }
+        for (String value : SlothSet.itemsToAdd(attrOldValues, attrNewValues)) {
+            diffCastedCI.addAttribute(value);
         }
     }
 
-    public boolean isEmpty(){
-        if (!super.isEmpty()) return false;
+    public boolean isEmpty() {
+        if (!super.isEmpty()) {
+            return false;
+        }
         return isAbstract == null && parentType == null && attributes.isEmpty();
     }
 
-
-    public Map<String, Object> toMap(){
+    public Map<String, Object> toMap() {
         Map<String, Object> fieldsValues = super.toMap();
-
         fieldsValues.put(Y_ABSTRACT, isAbstract());
         fieldsValues.put(Y_DERIVED, (getParentType() == null) ? null : getParentType().toString());
         fieldsValues.put(Y_ATTRIBUTES, getAttributes());
-
         return fieldsValues;
     }
 }

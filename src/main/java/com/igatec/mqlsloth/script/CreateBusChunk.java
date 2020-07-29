@@ -3,12 +3,14 @@ package com.igatec.mqlsloth.script;
 import com.igatec.mqlsloth.ci.constants.ScriptPriority;
 import com.igatec.mqlsloth.ci.util.BusCIName;
 import com.igatec.mqlsloth.ci.util.CIFullName;
+
 import java.util.Arrays;
 
 public class CreateBusChunk extends ScriptChunk implements MqlKeywords {
 
     private final String[] cmd;
 
+    // CHECKSTYLE.OFF: MagicNumber
     public CreateBusChunk(CIFullName relatedCI, String policy, String vault) {
         super(relatedCI);
         cmd = new String[9];
@@ -24,11 +26,10 @@ public class CreateBusChunk extends ScriptChunk implements MqlKeywords {
         cmd[8] = MqlUtil.qWrap(vault);
         setPriority(ScriptPriority.SP_BUS_CREATION);
     }
+    // CHECKSTYLE.ON: MagicNumber
 
     @Override
     public String[] getCommand() {
         return Arrays.copyOf(cmd, cmd.length);
     }
-
-
 }

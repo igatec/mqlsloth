@@ -1,5 +1,7 @@
 package com.igatec.mqlsloth.ci.constants;
 
+// todo remove ignorance and refactor
+// CHECKSTYLE.OFF: InterfaceIsType
 public interface ScriptPriority {
 
     int SP_AFTER_ADMIN_CREATION_1 = Integer.MIN_VALUE + 1;
@@ -24,5 +26,5 @@ public interface ScriptPriority {
 
     int SP_BUS_CREATION = 2000;
     int SP_BUS_MODIFICATION = 3000;
-
 }
+// CHECKSTYLE.ON: InterfaceIsType

@@ -48,21 +48,22 @@ import static com.igatec.mqlsloth.script.MqlKeywords.M_PROPERTY;
 import static com.igatec.mqlsloth.script.MqlKeywords.M_TABLE;
 import static com.igatec.mqlsloth.script.MqlKeywords.M_TO;
 
-;
-
 public class DBInputProvider extends AbstractInputProviderPatternInterpreter {
-
-    private final static List<SlothAdminType> adminTypes = new ArrayList<>();
+    public static final int DEFAULT_NAMES_QUEUE_CAPACITY = 10;
+    public static final int DEFAULT_CI_STRINGS_QUEUE_CAPACITY = 10;
+    public static final int DEFAULT_CIS_QUEUE_CAPACITY = 10;
+    public static final int REQUIRED_PART_OF_MQL_RESULT_NUMBER = 3;
+    private static final List<SlothAdminType> ADMIN_TYPES = new ArrayList<>();
 
     static {
-        adminTypes.addAll(SlothAdminType.getSorted());
+        ADMIN_TYPES.addAll(SlothAdminType.getSorted());
     }
 
     private final IMqlCommand mqlCommand;
     private final Session session;
 
     public DBInputProvider(Session session) throws Exception {
-        super(10, 10, 10);
+        super(DEFAULT_NAMES_QUEUE_CAPACITY, DEFAULT_CI_STRINGS_QUEUE_CAPACITY, DEFAULT_CIS_QUEUE_CAPACITY);
         this.session = session;
         this.mqlCommand = session.getCommand();
     }
@@ -87,11 +88,14 @@ public class DBInputProvider extends AbstractInputProviderPatternInterpreter {
                         MqlKeywords.M_NAME,
                         MqlKeywords.M_REVISION,
                         MqlKeywords.M_DESCRIPTION,
-                        MqlKeywords.M_ATTRIBUTE + ".*"
-                        , "from.to.type", "from.to.name", "from.to.revision"
+                        MqlKeywords.M_ATTRIBUTE + ".*",
+                        "from.to.type",
+                        "from.to.name",
+                        "from.to.revision"
                 );
-                if (result.isEmpty())
+                if (result.isEmpty()) {
                     return null;
+                }
             } else {
                 if (mqlAdminType.equals("table")) {
                     result = mqlCommand.execute(MqlKeywords.M_PRINT, mqlAdminType, ((StringCIName) ciName).getName(), "system");
@@ -128,7 +132,7 @@ public class DBInputProvider extends AbstractInputProviderPatternInterpreter {
 
     @Override
     public ObjectStreamReader<CIFullName> getAllCINames() {
-        Iterator<SlothAdminType> adminTypesIterator = SlothAdminType.sort(adminTypes).iterator();
+        Iterator<SlothAdminType> adminTypesIterator = SlothAdminType.sort(ADMIN_TYPES).iterator();
         DBObjectStreamReader reader = new DBObjectStreamReader(adminTypesIterator);
 
         return reader;
@@ -210,7 +214,14 @@ public class DBInputProvider extends AbstractInputProviderPatternInterpreter {
         if (SlothAdminType.isBus(ciFullName.getAdminType())) {
             try {
                 BusCIName busName = (BusCIName) ciName;
-                result = mqlCommand.execute(MqlKeywords.M_TEMP, MqlKeywords.M_QUERY, mqlAdminType, busName.getType(), busName.getName(), busName.getRevision());
+                result = mqlCommand.execute(
+                        MqlKeywords.M_TEMP,
+                        MqlKeywords.M_QUERY,
+                        mqlAdminType,
+                        busName.getType(),
+                        busName.getName(),
+                        busName.getRevision()
+                );
             } catch (ClassCastException e) {
                 result = "";
             }
@@ -229,13 +240,17 @@ public class DBInputProvider extends AbstractInputProviderPatternInterpreter {
                     List<String> parts = MqlParser.splitHeaderLine(name);
                     AbstractCIName abstractCIName = null;
                     if (ciFullName.getAdminType().getMqlAdminType().equals(MqlAdminType.BUSINESS_OBJECT)) {
-                        if (parts.size() != 3) {
-                            throw new IndexOutOfBoundsException("Size of parsed header is " + parts.size() + ", but for bus it must be 3");
+                        if (parts.size() != REQUIRED_PART_OF_MQL_RESULT_NUMBER) {
+                            throw new IndexOutOfBoundsException(
+                                    "Size of parsed header is " + parts.size() + ", but for bus it must be 3"
+                            );
                         }
                         abstractCIName = new BusCIName(parts.get(0), parts.get(1), parts.get(2));
                     } else {
                         if (parts.size() != 1) {
-                            throw new IndexOutOfBoundsException("Size of parsed header is " + parts.size() + ", but for admin object it must be 1");
+                            throw new IndexOutOfBoundsException(
+                                    "Size of parsed header is " + parts.size() + ", but for admin object it must be 1"
+                            );
                         }
                         abstractCIName = new StringCIName(parts.get(0));
                     }
@@ -251,18 +266,20 @@ public class DBInputProvider extends AbstractInputProviderPatternInterpreter {
         SlothAdminType aType = fullName.getAdminType();
         String mqlAdminType = aType.getMqlAdminType().toString();
         String adminName = null;
-        if (!SlothAdminType.isBus(aType))
+        if (!SlothAdminType.isBus(aType)) {
             adminName = fullName.getCIName().toString();
+        }
         try {
             String definition = loadCIStringByName(fullName);
-            if (definition == null)
+            if (definition == null) {
                 return new CIStub();
+            }
             MqlParser mqlParser = MqlParser.fromString(definition);
             AbstractCI ci = (AbstractCI) mqlParser.parse();
             CIFullName foundName = ci.getCIFullName();
-            if (!fullName.equals(foundName))
+            if (!fullName.equals(foundName)) {
                 throw new SlothException(String.format("CI name conflict. Required %s, found %s", fullName, foundName));
-
+            }
             // Find symbolic name
             if (ci instanceof AdminObjectCI) {
                 String queryResult = "";
@@ -290,7 +307,13 @@ public class DBInputProvider extends AbstractInputProviderPatternInterpreter {
 
             } else if (aType == SlothAdminType.POLICY) {
                 PolicyCI ciCast = (PolicyCI) ci;
-                String result = mqlCommand.execute(MqlKeywords.M_PRINT, mqlAdminType, adminName, MqlKeywords.M_SELECT, MqlKeywords.M_TYPE);
+                String result = mqlCommand.execute(
+                        MqlKeywords.M_PRINT,
+                        mqlAdminType,
+                        adminName,
+                        MqlKeywords.M_SELECT,
+                        MqlKeywords.M_TYPE
+                );
                 List<Pair<String, String>> pairs = MqlUtil.parseSelectPairs(result);
                 List<String> types = pairs.stream().map(Pair::getRight).collect(Collectors.toList());
                 types.forEach(ciCast::addType);
@@ -317,6 +340,8 @@ public class DBInputProvider extends AbstractInputProviderPatternInterpreter {
                             break;
                         case MqlKeywords.M_TO_REL:
                             ciCast.getEnd(RelationshipCI.End.TO).addRelationship(value);
+                            break;
+                        default:
                             break;
                     }
                 }

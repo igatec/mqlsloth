@@ -7,7 +7,11 @@ import com.igatec.mqlsloth.ci.constants.CIDiffMode;
 import com.igatec.mqlsloth.parser.ParserException;
 import com.igatec.mqlsloth.util.SlothString;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 public class AttributeObjectParser extends AdminObjectObjectParser {
@@ -16,7 +20,7 @@ public class AttributeObjectParser extends AdminObjectObjectParser {
     }
 
     @Override
-    public Map<String, Function> getKeyWordsMQL(){
+    public Map<String, Function> getKeyWordsMQL() {
         Map<String, Function> keyWordsToValueMakers = super.getKeyWordsMQL();
 
         Function<String, Boolean> isMultivalueMaker = Boolean::valueOf;
@@ -96,7 +100,7 @@ public class AttributeObjectParser extends AdminObjectObjectParser {
             throw new ParserException("Can't create " + M_ATTRIBUTE + ". Type not found");
         }
 
-        CIDiffMode mode = CIDiffMode .valueOf((String) fieldsValues.getOrDefault(Y_MODE, "TARGET"));
+        CIDiffMode mode = CIDiffMode.valueOf((String) fieldsValues.getOrDefault(Y_MODE, "TARGET"));
         AttributeCI createdObject = new AttributeCI(name, AttributeType.valueOf(type.toUpperCase()), mode);
         return createdObject;
     }
@@ -175,7 +179,10 @@ public class AttributeObjectParser extends AdminObjectObjectParser {
         }
 
         if (parsedValues.containsKey(Y_REMOVE_PREFIX + Y_RANGES)) {
-            List<String> rangesToRemove = (List<String>) parsedValues.getOrDefault(Y_REMOVE_PREFIX + Y_RANGES, Collections.EMPTY_LIST);
+            List<String> rangesToRemove = (List<String>) parsedValues.getOrDefault(
+                    Y_REMOVE_PREFIX + Y_RANGES,
+                    Collections.EMPTY_LIST
+            );
             rangesToRemove.forEach(((AttributeCI) parsebleObject)::reverseRange);
         }
 

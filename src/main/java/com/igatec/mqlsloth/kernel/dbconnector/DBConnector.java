@@ -5,30 +5,42 @@ import com.igatec.mqlsloth.iface.kernel.Session;
 import com.igatec.mqlsloth.kernel.CommandExecutionException;
 import com.igatec.mqlsloth.kernel.SlothException;
 import com.igatec.mqlsloth.kernel.session.SlothApp;
-import com.igatec.mqlsloth.script.*;
+import com.igatec.mqlsloth.script.MqlAction;
+import com.igatec.mqlsloth.script.MqlCommand;
+import com.igatec.mqlsloth.script.MqlKeywords;
+import com.igatec.mqlsloth.script.MqlUtil;
 import com.igatec.mqlsloth.script.action.JPOCompileAction;
 import com.igatec.mqlsloth.script.action.ModSymbolicNameAction;
 import com.igatec.mqlsloth.util.Workspace;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
-import static com.igatec.mqlsloth.script.MqlKeywords.*;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_ADD;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_LIST;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_MODIFY;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_ON;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_PROGRAM;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_PROPERTY;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_REMOVE;
+import static com.igatec.mqlsloth.script.MqlKeywords.M_TO;
 
 public class DBConnector {
 
     private IMqlCommand command = null;
     private final Iterator<MqlAction> iterator;
     private Session currentSession = null;
-    private final static String JPO_FILE_SUFFIX = "_mxJPO.java";
+    private static final String JPO_FILE_SUFFIX = "_mxJPO.java";
 
-    public DBConnector(Iterator<MqlAction> iterator){
+    public DBConnector(Iterator<MqlAction> iterator) {
         this.iterator = iterator;
     }
-    public DBConnector(Iterator<MqlAction> iterator, Session currentSession){
+
+    public DBConnector(Iterator<MqlAction> iterator, Session currentSession) {
         this(iterator);
         this.currentSession = currentSession;
     }
@@ -36,10 +48,10 @@ public class DBConnector {
     public void execute() throws SlothException {
         List<JPOCompileAction> compileActions = new LinkedList<>();
         List<ModSymbolicNameAction> symbolicNameActions = new LinkedList<>();
-        if (command == null){
-            command = ((currentSession==null) ? SlothApp.getCurrentSession() : currentSession).getCommand();
+        if (command == null) {
+            command = ((currentSession == null) ? SlothApp.getCurrentSession() : currentSession).getCommand();
         }
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             MqlAction action = iterator.next();
             if (action instanceof MqlCommand) {
                 MqlCommand cmd = (MqlCommand) action;
@@ -47,12 +59,12 @@ public class DBConnector {
                 try {
                     String result = command.execute(params);
                 } catch (CommandExecutionException ex) {
-                    throw new SlothException("Could not execute command" + System.lineSeparator() +
-                            StringUtils.join(params, ' '), ex);
+                    throw new SlothException("Could not execute command" + System.lineSeparator()
+                            + StringUtils.join(params, ' '), ex);
                 }
-            } else if (action instanceof JPOCompileAction){
+            } else if (action instanceof JPOCompileAction) {
                 compileActions.add((JPOCompileAction) action);
-            } else if (action instanceof ModSymbolicNameAction){
+            } else if (action instanceof ModSymbolicNameAction) {
                 symbolicNameActions.add((ModSymbolicNameAction) action);
             }
         }
@@ -61,7 +73,7 @@ public class DBConnector {
     }
 
     private void modSymbolicNames(List<ModSymbolicNameAction> actions) throws CommandExecutionException {
-        for (ModSymbolicNameAction action: actions){
+        for (ModSymbolicNameAction action : actions) {
             String type = action.getCiType();
             String name = action.getCiName();
             String queryResult = "";
@@ -75,7 +87,7 @@ public class DBConnector {
             }
 
             String[] resultLines = MqlUtil.splitToLines(queryResult);
-            for (String s: resultLines){
+            for (String s : resultLines) {
                 String propName = s.split(" on program ")[0];
                 command.execute(M_MODIFY, M_PROGRAM, MqlUtil.SYMBOLIC_NAME_PROGRAM,
                         M_REMOVE, M_PROPERTY, propName, M_TO, type, name);
@@ -97,19 +109,19 @@ public class DBConnector {
         Workspace ws = Workspace.create(currentSession);
         File wsFile = ws.getDir();
         String wsPath = wsFile.getName();
-        for (JPOCompileAction action: actions){
+        for (JPOCompileAction action : actions) {
             try {
                 FileUtils.writeStringToFile(
                         new File(wsPath + File.separator + action.getProgName() + JPO_FILE_SUFFIX),
                         action.getCode(), false);
-            } catch (Exception ex){
+            } catch (Exception ex) {
                 throw new SlothException(ex);
             }
         }
         if (!actions.isEmpty()) {
             command.execute(MqlKeywords.M_INSERT, MqlKeywords.M_PROGRAM, wsPath + File.separator);
         }
-        for (JPOCompileAction action:actions){
+        for (JPOCompileAction action : actions) {
             command.execute(MqlKeywords.M_COMPILE, MqlKeywords.M_PROGRAM, action.getProgName());
         }
     }

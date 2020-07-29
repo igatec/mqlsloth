@@ -8,7 +8,7 @@ public class ModSymbolicNameAction implements MqlAction {
     private final String ciName;
     private final String symbolicName;
 
-    public ModSymbolicNameAction(String ciType, String ciName, String symbolicName){
+    public ModSymbolicNameAction(String ciType, String ciName, String symbolicName) {
         this.ciType = ciType;
         this.ciName = ciName;
         this.symbolicName = symbolicName;

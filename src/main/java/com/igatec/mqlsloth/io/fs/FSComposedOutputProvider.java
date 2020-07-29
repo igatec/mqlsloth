@@ -10,20 +10,20 @@ import java.io.File;
 
 public class FSComposedOutputProvider extends AbstractOutputProvider {
 
-    private final static String DIFF_DIR = "diff";
-    private final static String SCRIPT_DIR = "script";
+    private static final String DIFF_DIR = "diff";
+    private static final String SCRIPT_DIR = "script";
 
     private final OutputProvider diffProvider;
     private final OutputProvider scriptProvider;
 
     public FSComposedOutputProvider(String directory) {
         File dir = new File(directory);
-        if (!dir.exists())
+        if (!dir.exists()) {
             dir.mkdir();
+        }
         diffProvider = new FileSystemOutputProvider(directory + File.separator + DIFF_DIR);
         scriptProvider = new FileSystemOutputProvider(directory + File.separator + SCRIPT_DIR);
     }
-
 
     @Override
     public void saveCIDefinition(AbstractCI ci) throws SlothException {

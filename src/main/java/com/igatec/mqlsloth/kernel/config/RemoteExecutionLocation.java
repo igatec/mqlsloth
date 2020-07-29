@@ -4,7 +4,7 @@ public class RemoteExecutionLocation extends ExecutionLocation {
 
     private final RemoteConfig remoteConfig;
 
-    public RemoteExecutionLocation(RemoteConfig remoteConfig){
+    public RemoteExecutionLocation(RemoteConfig remoteConfig) {
         this.remoteConfig = remoteConfig;
     }
 

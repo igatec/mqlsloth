@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+        "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+        "https://checkstyle.org/dtds/configuration_1_3.dtd">
+<module name="Checker">
+    <property name="severity" value="error"/>
+    <property name="fileExtensions" value="java"/>
+
+    <!-- https://checkstyle.org/config_filters.html#SuppressionFilter -->
+    <module name="SuppressionFilter">
+        <property name="file" value="${org.checkstyle.sun.suppressionfilter.config}"
+                  default="checkstyle-suppressions.xml"/>
+        <property name="optional" value="true"/>
+    </module>
+
+    <!-- Checks whether files end with a new line.                        -->
+    <!-- See https://checkstyle.org/config_misc.html#NewlineAtEndOfFile -->
+    <module name="NewlineAtEndOfFile"/>
+
+    <!--    &lt;!&ndash; Checks that property files contain the same keys.         &ndash;&gt;-->
+    <!--    &lt;!&ndash; See https://checkstyle.org/config_misc.html#Translation &ndash;&gt;-->
+    <!--    <module name="Translation"/>-->
+
+    <!--    &lt;!&ndash; Checks for Size Violations.                    &ndash;&gt;-->
+    <!--    &lt;!&ndash; See https://checkstyle.org/config_sizes.html &ndash;&gt;-->
+    <module name="FileLength"/>
+    <module name="LineLength">
+        <property name="fileExtensions" value="java"/>
+        <property name="max" value="130"/>
+    </module>
+
+    <module name="FileTabCharacter"/>
+
+    <module name="TreeWalker">
+        <!--        &lt;!&ndash; Checks for Javadoc comments.                     &ndash;&gt;-->
+        <!--        &lt;!&ndash; See https://checkstyle.org/config_javadoc.html &ndash;&gt;-->
+<!--        <module name="InvalidJavadocPosition"/>-->
+<!--        <module name="MissingJavadocType"/>-->
+<!--        <module name="MissingJavadocMethod"/>-->
+<!--        <module name="JavadocMethod">-->
+<!--            <property name="scope" value="public"/>-->
+<!--        </module>-->
+
+        <!--        &lt;!&ndash; Checks for Naming Conventions.                  &ndash;&gt;-->
+        <!--        &lt;!&ndash; See https://checkstyle.org/config_naming.html &ndash;&gt;-->
+        <module name="ConstantName"/>
+        <module name="LocalVariableName"/>
+        <module name="MemberName"/>
+        <module name="MethodName"/>
+        <module name="PackageName"/>
+        <module name="ParameterName"/>
+        <module name="StaticVariableName"/>
+        <module name="TypeName">
+            <property name="format" value="^[A-Z][a-zA-Z0-9]*(_mxJPO)*$"/>
+        </module>
+
+        <!--        &lt;!&ndash; Checks for imports                              &ndash;&gt;-->
+        <!--        &lt;!&ndash; See https://checkstyle.sourceforge.io/config_imports.html &ndash;&gt;-->
+        <module name="AvoidStarImport"/>
+        <module name="RedundantImport"/>
+        <module name="UnusedImports">
+            <property name="processJavadoc" value="false"/>
+        </module>
+
+        <!--        &lt;!&ndash; Checks for Size Violations.                    &ndash;&gt;-->
+        <!--        &lt;!&ndash; See https://checkstyle.org/config_sizes.html &ndash;&gt;-->
+        <module name="MethodLength">
+            <property name="max" value="100"/>
+        </module>
+        <module name="ParameterNumber">
+            <property name="max" value="5"/>
+        </module>
+
+        <!--        &lt;!&ndash; Checks for whitespace                               &ndash;&gt;-->
+        <!--        &lt;!&ndash; See https://checkstyle.org/config_whitespace.html &ndash;&gt;-->
+        <module name="GenericWhitespace"/>
+        <module name="MethodParamPad"/>
+        <module name="NoWhitespaceAfter"/>
+        <module name="NoWhitespaceBefore"/>
+        <module name="OperatorWrap"/>
+        <module name="ParenPad"/>
+        <module name="TypecastParenPad"/>
+        <module name="WhitespaceAfter"/>
+        <module name="WhitespaceAround"/>
+        <module name="NoLineWrap"/>
+        <module name="EmptyLineSeparator">
+            <property name="allowNoEmptyLineBetweenFields" value="true"/>
+            <property name="allowMultipleEmptyLines" value="false"/>
+        </module>
+
+        <!--        &lt;!&ndash; Modifier Checks                                    &ndash;&gt;-->
+        <!--        &lt;!&ndash; See https://checkstyle.sourceforge.io/config_modifier.html &ndash;&gt;-->
+        <module name="ModifierOrder"/>
+        <module name="RedundantModifier"/>
+
+        <!--        &lt;!&ndash; Checks for blocks. You know, those {}'s         &ndash;&gt;-->
+        <!--        &lt;!&ndash; See https://checkstyle.org/config_blocks.html &ndash;&gt;-->
+        <module name="AvoidNestedBlocks"/>
+        <module name="EmptyBlock"/>
+        <module name="LeftCurly"/>
+        <module name="NeedBraces"/>
+        <module name="RightCurly"/>
+
+        <!--        &lt;!&ndash; Checks for common coding problems               &ndash;&gt;-->
+        <!--        &lt;!&ndash; See https://checkstyle.org/config_coding.html &ndash;&gt;-->
+        <module name="EmptyStatement"/>
+        <module name="EqualsHashCode"/>
+<!--        <module name="HiddenField"/>-->
+        <module name="IllegalInstantiation"/>
+        <module name="InnerAssignment"/>
+        <module name="MagicNumber"/>
+        <module name="MissingSwitchDefault"/>
+        <module name="MultipleVariableDeclarations"/>
+        <module name="SimplifyBooleanExpression"/>
+        <module name="SimplifyBooleanReturn"/>
+
+        <!--        &lt;!&ndash; Checks for class design                         &ndash;&gt;-->
+        <!--        &lt;!&ndash; See https://checkstyle.org/config_design.html &ndash;&gt;-->
+<!--        <module name="DesignForExtension"/>-->
+        <module name="FinalClass"/>
+        <module name="HideUtilityClassConstructor"/>
+        <module name="InterfaceIsType"/>
+        <!--        <module name="VisibilityModifier"/>-->
+
+        <!--        &lt;!&ndash; Miscellaneous other checks.                   &ndash;&gt;-->
+        <!--        &lt;!&ndash; See https://checkstyle.org/config_misc.html &ndash;&gt;-->
+        <module name="ArrayTypeStyle"/>
+        <!--        <module name="FinalParameters"/>-->
+        <!--        <module name="TodoComment"/>-->
+        <module name="UpperEll"/>
+        <module name="SuppressionCommentFilter">
+            <property name="offCommentFormat" value="CHECKSTYLE.OFF\: ([\w\|]+)"/>
+            <property name="onCommentFormat" value="CHECKSTYLE.ON\: ([\w\|]+)"/>
+            <property name="checkFormat" value="$1"/>
+        </module>
+    </module>
+</module>

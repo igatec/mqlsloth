@@ -4,12 +4,14 @@ import com.igatec.mqlsloth.ci.constants.ScriptPriority;
 import com.igatec.mqlsloth.ci.constants.SlothAdminType;
 import com.igatec.mqlsloth.ci.util.BusCIName;
 import com.igatec.mqlsloth.ci.util.CIFullName;
+
 import java.util.Arrays;
 
 public class ConnectBusChunk extends ScriptChunk {
 
     private final String[] command;
 
+    // CHECKSTYLE.OFF: MagicNumber
     public ConnectBusChunk(BusCIName from, String relName, BusCIName to, boolean connect) {
         super(new CIFullName(SlothAdminType.BUS, from));
         command = new String[11];
@@ -26,6 +28,7 @@ public class ConnectBusChunk extends ScriptChunk {
         command[10] = MqlUtil.qWrap(to.getRevision());
         setPriority(ScriptPriority.SP_BUS_MODIFICATION);
     }
+    // CHECKSTYLE.ON: MagicNumber
 
     @Override
     public String[] getCommand() {

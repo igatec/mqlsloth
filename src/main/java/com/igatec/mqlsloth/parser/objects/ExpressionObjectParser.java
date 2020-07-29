@@ -37,7 +37,7 @@ public class ExpressionObjectParser extends AdminObjectObjectParser {
     protected void setParsedMQLValuesToObject(Map<String, Object> parsedValues, AbstractCI objectToParse) {
         super.setParsedMQLValuesToObject(parsedValues, objectToParse);
         if (parsedValues.containsKey(M_VALUE)) {
-            ((ExpressionCI)objectToParse).setValue(parsedValues.get(M_VALUE).toString());
+            ((ExpressionCI) objectToParse).setValue(parsedValues.get(M_VALUE).toString());
         }
     }
 
@@ -45,7 +45,7 @@ public class ExpressionObjectParser extends AdminObjectObjectParser {
     protected void setParsedYAMLValuesToObject(Map<String, Object> parsedValues, AbstractCI objectToParse) {
         super.setParsedYAMLValuesToObject(parsedValues, objectToParse);
         if (parsedValues.containsKey(Y_VALUE)) {
-            ((ExpressionCI)objectToParse).setValue(parsedValues.get(Y_VALUE).toString());
+            ((ExpressionCI) objectToParse).setValue(parsedValues.get(Y_VALUE).toString());
         }
     }
 

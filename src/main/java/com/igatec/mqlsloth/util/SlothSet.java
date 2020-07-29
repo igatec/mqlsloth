@@ -1,43 +1,56 @@
 package com.igatec.mqlsloth.util;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 public class SlothSet<E> extends HashSet<E> implements ReversibleSet<E> {
 
-    private final static String MATCHING_EXCEPTION_TEXT = "Items and Reversed items have matching objects";
+    private static final String MATCHING_EXCEPTION_TEXT = "Items and Reversed items have matching objects";
 
     private final Set<E> reversed = new HashSet<>();
     private final boolean diffMode;
 
-    public SlothSet(boolean diffMode){
+    public SlothSet(boolean diffMode) {
         super();
         this.diffMode = diffMode;
     }
 
-    public SlothSet(Collection<E> items, boolean diffMode){
+    public SlothSet(Collection<E> items, boolean diffMode) {
         this.diffMode = diffMode;
         super.addAll(items);
     }
 
-    public SlothSet(ReversibleSet<E> reversibleSet, boolean diffMode){
+    public SlothSet(ReversibleSet<E> reversibleSet, boolean diffMode) {
         super();
         reversed.addAll(reversibleSet.getReversed());
         this.diffMode = diffMode;
         super.addAll(reversibleSet.get());
     }
 
-    public SlothSet(Collection<E> items, Collection<E> reversedItems){
-        for (E e:reversedItems) {
-            if (items.contains(e))
+    public SlothSet(Collection<E> items, Collection<E> reversedItems) {
+        for (E e : reversedItems) {
+            if (items.contains(e)) {
                 throw new ReversibleSetException(MATCHING_EXCEPTION_TEXT);
+            }
         }
         reversed.addAll(reversedItems);
         this.diffMode = true;
         super.addAll(items);
     }
 
-    public boolean isDiffMode(){
-        return diffMode;
+    public static <C> Set<C> itemsToRemove(ReversibleSet<C> state1, ReversibleSet<C> state2) {
+        HashSet<C> result = new HashSet<>();
+        for (C c : state1) {
+            if (state2.shouldRemove(c)) {
+                result.add(c);
+            }
+        }
+        return result;
     }
 
     @Override
@@ -50,30 +63,28 @@ public class SlothSet<E> extends HashSet<E> implements ReversibleSet<E> {
         }
     }
 
+    public static <C> Set<C> itemsToAdd(ReversibleSet<C> state1, ReversibleSet<C> state2) {
+        HashSet<C> result = new HashSet<>();
+        for (C c : state2) {
+            if (!state1.contains(c)) {
+                result.add(c);
+            }
+        }
+        return result;
+    }
+
+    public boolean isDiffMode() {
+        return diffMode;
+    }
+
     @Override
-    public boolean add(E e){
+    public boolean add(E e) {
         boolean r = reversed.remove(e);
         if (r) {
             return true;
         } else {
             return super.add(e);
         }
-    }
-
-    @Override
-    public boolean reverseAll(Collection<? extends E> c) {
-        boolean r = false;
-        for (E e:c)
-            r |= reverse(e);
-        return r;
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends E> c) {
-        boolean r = false;
-        for (E e:c)
-            r |= add(e);
-        return r;
     }
 
     @Override
@@ -112,29 +123,38 @@ public class SlothSet<E> extends HashSet<E> implements ReversibleSet<E> {
     }
 
     @Override
+    public boolean reverseAll(Collection<? extends E> c) {
+        boolean r = false;
+        for (E e : c) {
+            r |= reverse(e);
+        }
+        return r;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        boolean r = false;
+        for (E e : c) {
+            r |= add(e);
+        }
+        return r;
+    }
+
+    @Override
     public Map<E, Boolean> toMap() {
         Map<E, Boolean> result = new HashMap<>();
-        for (E e:this)
+        for (E e : this) {
             result.put(e, true);
-        for (E e:reversed)
+        }
+        for (E e : reversed) {
             result.put(e, false);
+        }
         return result;
     }
 
     @Override
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return super.isEmpty() && reversed.isEmpty();
-    }
-
-    @Override
-    public void clearReversed(){
-        reversed.clear();
-    }
-
-    @Override
-    public void clearAll(){
-        super.clear();
-        reversed.clear();
     }
 
     @Override
@@ -148,19 +168,21 @@ public class SlothSet<E> extends HashSet<E> implements ReversibleSet<E> {
     }
 
     @Override
-    public boolean shouldRemove(E e) {
-        if (diffMode){
-            return containsReversed(e);
-        } else {
-            return !contains(e);
-        }
+    public void clearReversed() {
+        reversed.clear();
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
         SlothSet<?> slothSet = (SlothSet<?>) o;
         return Objects.equals(reversed, slothSet.reversed);
     }
@@ -170,22 +192,19 @@ public class SlothSet<E> extends HashSet<E> implements ReversibleSet<E> {
         return Objects.hash(super.hashCode(), reversed);
     }
 
-    public static <C> Set<C> itemsToRemove(ReversibleSet<C> state1, ReversibleSet<C> state2){
-        HashSet<C> result = new HashSet<>();
-        for (C c:state1){
-            if (state2.shouldRemove(c))
-                result.add(c);
-        }
-        return result;
+    @Override
+    public void clearAll() {
+        super.clear();
+        reversed.clear();
     }
 
-    public static <C> Set<C> itemsToAdd(ReversibleSet<C> state1, ReversibleSet<C> state2){
-        HashSet<C> result = new HashSet<>();
-        for (C c:state2){
-            if (!state1.contains(c))
-                result.add(c);
+    @Override
+    public boolean shouldRemove(E e) {
+        if (diffMode) {
+            return containsReversed(e);
+        } else {
+            return !contains(e);
         }
-        return result;
     }
 
 }

@@ -3,7 +3,7 @@ package com.igatec.mqlsloth.parser.json;
 public class JsonCIParser /*implements ReaderCIParser, WriterCI*/ {
 //    String ciData;
 //
-//    private final static String SLOTH_ADMIN_TYPE_KEY = "objectType";
+//    private static final String SLOTH_ADMIN_TYPE_KEY = "objectType";
 //
 //    @Override
 //    public String stringify(AbstractCI ci) throws ParserException {

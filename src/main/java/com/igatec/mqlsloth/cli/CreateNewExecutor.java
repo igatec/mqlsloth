@@ -35,9 +35,10 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-;
-
 public class CreateNewExecutor extends AbstractExecutor {
+
+    public static final int REQUIRED_PARAMS_NUMBER = 3;
+
     public CreateNewExecutor() {
         super(null);
     }
@@ -46,26 +47,29 @@ public class CreateNewExecutor extends AbstractExecutor {
     public void run(Context context, CommandLine cmd) throws SlothException {
 
         String dir = cmd.getOptionValue(LOCATION_OPT);
-        if (dir == null)
+        if (dir == null) {
             throw new SlothException("ERROR: 'Create new' tasks must have '" + LOCATION_OPT + "' option");
-
+        }
         String[] params = cmd.getOptionValues(NEW_OPT);
-        if (params == null || params.length < 1)
+        if (params == null || params.length < 1) {
             throw new SlothException("ERROR: CI type was not specified");
+        }
         String ciType = params[0];
-        if (params.length < 2)
+        if (params.length < 2) {
             throw new SlothException("ERROR: CI name was not specified");
+        }
         String ciName = params[1];
         AbstractCI ci;
         SlothAdminType aType = SlothAdminType.getByAlias(ciType);
-        if (aType == null)
+        if (aType == null) {
             throw new SlothException(String.format("ERROR: CI admin type '%s' is invalid", ciType));
-
+        }
         if (SlothAdminType.TYPE.equals(aType)) {
             ci = new TypeCI(ciName);
         } else if (SlothAdminType.ATTRIBUTE.equals(aType)) {
-            if (params.length < 3)
+            if (params.length < REQUIRED_PARAMS_NUMBER) {
                 throw new SlothException("ERROR: Attribute type was not specified");
+            }
             String attrType = params[2];
             ci = new AttributeCI(ciName, AttributeType.valueOf(attrType.toUpperCase()));
         } else if (SlothAdminType.INTERFACE.equals(aType)) {
@@ -94,15 +98,21 @@ public class CreateNewExecutor extends AbstractExecutor {
             ((ProgramCI) ci).setCode(defaultCode);
         } else if (SlothAdminType.NUMBER_GENERATOR.equals(aType)) {
             String revision = "";
-            if (params.length > 2) revision = params[2];
+            if (params.length > 2) {
+                revision = params[2];
+            }
             ci = new NumberGeneratorCI(ciName, revision);
         } else if (SlothAdminType.OBJECT_GENERATOR.equals(aType)) {
             String revision = "";
-            if (params.length > 2) revision = params[2];
+            if (params.length > 2) {
+                revision = params[2];
+            }
             ci = new ObjectGeneratorCI(ciName, revision);
         } else if (SlothAdminType.TRIGGER.equals(aType)) {
             String revision = "";
-            if (params.length > 2) revision = params[2];
+            if (params.length > 2) {
+                revision = params[2];
+            }
             ci = new TriggerCI(ciName, revision);
         } else if (SlothAdminType.ROLE.equals(aType)) {
             ci = new RoleCI(ciName);
@@ -125,10 +135,9 @@ public class CreateNewExecutor extends AbstractExecutor {
         } else {
             throw new SlothException(String.format("ERROR: CI file of type '%s' cannot be created with this command", ciType));
         }
-
-        if (ci instanceof AdminObjectCI)
+        if (ci instanceof AdminObjectCI) {
             ((AdminObjectCI) ci).setDefaultSymbolicName();
-
+        }
         OutputProvider oP = new FileSystemOutputProvider(dir);
         oP.saveCIDefinition(ci);
     }

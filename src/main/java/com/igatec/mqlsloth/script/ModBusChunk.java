@@ -10,6 +10,7 @@ public class ModBusChunk extends ScriptChunk implements MqlKeywords {
 
     private final String[] cmd;
 
+    // CHECKSTYLE.OFF: MagicNumber
     public ModBusChunk(CIFullName relatedCI, String... params) {
         super(relatedCI);
         cmd = new String[5 + params.length];
@@ -20,16 +21,15 @@ public class ModBusChunk extends ScriptChunk implements MqlKeywords {
         cmd[3] = MqlUtil.qWrap(tnr.getName());
         cmd[4] = MqlUtil.qWrap(tnr.getRevision());
         int i = 5;
-        for (String p:params){
+        for (String p : params) {
             cmd[i++] = MqlUtil.qWrap(p);
         }
         setPriority(ScriptPriority.SP_BUS_MODIFICATION);
     }
+    // CHECKSTYLE.ON: MagicNumber
 
     @Override
     public String[] getCommand() {
         return Arrays.copyOf(cmd, cmd.length);
     }
-
-
 }

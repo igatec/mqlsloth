@@ -2,20 +2,19 @@ package com.igatec.mqlsloth.parser.objects;
 
 import com.igatec.mqlsloth.ci.AbstractCI;
 import com.igatec.mqlsloth.ci.GroupCI;
-import com.igatec.mqlsloth.ci.RoleCI;
 import com.igatec.mqlsloth.ci.constants.CIDiffMode;
 import com.igatec.mqlsloth.parser.ParserException;
 
 import java.util.Map;
 import java.util.function.Function;
 
-public class GroupObjectParser extends UserCombinationObjectParser{
+public class GroupObjectParser extends UserCombinationObjectParser {
     public GroupObjectParser(Format format) {
         super(format);
     }
 
     @Override
-    public Map<String, Function> getKeyWordsMQL(){
+    public Map<String, Function> getKeyWordsMQL() {
         Map<String, Function> keyWordsToValueMakers = super.getKeyWordsMQL();
         return keyWordsToValueMakers;
     }
@@ -39,7 +38,7 @@ public class GroupObjectParser extends UserCombinationObjectParser{
             throw new ParserException("Can't create " + M_GROUP + ". Name not found");
         }
 
-        CIDiffMode mode = CIDiffMode .valueOf((String) fieldsValues.getOrDefault("_mode", "TARGET"));
+        CIDiffMode mode = CIDiffMode.valueOf((String) fieldsValues.getOrDefault("_mode", "TARGET"));
         GroupCI createdObject = new GroupCI(name, mode);
         return createdObject;
     }

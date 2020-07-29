@@ -13,7 +13,7 @@ public abstract class ScriptChunk {
     private List<Assertion> preAsserions;
     private List<Assertion> postAsserions;
 
-    protected ScriptChunk(CIFullName relatedCI){
+    protected ScriptChunk(CIFullName relatedCI) {
         this.relatedCI = relatedCI;
     }
 
@@ -21,7 +21,7 @@ public abstract class ScriptChunk {
         this.priority = priority;
     }
 
-    public int getPriority(){
+    public int getPriority() {
         return priority;
     }
 
@@ -31,35 +31,37 @@ public abstract class ScriptChunk {
 
     public abstract String[] getCommand();
 
-    public boolean hasAssertions(){
+    public boolean hasAssertions() {
         return hasPostAsserions() || hasPreAsserions();
     }
 
-    public boolean hasPreAsserions(){
-        return preAsserions != null && preAsserions.size()>0;
+    public boolean hasPreAsserions() {
+        return preAsserions != null && preAsserions.size() > 0;
     }
 
-    public boolean hasPostAsserions(){
-        return postAsserions != null && postAsserions.size()>0;
+    public boolean hasPostAsserions() {
+        return postAsserions != null && postAsserions.size() > 0;
     }
 
-    public List<Assertion> getPreAsserions(){
-        return preAsserions==null ? new LinkedList<>() : new LinkedList<>(preAsserions);
+    public List<Assertion> getPreAsserions() {
+        return preAsserions == null ? new LinkedList<>() : new LinkedList<>(preAsserions);
     }
 
-    public List<Assertion> getPostAsserions(){
-        return postAsserions==null ? new LinkedList<>() : new LinkedList<>(postAsserions);
+    public List<Assertion> getPostAsserions() {
+        return postAsserions == null ? new LinkedList<>() : new LinkedList<>(postAsserions);
     }
 
-    public void addPreAssertion(Assertion assertion){
-        if (preAsserions == null)
+    public void addPreAssertion(Assertion assertion) {
+        if (preAsserions == null) {
             preAsserions = new LinkedList<>();
+        }
         preAsserions.add(assertion);
     }
 
-    public void addPostAssertion(Assertion assertion){
-        if (postAsserions == null)
+    public void addPostAssertion(Assertion assertion) {
+        if (postAsserions == null) {
             postAsserions = new LinkedList<>();
+        }
         postAsserions.add(assertion);
     }
 

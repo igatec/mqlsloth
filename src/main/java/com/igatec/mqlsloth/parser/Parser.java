@@ -1,16 +1,33 @@
 package com.igatec.mqlsloth.parser;
 
+import com.igatec.mqlsloth.ci.constants.SlothAdminType;
+import com.igatec.mqlsloth.parser.objects.AbstractObjectParser;
+import com.igatec.mqlsloth.parser.objects.AttributeObjectParser;
+import com.igatec.mqlsloth.parser.objects.ChannelObjectParser;
+import com.igatec.mqlsloth.parser.objects.CommandObjectParser;
+import com.igatec.mqlsloth.parser.objects.ExpressionObjectParser;
+import com.igatec.mqlsloth.parser.objects.FormObjectParser;
+import com.igatec.mqlsloth.parser.objects.GroupObjectParser;
+import com.igatec.mqlsloth.parser.objects.InterfaceObjectParser;
+import com.igatec.mqlsloth.parser.objects.MenuObjectParser;
 import com.igatec.mqlsloth.parser.objects.NumberGeneratorObjectParser;
 import com.igatec.mqlsloth.parser.objects.ObjectGeneratorObjectParser;
+import com.igatec.mqlsloth.parser.objects.ObjectParser;
+import com.igatec.mqlsloth.parser.objects.PageObjectParser;
+import com.igatec.mqlsloth.parser.objects.PolicyObjectParser;
+import com.igatec.mqlsloth.parser.objects.PortalObjectParser;
+import com.igatec.mqlsloth.parser.objects.ProgramObjectParser;
+import com.igatec.mqlsloth.parser.objects.RelationshipObjectParser;
+import com.igatec.mqlsloth.parser.objects.RoleObjectParser;
+import com.igatec.mqlsloth.parser.objects.TableObjectParser;
 import com.igatec.mqlsloth.parser.objects.TriggerObjectParser;
-import com.igatec.mqlsloth.ci.constants.SlothAdminType;
-import com.igatec.mqlsloth.parser.objects.*;
+import com.igatec.mqlsloth.parser.objects.TypeObjectParser;
 
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-public abstract class Parser<T> implements ReaderCIParser, KeyWordFinder{
+public abstract class Parser<T> implements ReaderCIParser, KeyWordFinder {
     public static final String ADMIN_TYPE_KEY = "adminType";
     public static final String ADMIN_TYPE_VALUE = "name";
 
@@ -26,7 +43,7 @@ public abstract class Parser<T> implements ReaderCIParser, KeyWordFinder{
         try {
             T abstractCI = parseObject();
             return abstractCI;
-        } catch (ParserException e){
+        } catch (ParserException e) {
             throw e;
         } catch (Exception e) {
             ParserException parserException = new ParserException();
@@ -35,7 +52,7 @@ public abstract class Parser<T> implements ReaderCIParser, KeyWordFinder{
         }
     }
 
-    protected final T parseObject() throws Exception{
+    protected final T parseObject() throws Exception {
         beforeParseObject();
         T parsedObject = parseConcreteObject();
         afterParseObject();
@@ -54,7 +71,7 @@ public abstract class Parser<T> implements ReaderCIParser, KeyWordFinder{
     }
 
     private void throwIfCiDataNullOrEmpty() throws Exception {
-        if (ciData == null ) {
+        if (ciData == null) {
             Exception nullPointerException = new NullPointerException("String to parse is null. Set the string.");
             throw nullPointerException;
         }
@@ -67,7 +84,7 @@ public abstract class Parser<T> implements ReaderCIParser, KeyWordFinder{
 
     protected abstract void makeObjectParserIfNotSet() throws Exception;
 
-    protected void afterParseObject() throws Exception{
+    protected void afterParseObject() throws Exception {
         return;
     }
 
@@ -115,11 +132,11 @@ public abstract class Parser<T> implements ReaderCIParser, KeyWordFinder{
             case PORTAL:
                 return new PortalObjectParser(format);
             case EXPRESSION:
-                return  new ExpressionObjectParser(format);
+                return new ExpressionObjectParser(format);
             case FORM:
-                return  new FormObjectParser(format);
+                return new FormObjectParser(format);
             case WEB_TABLE:
-                return  new TableObjectParser(format);
+                return new TableObjectParser(format);
             default:
                 throw new ParserException("Can't find parser for admin type " + adminType);
         }

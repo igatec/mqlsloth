@@ -2,11 +2,13 @@ package com.igatec.mqlsloth.util;
 
 import com.igatec.mqlsloth.kernel.SlothException;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 public class ComposedObjectStreamReader<C> implements ObjectStreamReader<C> {
 
-    private final Iterator< ObjectStreamReader <C> > readersIter;
+    private final Iterator<ObjectStreamReader<C>> readersIter;
     private ObjectStreamReader<C> currentReader;
     private C next;
 
@@ -18,24 +20,26 @@ public class ComposedObjectStreamReader<C> implements ObjectStreamReader<C> {
 
     private void init() throws SlothException {
         next = null;
-        while (!currentReader.hasNext()){
-            if (readersIter.hasNext())
+        while (!currentReader.hasNext()) {
+            if (readersIter.hasNext()) {
                 currentReader = readersIter.next();
-            else
+            } else {
                 return;
+            }
         }
         next = currentReader.next();
     }
 
     public C next() throws SlothException {
         C next = this.next;
-        if (next == null)
+        if (next == null) {
             throw new NoSuchElementException();
+        }
         init();
         return next;
     }
 
-    public boolean hasNext(){
+    public boolean hasNext() {
         return next != null;
     }
 

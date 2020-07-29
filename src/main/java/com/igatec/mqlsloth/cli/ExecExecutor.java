@@ -6,8 +6,6 @@ import com.igatec.mqlsloth.kernel.session.SessionWithContext;
 import com.igatec.mqlsloth.kernel.session.SessionWithContextBuilder;
 import org.apache.commons.cli.CommandLine;
 
-;
-
 public class ExecExecutor extends AbstractExecutor {
     public ExecExecutor(SlothAppCLI cli) {
         super(cli);
@@ -22,13 +20,13 @@ public class ExecExecutor extends AbstractExecutor {
         try {
             String result = session.executeSingleMqlCommand(command);
             System.out.print(result);
-        } catch (SlothException ex){
+        } catch (SlothException ex) {
             System.out.print(ex);
         }
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return SlothAppCLI.EXEC_OPT_L;
     }
 }

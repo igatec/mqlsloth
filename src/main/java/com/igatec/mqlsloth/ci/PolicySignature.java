@@ -13,7 +13,7 @@ public class PolicySignature {
     private final Set<String> reject = new HashSet<>();
     private String filter;
 
-    public PolicySignature(String name){
+    public PolicySignature(String name) {
         this.name = name;
     }
 
@@ -33,7 +33,7 @@ public class PolicySignature {
         return new HashSet<>(approve);
     }
 
-    public boolean addApprove(String value){
+    public boolean addApprove(String value) {
         return approve.add(value);
     }
 
@@ -41,7 +41,7 @@ public class PolicySignature {
         return new HashSet<>(ignore);
     }
 
-    public boolean addIgnore(String value){
+    public boolean addIgnore(String value) {
         return ignore.add(value);
     }
 
@@ -49,7 +49,7 @@ public class PolicySignature {
         return new HashSet<>(reject);
     }
 
-    public boolean addReject(String value){
+    public boolean addReject(String value) {
         return reject.add(value);
     }
 
@@ -63,15 +63,19 @@ public class PolicySignature {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         PolicySignature that = (PolicySignature) o;
-        return Objects.equals(name, that.name) &&
-                Objects.equals(branch, that.branch) &&
-                Objects.equals(approve, that.approve) &&
-                Objects.equals(ignore, that.ignore) &&
-                Objects.equals(reject, that.reject) &&
-                Objects.equals(filter, that.filter);
+        return Objects.equals(name, that.name)
+                && Objects.equals(branch, that.branch)
+                && Objects.equals(approve, that.approve)
+                && Objects.equals(ignore, that.ignore)
+                && Objects.equals(reject, that.reject)
+                && Objects.equals(filter, that.filter);
     }
 
     @Override

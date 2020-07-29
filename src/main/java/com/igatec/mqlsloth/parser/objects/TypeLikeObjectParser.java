@@ -17,7 +17,7 @@ public abstract class TypeLikeObjectParser extends AdminObjectObjectParser {
     }
 
     @Override
-    public Map<String, Function> getKeyWordsMQL(){
+    public Map<String, Function> getKeyWordsMQL() {
         Map<String, Function> keyWordsToValueMakers = super.getKeyWordsMQL();
 
         Function<String, Boolean> isAbstractMaker = Boolean::valueOf;
@@ -55,50 +55,42 @@ public abstract class TypeLikeObjectParser extends AdminObjectObjectParser {
     @Override
     protected void setParsedMQLValuesToObject(Map<String, Object> parsedValues, AbstractCI parsebleObject) {
         super.setParsedMQLValuesToObject(parsedValues, parsebleObject);
-
         if (parsedValues.containsKey(M_ABSTRACT)) {
             ((TypeLikeCI) parsebleObject).setAbstract((Boolean) parsedValues.get(M_ABSTRACT));
         }
-
         if (parsedValues.containsKey(M_DERIVED)) {
             ((TypeLikeCI) parsebleObject).setParentType((SlothString) parsedValues.get(M_DERIVED));
         }
-
         if (parsedValues.containsKey(M_ATTRIBUTE)) {
             List<String> attributes = (List<String>) parsedValues.getOrDefault(M_ATTRIBUTE, Collections.EMPTY_LIST);
             attributes.forEach(((TypeLikeCI) parsebleObject)::addAttribute);
         }
-
         return;
     }
 
     @Override
     protected void setParsedYAMLValuesToObject(Map<String, Object> parsedValues, AbstractCI parsebleObject) {
         super.setParsedYAMLValuesToObject(parsedValues, parsebleObject);
-
         if (parsedValues.containsKey(Y_ABSTRACT)) {
             ((TypeLikeCI) parsebleObject).setAbstract((Boolean) parsedValues.get(Y_ABSTRACT));
         }
-
         if (parsedValues.containsKey(Y_DERIVED)) {
             ((TypeLikeCI) parsebleObject).setParentType(new SlothString((String) parsedValues.get(Y_DERIVED)));
         }
-
         if (parsedValues.containsKey(Y_ATTRIBUTES)) {
             List<String> attributes = (List<String>) parsedValues.getOrDefault(Y_ATTRIBUTES, Collections.EMPTY_LIST);
             attributes.forEach(((TypeLikeCI) parsebleObject)::addAttribute);
         }
-
         if (parsedValues.containsKey(Y_REMOVE_PREFIX + Y_DERIVED)) {
             ((TypeLikeCI) parsebleObject).deleteParentType();
         }
-
-
         if (parsedValues.containsKey(Y_REMOVE_PREFIX + Y_ATTRIBUTES)) {
-            List<String> attributesToRemove = (List<String>) parsedValues.getOrDefault(Y_REMOVE_PREFIX + Y_ATTRIBUTES, Collections.EMPTY_LIST);
+            List<String> attributesToRemove = (List<String>) parsedValues.getOrDefault(
+                    Y_REMOVE_PREFIX + Y_ATTRIBUTES,
+                    Collections.EMPTY_LIST
+            );
             attributesToRemove.forEach(((TypeLikeCI) parsebleObject)::reverseAttribute);
         }
-
         return;
     }
 

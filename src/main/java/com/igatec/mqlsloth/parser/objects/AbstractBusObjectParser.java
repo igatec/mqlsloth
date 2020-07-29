@@ -5,7 +5,10 @@ import com.igatec.mqlsloth.ci.AbstractCI;
 import com.igatec.mqlsloth.ci.util.BusCIName;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -75,22 +78,24 @@ public abstract class AbstractBusObjectParser extends AbstractObjectParser {
         }
 
         if (parsedValues.containsKey(M_ATTRIBUTE)) {
-            List<Map.Entry> attributes = ((Map<String, Map<String, String>>) parsedValues.getOrDefault(M_ATTRIBUTE, Collections.EMPTY_MAP))
-                    .entrySet()
-                    .stream()
+            List<Map.Entry> attributes = (
+                    (Map<String, Map<String, String>>) parsedValues.getOrDefault(
+                            M_ATTRIBUTE,
+                            Collections.EMPTY_MAP
+                    )
+            ).entrySet().stream()
                     .map(entry -> {
                         String key = entry.getKey();
                         Map<String, String> fields = entry.getValue();
                         String value = fields.getOrDefault(M_VALUE, StringUtils.EMPTY);
                         return new AbstractMap.SimpleEntry<>(key, value);
-                    })
-                    .collect(Collectors.toList());
+                    }).collect(Collectors.toList());
             attributes.forEach(ci::setAttribute);
         }
 
-        if (parsedValues.containsKey(M_FROM)){
+        if (parsedValues.containsKey(M_FROM)) {
             Map from = (Map) parsedValues.get(M_FROM);
-            for (Object relName: from.keySet()){
+            for (Object relName : from.keySet()) {
                 Map to = (Map) ((Map) from.get(relName)).get(M_TO);
                 String type = (String) to.get(M_TYPE);
                 String name = (String) to.get(M_NAME);
@@ -123,15 +128,18 @@ public abstract class AbstractBusObjectParser extends AbstractObjectParser {
                     .forEach(ci::setAttribute);
         }
 
-        if (parsedValues.containsKey(Y_FROM)){
+        if (parsedValues.containsKey(Y_FROM)) {
             List from = (List) parsedValues.get(Y_FROM);
-            for (Object connectionObj: from){
+            for (Object connectionObj : from) {
                 Map connectionMap = (Map) connectionObj;
                 String type = (String) connectionMap.get(Y_TYPE);
                 String name = (String) connectionMap.get(Y_NAME);
                 String revision = (String) connectionMap.get(Y_REVISION);
                 BusCIName busName = new BusCIName(type, name, revision);
-                AbstractBusCI.ConnectionPointer cp = new AbstractBusCI.ConnectionPointer((String) connectionMap.get(Y_REL), busName);
+                AbstractBusCI.ConnectionPointer cp = new AbstractBusCI.ConnectionPointer(
+                        (String) connectionMap.get(Y_REL),
+                        busName
+                );
                 ci.addFromConnection(cp);
             }
         }

@@ -6,11 +6,11 @@ public class SlothString implements ReversibleString {
 
     private final String value;
 
-    public SlothString(String value){
+    public SlothString(String value) {
         this.value = value;
     }
 
-    public SlothString(){
+    public SlothString() {
         value = null;
     }
 
@@ -25,14 +25,18 @@ public class SlothString implements ReversibleString {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return value();
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         SlothString that = (SlothString) o;
         return Objects.equals(value, that.value);
     }

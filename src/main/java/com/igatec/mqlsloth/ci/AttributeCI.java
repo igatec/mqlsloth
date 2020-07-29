@@ -1,19 +1,21 @@
 package com.igatec.mqlsloth.ci;
 
 import com.igatec.mqlsloth.ci.annotation.ModBooleanProvider;
-import com.igatec.mqlsloth.ci.annotation.ModReversibleStringProvider;
 import com.igatec.mqlsloth.ci.annotation.ModStringProvider;
 import com.igatec.mqlsloth.ci.annotation.ModStringSetProvider;
-import com.igatec.mqlsloth.ci.constants.*;
-import com.igatec.mqlsloth.ci.util.CIFullName;
+import com.igatec.mqlsloth.ci.constants.AttributeType;
+import com.igatec.mqlsloth.ci.constants.CIDiffMode;
+import com.igatec.mqlsloth.ci.constants.SlothAdminType;
 import com.igatec.mqlsloth.script.AttributeCreateChunk;
-import com.igatec.mqlsloth.script.CreateChunk;
 import com.igatec.mqlsloth.script.ScriptChunk;
-import com.igatec.mqlsloth.util.*;
-import java.util.*;
+import com.igatec.mqlsloth.util.ReversibleSet;
+import com.igatec.mqlsloth.util.ReversibleString;
+import com.igatec.mqlsloth.util.SlothSet;
+import com.igatec.mqlsloth.util.SlothString;
+
+import java.util.Map;
 
 public class AttributeCI extends AdminObjectCI {
-
     private final AttributeType type;
     private Boolean isMultivalue;
     private Boolean isMultiline;
@@ -26,6 +28,7 @@ public class AttributeCI extends AdminObjectCI {
     public AttributeCI(String name, AttributeType type) {
         this(name, type, CIDiffMode.TARGET);
     }
+
     public AttributeCI(String name, AttributeType type, CIDiffMode diffMode) {
         super(SlothAdminType.ATTRIBUTE, name, diffMode);
         this.type = type;
@@ -36,7 +39,7 @@ public class AttributeCI extends AdminObjectCI {
         }
     }
 
-    private void initTarget(){
+    private void initTarget() {
         isMultivalue = false;
         isMultiline = false;
         defaultValue = new SlothString();
@@ -46,7 +49,7 @@ public class AttributeCI extends AdminObjectCI {
         resetOnRevision = false;
     }
 
-    private void initDiff(){
+    private void initDiff() {
         isMultivalue = null;
         isMultiline = null;
         defaultValue = null;
@@ -60,10 +63,15 @@ public class AttributeCI extends AdminObjectCI {
         return type;
     }
 
-    @ModBooleanProvider(value = M_MULTIVALUE, setFalsePriority = SP_SET_ATTR_NOT_MULTIVALUE, setTruePriority = SP_SET_ATTR_MULTIVALUE)
+    @ModBooleanProvider(
+            value = M_MULTIVALUE,
+            setFalsePriority = SP_SET_ATTR_NOT_MULTIVALUE,
+            setTruePriority = SP_SET_ATTR_MULTIVALUE
+    )
     public Boolean isMultivalue() {
         return isMultivalue;
     }
+
     public void setMultivalue(Boolean multivalue) {
         checkModeAssertion(multivalue != null, CIDiffMode.TARGET);
         isMultivalue = multivalue;
@@ -73,6 +81,7 @@ public class AttributeCI extends AdminObjectCI {
     public Boolean isMultiline() {
         return isMultiline;
     }
+
     public void setMultiline(Boolean multiline) {
         checkModeAssertion(multiline != null, CIDiffMode.TARGET);
         isMultiline = multiline;
@@ -82,11 +91,13 @@ public class AttributeCI extends AdminObjectCI {
     public ReversibleString getDefaultValue() {
         return defaultValue;
     }
+
     public void setDefaultValue(ReversibleString defaultValue) {
         checkModeAssertion(defaultValue != null, CIDiffMode.TARGET);
         this.defaultValue = defaultValue;
     }
-    public void deleteDefaultValue(){
+
+    public void deleteDefaultValue() {
         setDefaultValue(new SlothString(null));
     }
 
@@ -94,10 +105,12 @@ public class AttributeCI extends AdminObjectCI {
     public ReversibleSet<String> getRange() {
         return new SlothSet<>(range, isDiffMode());
     }
+
     public Boolean addRange(String rangeItem) {
         return range.add(rangeItem);
     }
-    public boolean reverseRange(String rangeItem){
+
+    public boolean reverseRange(String rangeItem) {
         checkModeAssertion(CIDiffMode.DIFF);
         return range.reverse(rangeItem);
     }
@@ -106,6 +119,7 @@ public class AttributeCI extends AdminObjectCI {
     public Integer getMaxLength() {
         return maxLength;
     }
+
     public void setMaxLength(Integer maxLength) {
         checkModeAssertion(maxLength != null, CIDiffMode.TARGET);
         this.maxLength = maxLength;
@@ -115,6 +129,7 @@ public class AttributeCI extends AdminObjectCI {
     public Boolean isResetOnClone() {
         return resetOnClone;
     }
+
     public void setResetOnClone(Boolean resetOnClone) {
         checkModeAssertion(resetOnClone != null, CIDiffMode.TARGET);
         this.resetOnClone = resetOnClone;
@@ -124,68 +139,64 @@ public class AttributeCI extends AdminObjectCI {
     public Boolean isResetOnRevision() {
         return resetOnRevision;
     }
+
     public void setResetOnRevision(Boolean resetOnRevision) {
         checkModeAssertion(resetOnRevision != null, CIDiffMode.TARGET);
         this.resetOnRevision = resetOnRevision;
     }
 
-
     @Override
-    protected void fillDiffCI(AbstractCI newCI, AbstractCI diffCI){
+    protected void fillDiffCI(AbstractCI newCI, AbstractCI diffCI) {
         super.fillDiffCI(newCI, diffCI);
         AttributeCI newCastedCI = (AttributeCI) newCI;
         AttributeCI diffCastedCI = (AttributeCI) diffCI;
         checkCIConstraint("Attribute type conflict", getType() == newCastedCI.getType());
-        {
-            Boolean value = newCastedCI.isMultivalue();
-            if (value != null && !value.equals(isMultivalue())){
-                diffCastedCI.setMultivalue(value);
-            }
+        Boolean isMultiValue = newCastedCI.isMultivalue();
+        if (isMultiValue != null && !isMultiValue.equals(isMultivalue())) {
+            diffCastedCI.setMultivalue(isMultiValue);
         }
-        {
-            Boolean value = newCastedCI.isMultiline();
-            if (value != null && !value.equals(isMultiline())){
-                diffCastedCI.setMultiline(value);
-            }
+        Boolean isMultiline = newCastedCI.isMultiline();
+        if (isMultiline != null && !isMultiline.equals(isMultiline())) {
+            diffCastedCI.setMultiline(isMultiline);
         }
-        {
-            Boolean value = newCastedCI.isResetOnClone();
-            if (value != null && !value.equals(isResetOnClone())){
-                diffCastedCI.setResetOnClone(value);
-            }
+        Boolean isResetOnClone = newCastedCI.isResetOnClone();
+        if (isResetOnClone != null && !isResetOnClone.equals(isResetOnClone())) {
+            diffCastedCI.setResetOnClone(isResetOnClone);
         }
-        {
-            Boolean value = newCastedCI.isResetOnRevision();
-            if (value != null && !value.equals(isResetOnRevision())){
-                diffCastedCI.setResetOnRevision(value);
-            }
+        Boolean isResetOnRevision = newCastedCI.isResetOnRevision();
+        if (isResetOnRevision != null && !isResetOnRevision.equals(isResetOnRevision())) {
+            diffCastedCI.setResetOnRevision(isResetOnRevision);
         }
-        {
-            Integer value = newCastedCI.getMaxLength();
-            if (value != null && !value.equals(getMaxLength())){
-                diffCastedCI.setMaxLength(value);
-            }
+        Integer maxLength = newCastedCI.getMaxLength();
+        if (maxLength != null && !maxLength.equals(getMaxLength())) {
+            diffCastedCI.setMaxLength(maxLength);
         }
-        {
-            ReversibleString value = newCastedCI.getDefaultValue();
-            if (value != null && !value.equals(getDefaultValue())){
-                diffCastedCI.setDefaultValue(value);
-            }
+        ReversibleString defaultValue = newCastedCI.getDefaultValue();
+        if (defaultValue != null && !defaultValue.equals(getDefaultValue())) {
+            diffCastedCI.setDefaultValue(defaultValue);
         }
-        {
-            ReversibleSet<String> oldValues = getRange();
-            ReversibleSet<String> newValues = newCastedCI.getRange();
-            for (String value:SlothSet.itemsToRemove(oldValues, newValues))
-                diffCastedCI.reverseRange(value);
-            for (String value:SlothSet.itemsToAdd(oldValues, newValues))
-                diffCastedCI.addRange(value);
+        ReversibleSet<String> oldValues = getRange();
+        ReversibleSet<String> newValues = newCastedCI.getRange();
+        for (String value : SlothSet.itemsToRemove(oldValues, newValues)) {
+            diffCastedCI.reverseRange(value);
+        }
+        for (String value : SlothSet.itemsToAdd(oldValues, newValues)) {
+            diffCastedCI.addRange(value);
         }
     }
 
     @Override
-    public boolean isEmpty(){
-        if (!super.isEmpty()) return false;
-        return isMultiline==null && isMultivalue==null && resetOnClone==null && resetOnRevision==null && maxLength==null && range.isEmpty() && defaultValue==null;
+    public boolean isEmpty() {
+        if (!super.isEmpty()) {
+            return false;
+        }
+        return isMultiline == null
+                && isMultivalue == null
+                && resetOnClone == null
+                && resetOnRevision == null
+                && maxLength == null
+                && range.isEmpty()
+                && defaultValue == null;
     }
 
     @Override
@@ -197,22 +208,22 @@ public class AttributeCI extends AdminObjectCI {
     }
 
     @Override
-    protected ScriptChunk buildCreateChunk(){
+    protected ScriptChunk buildCreateChunk() {
         return new AttributeCreateChunk(getCIFullName(), getType());
     }
 
     @Override
-    public AbstractCI buildDefaultCI(){
+    public AbstractCI buildDefaultCI() {
         return new AttributeCI(getName(), getType());
     }
 
-    public Map<String, Object> toMap(){
+    public Map<String, Object> toMap() {
         Map<String, Object> fieldsValues = super.toMap();
 
         fieldsValues.put(Y_TYPE, getType());
         fieldsValues.put(Y_MULTIVALUE, isMultivalue());
         fieldsValues.put(Y_MULTILINE, isMultiline());
-        fieldsValues.put(Y_DEFAULT, (getDefaultValue() == null)? null : getDefaultValue().toString());
+        fieldsValues.put(Y_DEFAULT, (getDefaultValue() == null) ? null : getDefaultValue().toString());
         fieldsValues.put(Y_RANGES, getRange());
         fieldsValues.put(Y_RESET_ON_CLONE, isResetOnClone());
         fieldsValues.put(Y_RESET_ON_REVISION, isResetOnRevision());

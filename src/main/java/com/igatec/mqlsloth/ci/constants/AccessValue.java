@@ -51,18 +51,22 @@ public enum AccessValue {
     ADDINTERFACE,
     REMOVEINTERFACE;
 
-    private static Set<String> stringValues = Collections.unmodifiableSet(Arrays.stream(values()).map(AccessValue::toString).collect(Collectors.toSet()));
+    private static Set<String> stringValues = Collections.unmodifiableSet(
+            Arrays.stream(values())
+                    .map(AccessValue::toString)
+                    .collect(Collectors.toSet())
+    );
 
-    public static AccessValue get(String value){
+    public static AccessValue get(String value) {
         return valueOf(value.toUpperCase());
     }
 
-    public static Set<String> stringValues(){
+    public static Set<String> stringValues() {
         return stringValues;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return super.toString().toLowerCase();
     }
 

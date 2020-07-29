@@ -9,7 +9,7 @@ public class TriggerValue {
     private final String input;
 
     public TriggerValue(String program, String input) {
-        this.program = program==null ? DEFAULT_PROGRAM : program;
+        this.program = program == null ? DEFAULT_PROGRAM : program;
         this.input = input;
     }
 
@@ -23,11 +23,15 @@ public class TriggerValue {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         TriggerValue that = (TriggerValue) o;
-        return Objects.equals(program, that.program) &&
-                Objects.equals(input, that.input);
+        return Objects.equals(program, that.program)
+                && Objects.equals(input, that.input);
     }
 
     @Override

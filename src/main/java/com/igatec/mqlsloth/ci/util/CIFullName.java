@@ -11,7 +11,7 @@ public class CIFullName implements Comparable<CIFullName> {
     private AbstractCIName ciName;
     private final Comparator<SlothAdminType> slothAdminTypeComparator;
 
-    public CIFullName(SlothAdminType adminType, AbstractCIName ciName){
+    public CIFullName(SlothAdminType adminType, AbstractCIName ciName) {
         this.adminType = adminType;
         this.ciName = ciName;
         slothAdminTypeComparator = new SlothAdminType.Comp();
@@ -31,11 +31,15 @@ public class CIFullName implements Comparable<CIFullName> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         CIFullName fullName = (CIFullName) o;
-        return adminType == fullName.adminType &&
-                Objects.equals(ciName, fullName.ciName);
+        return adminType == fullName.adminType
+                && Objects.equals(ciName, fullName.ciName);
     }
 
     @Override
@@ -44,15 +48,16 @@ public class CIFullName implements Comparable<CIFullName> {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return adminType + "_" + ciName;
     }
 
     @Override
     public int compareTo(CIFullName o) {
         int c = slothAdminTypeComparator.compare(adminType, o.adminType);
-        if (c != 0)
+        if (c != 0) {
             return c;
+        }
         return ciName.compareTo(o.ciName);
     }
 

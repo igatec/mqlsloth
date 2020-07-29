@@ -1,7 +1,8 @@
 package com.igatec.mqlsloth.script;
 
+// todo remove ignorace and refactor
+// CHECKSTYLE.OFF: InterfaceIsType
 public interface YAMLKeywords {
-
     String Y_ABSTRACT = "abstract";
     String Y_ADD = "add";
     String Y_ACCESS = "access";
@@ -26,7 +27,7 @@ public interface YAMLKeywords {
     String Y_DEFERRED = "deferred";
     String Y_DELETE = "delete";
     String Y_DERIVED = "derived";
-    String Y_DESCRIPTION = "description";//+
+    String Y_DESCRIPTION = "description";
     String Y_DIMENSION = "dimension";
     String Y_EKL = "EKL";
     String Y_ENFORCE_LOCKING = "enforceLocking";
@@ -106,3 +107,4 @@ public interface YAMLKeywords {
     String Y_COLUMN = "column";
     String Y_COLUMNS = "columns";
 }
+// CHECKSTYLE.OFF: InterfaceIsType

@@ -9,7 +9,7 @@ public class ExportExecutor extends AbstractExportExecutor {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return SlothAppCLI.EXPORT_OPT_L;
     }
 

@@ -22,15 +22,16 @@ public class AppConfig {
 
     private List<RemoteConfig> remotes = new LinkedList<>();
 
-    public void addRemote(RemoteConfig remote){
+    public void addRemote(RemoteConfig remote) {
         remotes.add(remote);
     }
 
-    public RemoteConfig getRemoteByName(String name){
+    public RemoteConfig getRemoteByName(String name) {
         RemoteConfig result = null;
-        for (RemoteConfig r:remotes){
-            if (name.equals(r.getName()))
+        for (RemoteConfig r : remotes) {
+            if (name.equals(r.getName())) {
                 result = r;
+            }
         }
         return result;
     }
@@ -39,14 +40,15 @@ public class AppConfig {
         this.remotes = new LinkedList<>(remotes);
     }
 
-    public List<RemoteConfig> getRemotes(){
+    public List<RemoteConfig> getRemotes() {
         return new LinkedList<>(remotes);
     }
 
-    public boolean validate(){
-        for (RemoteConfig rConf:remotes){
-            if (!rConf.validate())
+    public boolean validate() {
+        for (RemoteConfig rConf : remotes) {
+            if (!rConf.validate()) {
                 return false;
+            }
         }
         return true;
     }

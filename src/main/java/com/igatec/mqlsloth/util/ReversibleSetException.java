@@ -2,16 +2,19 @@ package com.igatec.mqlsloth.util;
 
 public class ReversibleSetException extends RuntimeException {
 
-    public ReversibleSetException(){
+    public ReversibleSetException() {
         super();
     }
-    public ReversibleSetException(String message){
+
+    public ReversibleSetException(String message) {
         super(message);
     }
-    public ReversibleSetException(String message, Throwable throwable){
+
+    public ReversibleSetException(String message, Throwable throwable) {
         super(message, throwable);
     }
-    public ReversibleSetException(Throwable throwable){
+
+    public ReversibleSetException(Throwable throwable) {
         super(throwable);
     }
 

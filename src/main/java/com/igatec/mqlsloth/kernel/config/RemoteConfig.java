@@ -41,14 +41,18 @@ public class RemoteConfig {
         this.name = name;
     }
 
-    public boolean validate(){
-        return name!=null && appUrl!=null && userName!=null && password!=null;
+    public boolean validate() {
+        return name != null && appUrl != null && userName != null && password != null;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         RemoteConfig that = (RemoteConfig) o;
         return Objects.equals(appUrl, that.appUrl);
     }

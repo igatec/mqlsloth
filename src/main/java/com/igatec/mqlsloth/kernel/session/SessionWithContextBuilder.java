@@ -15,9 +15,15 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 public class SessionWithContextBuilder implements SessionBuilder {
+    protected Context context;
+
     static void setTrustManager() throws Exception {
         SSLContext sc = SSLContext.getInstance("TLS");
-        sc.init((KeyManager[]) null, new TrustManager[]{new SessionWithContextBuilder.TrustAllTrustManager()}, (SecureRandom) null);
+        sc.init(
+                (KeyManager[]) null,
+                new TrustManager[]{new SessionWithContextBuilder.TrustAllTrustManager()},
+                (SecureRandom) null
+        );
         HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
     }
 
@@ -35,9 +41,6 @@ public class SessionWithContextBuilder implements SessionBuilder {
         public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
         }
     }
-
-
-    protected Context context;
 
     public void setContext(Context context) {
         this.context = context;

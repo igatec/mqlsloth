@@ -5,21 +5,20 @@ import com.igatec.mqlsloth.iface.kernel.RealtimeExecutionController;
 import com.igatec.mqlsloth.iface.kernel.Session;
 import com.igatec.mqlsloth.kernel.SlothException;
 
-;
-
 public class SessionWithContext implements Session {
 
     protected GlobalCommand command;
     private Context context;
 
-    protected SessionWithContext(){}
+    protected SessionWithContext() {
+    }
 
-    public SessionWithContext(Context context, TransactionMode transactionMode){
+    public SessionWithContext(Context context, TransactionMode transactionMode) {
         command = new GlobalCommand(context, transactionMode);
         this.context = context;
     }
 
-    public SessionWithContext(Context context){
+    public SessionWithContext(Context context) {
         this(context, TransactionMode.WRITE);
     }
 
@@ -28,7 +27,7 @@ public class SessionWithContext implements Session {
             String result = command.execute(args);
             commit();
             return result;
-        } catch (SlothException ex){
+        } catch (SlothException ex) {
             abort();
             throw ex;
         }
@@ -49,7 +48,7 @@ public class SessionWithContext implements Session {
     }
 
     @Override
-    public boolean hasCommand(){
+    public boolean hasCommand() {
         return command != null;
     }
 
@@ -69,8 +68,9 @@ public class SessionWithContext implements Session {
 
     @Override
     public GlobalCommand getCommand() throws SlothException {
-        if (command == null)
+        if (command == null) {
             throw new SlothException("MQL context is not connected");
+        }
         return command;
     }
 }

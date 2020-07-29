@@ -4,28 +4,25 @@ import com.igatec.mqlsloth.ci.constants.CIDiffMode;
 import com.igatec.mqlsloth.ci.constants.SlothAdminType;
 import com.igatec.mqlsloth.ci.util.BusCIName;
 import com.igatec.mqlsloth.ci.util.CIFullName;
-import com.igatec.mqlsloth.script.ScriptChunk;
-import com.igatec.mqlsloth.util.ReversibleMap;
 
-import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class ObjectGeneratorCI extends AdminBusCI {
 
-    public final static String BUS_TYPE = M_OBJECT_GENERATOR;
-    public final static String REL_TO_NG = M_NUMBER_GENERATOR;
+    public static final String BUS_TYPE = M_OBJECT_GENERATOR;
+    public static final String REL_TO_NG = M_NUMBER_GENERATOR;
 
-    public final static String ATTR_NAME_PREFIX = "eService Name Prefix";
-    public final static String ATTR_NAME_SUFFIX = "eService Name Suffix";
-    public final static String ATTR_TIME_LIMIT = "eService Processing Time Limit";
-    public final static String ATTR_RETRY_COUNT = "eService Retry Count";
-    public final static String ATTR_RETRY_DELAY = "eService Retry Delay";
-    public final static String ATTR_POLICY = "eService Safety Policy";
-    public final static String ATTR_VAULT = "eService Safety Vault";
+    public static final String ATTR_NAME_PREFIX = "eService Name Prefix";
+    public static final String ATTR_NAME_SUFFIX = "eService Name Suffix";
+    public static final String ATTR_TIME_LIMIT = "eService Processing Time Limit";
+    public static final String ATTR_RETRY_COUNT = "eService Retry Count";
+    public static final String ATTR_RETRY_DELAY = "eService Retry Delay";
+    public static final String ATTR_POLICY = "eService Safety Policy";
+    public static final String ATTR_VAULT = "eService Safety Vault";
 
-    private final static Set<String> ALL_ATTRS;
+    private static final Set<String> ALL_ATTRS;
 
     static {
         ALL_ATTRS = new TreeSet<>();
@@ -38,17 +35,18 @@ public class ObjectGeneratorCI extends AdminBusCI {
         ALL_ATTRS.add(ATTR_VAULT);
     }
 
-    public static CIFullName createCIFullName(String name, String revision){
+    public ObjectGeneratorCI(String name, String revision) {
+        this(name, revision, CIDiffMode.TARGET);
+    }
+
+    public static CIFullName createCIFullName(String name, String revision) {
         return new CIFullName(SlothAdminType.OBJECT_GENERATOR, new BusCIName(BUS_TYPE, name, revision));
     }
 
-    public static SortedSet<String> getAllAttributesNames(){
+    public static SortedSet<String> getAllAttributesNames() {
         return new TreeSet<>(ALL_ATTRS);
     }
 
-    public ObjectGeneratorCI(String name, String revision){
-        this(name, revision, CIDiffMode.TARGET);
-    }
     public ObjectGeneratorCI(String name, String revision, CIDiffMode diffMode) {
         super(
                 SlothAdminType.OBJECT_GENERATOR,
@@ -61,110 +59,114 @@ public class ObjectGeneratorCI extends AdminBusCI {
             initDiff();
         }
     }
-    private void initDiff(){
-        for (String attr:ALL_ATTRS){
+
+    private void initDiff() {
+        for (String attr : ALL_ATTRS) {
             super.setAttribute(attr, null);
         }
     }
-    private void initTarget(){
-        for (String attr:ALL_ATTRS){
+
+    private void initTarget() {
+        for (String attr : ALL_ATTRS) {
             super.setAttribute(attr, "");
         }
     }
 
-
-    public Boolean isNumberGeneratorConnected(){ // TODO debug may be needed
+    public Boolean isNumberGeneratorConnected() { // TODO debug may be needed
         return getFromConnections().size() > 0;
     }
-    public void disconnectNumberGenerator(){
+
+    public void disconnectNumberGenerator() {
         checkCIConstraint(isNumberGeneratorConnected());
         ConnectionPointer cp = super.getFromConnections().stream().findFirst().get();
         super.reverseFromConnection(cp);
     }
-    public void connectNumberGenerator(String name, String revision){
-        checkCIConstraint(name!=null, revision!=null, !isNumberGeneratorConnected());
+
+    public void connectNumberGenerator(String name, String revision) {
+        checkCIConstraint(name != null, revision != null, !isNumberGeneratorConnected());
         super.addFromConnection(new ConnectionPointer(
                 REL_TO_NG, new BusCIName(NumberGeneratorCI.BUS_TYPE, name, revision)
         ));
     }
-    public String getNumberGeneratorName(){
+
+    public String getNumberGeneratorName() {
         return null; // TODO
     }
-    public String getNumberGeneratorRevision(){
+
+    public String getNumberGeneratorRevision() {
         return null; // TODO
     }
 
     @Override
-    public void setAttribute(String key, String value){
-//        checkCIConstraint(ALL_ATTRS.contains(key), "Object generator object does not contain attribute '"+key+"'");
+    public void setAttribute(String key, String value) {
         super.setAttribute(key, value);
     }
 
-
-    public String getNamePrefix(){
+    public String getNamePrefix() {
         return getAttribute(ATTR_NAME_PREFIX);
     }
-    public void setNamePrefix(String value){
+
+    public void setNamePrefix(String value) {
         checkModeAssertion(value != null, CIDiffMode.TARGET);
         setAttribute(ATTR_NAME_PREFIX, value);
     }
 
-
-    public String getNameSuffix(){
+    public String getNameSuffix() {
         return getAttribute(ATTR_NAME_SUFFIX);
     }
-    public void setNameSuffix(String value){
+
+    public void setNameSuffix(String value) {
         checkModeAssertion(value != null, CIDiffMode.TARGET);
         setAttribute(ATTR_NAME_SUFFIX, value);
     }
 
-
-    public String getProcessingTimeLimit(){
+    public String getProcessingTimeLimit() {
         return getAttribute(ATTR_TIME_LIMIT);
     }
-    public void setProcessingTimeLimit(String value){
+
+    public void setProcessingTimeLimit(String value) {
         checkModeAssertion(value != null, CIDiffMode.TARGET);
         setAttribute(ATTR_TIME_LIMIT, value);
     }
 
-
-    public String getRetryCount(){
+    public String getRetryCount() {
         return getAttribute(ATTR_RETRY_COUNT);
     }
-    public void setRetryCount(String value){
+
+    public void setRetryCount(String value) {
         checkModeAssertion(value != null, CIDiffMode.TARGET);
         setAttribute(ATTR_RETRY_COUNT, value);
     }
 
-
-    public String getRetryDelay(){
+    public String getRetryDelay() {
         return getAttribute(ATTR_RETRY_DELAY);
     }
-    public void setRetryDelay(String value){
+
+    public void setRetryDelay(String value) {
         checkModeAssertion(value != null, CIDiffMode.TARGET);
         setAttribute(ATTR_RETRY_DELAY, value);
     }
 
-
-    public String getSafetyPolicy(){
+    public String getSafetyPolicy() {
         return getAttribute(ATTR_POLICY);
     }
-    public void setSafetyPolicy(String value){
+
+    public void setSafetyPolicy(String value) {
         checkModeAssertion(value != null, CIDiffMode.TARGET);
         setAttribute(ATTR_POLICY, value);
     }
 
-
-    public String getSafetyVault(){
+    public String getSafetyVault() {
         return getAttribute(ATTR_VAULT);
     }
-    public void setSafetyVault(String value){
+
+    public void setSafetyVault(String value) {
         checkModeAssertion(value != null, CIDiffMode.TARGET);
         setAttribute(ATTR_VAULT, value);
     }
 
     @Override
-    public ObjectGeneratorCI buildDiff(AbstractCI newCI){
+    public ObjectGeneratorCI buildDiff(AbstractCI newCI) {
         BusCIName tnr = (BusCIName) getCIName();
         ObjectGeneratorCI ci = (ObjectGeneratorCI) newCI;
         ObjectGeneratorCI diff = new ObjectGeneratorCI(tnr.getName(), tnr.getRevision(), CIDiffMode.DIFF);
@@ -173,9 +175,8 @@ public class ObjectGeneratorCI extends AdminBusCI {
     }
 
     @Override
-    public AbstractCI buildDefaultCI(){
+    public AbstractCI buildDefaultCI() {
         BusCIName tnr = (BusCIName) getCIName();
         return new ObjectGeneratorCI(tnr.getName(), tnr.getRevision());
     }
-
 }

@@ -15,7 +15,7 @@ public class TypeObjectParser extends TypeLikeObjectParser {
     }
 
     @Override
-    public Map<String, Function> getKeyWordsMQL(){
+    public Map<String, Function> getKeyWordsMQL() {
         Map<String, Function> keyWordsToValueMakers = super.getKeyWordsMQL();
 
         Function<String, Boolean> isComposedMaker = Boolean::valueOf;
@@ -46,7 +46,7 @@ public class TypeObjectParser extends TypeLikeObjectParser {
             throw new ParserException("Can't create " + M_TYPE + ". Name not found");
         }
 
-        CIDiffMode mode = CIDiffMode .valueOf((String) fieldsValues.getOrDefault("_mode", "TARGET"));
+        CIDiffMode mode = CIDiffMode.valueOf((String) fieldsValues.getOrDefault("_mode", "TARGET"));
         TypeCI createdObject = new TypeCI(name, mode);
         return createdObject;
     }

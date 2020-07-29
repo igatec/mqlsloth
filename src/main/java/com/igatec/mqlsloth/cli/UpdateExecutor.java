@@ -9,7 +9,7 @@ public class UpdateExecutor extends AbstractExportExecutor {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return SlothAppCLI.UPDATE_OPT_L;
     }
 

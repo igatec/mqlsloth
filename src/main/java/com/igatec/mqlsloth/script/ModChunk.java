@@ -7,17 +7,17 @@ import com.igatec.mqlsloth.ci.util.CIFullName;
 import org.apache.commons.lang3.ArrayUtils;
 
 public class ModChunk extends ScriptChunk implements AttachableChunk, HeadChunk {
-
     protected String[] cmdParam;
     protected boolean canBeAttached = true;
 
-    public ModChunk(CIFullName relatedCI, String... cmdParam){
+    public ModChunk(CIFullName relatedCI, String... cmdParam) {
         super(relatedCI);
         this.cmdParam = cmdParam;
         int prior = SlothAdminType.isBus(relatedCI.getAdminType()) ? ScriptPriority.SP_BUS_MODIFICATION : Integer.MIN_VALUE;
         setPriority(prior);
     }
-    public ModChunk(CIFullName relatedCI, int priority, String... cmdParam){
+
+    public ModChunk(CIFullName relatedCI, int priority, String... cmdParam) {
         this(relatedCI, cmdParam);
         int prior = SlothAdminType.isBus(relatedCI.getAdminType()) ? ScriptPriority.SP_BUS_MODIFICATION : priority;
         setPriority(prior);
@@ -34,17 +34,23 @@ public class ModChunk extends ScriptChunk implements AttachableChunk, HeadChunk 
 
     @Override
     public String[] getCommand() {
-        return ArrayUtils.addAll( getCommandHead(), getCommandParam() );
+        return ArrayUtils.addAll(getCommandHead(), getCommandParam());
     }
 
     @Override
-    public String[] getCommandHead(){
+    public String[] getCommandHead() {
         CIFullName ci = getRelatedCI();
         SlothAdminType aType = ci.getAdminType();
         String mqlKey = aType.getMqlKey();
-        if (SlothAdminType.isBus(aType)){
+        if (SlothAdminType.isBus(aType)) {
             BusCIName tnr = (BusCIName) ci.getCIName();
-            return new String[]{MqlKeywords.M_MODIFY, mqlKey, MqlUtil.qWrap(tnr.getType()), MqlUtil.qWrap(tnr.getName()), MqlUtil.qWrap(tnr.getRevision())};
+            return new String[]{
+                    MqlKeywords.M_MODIFY,
+                    mqlKey,
+                    MqlUtil.qWrap(tnr.getType()),
+                    MqlUtil.qWrap(tnr.getName()),
+                    MqlUtil.qWrap(tnr.getRevision())
+            };
         } else {
             return new String[]{MqlKeywords.M_MODIFY, mqlKey, MqlUtil.qWrap(ci.getName())};
         }
@@ -54,5 +60,4 @@ public class ModChunk extends ScriptChunk implements AttachableChunk, HeadChunk 
     public String[] getCommandParam() {
         return cmdParam;
     }
-
 }

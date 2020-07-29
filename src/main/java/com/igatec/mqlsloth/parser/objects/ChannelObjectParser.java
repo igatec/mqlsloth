@@ -2,12 +2,14 @@ package com.igatec.mqlsloth.parser.objects;
 
 import com.igatec.mqlsloth.ci.AbstractCI;
 import com.igatec.mqlsloth.ci.ChannelCI;
-import com.igatec.mqlsloth.ci.MenuCI;
 import com.igatec.mqlsloth.ci.constants.CIDiffMode;
 import com.igatec.mqlsloth.parser.ParserException;
 import com.igatec.mqlsloth.parser.mql.MqlParser;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 public class ChannelObjectParser extends UIComponentObjectParser {
@@ -17,7 +19,7 @@ public class ChannelObjectParser extends UIComponentObjectParser {
     }
 
     @Override
-    public Map<String, Function> getKeyWordsMQL(){
+    public Map<String, Function> getKeyWordsMQL() {
         Map<String, Function> keyWordsToValueMakers = super.getKeyWordsMQL();
         keyWordsToValueMakers.put(M_HEIGHT, Function.identity());
         Function<String, Collection> commandsMaker = MqlParser::parseListValue;
@@ -26,7 +28,7 @@ public class ChannelObjectParser extends UIComponentObjectParser {
     }
 
     @Override
-    public Map<String, Function> getKeyWordsYAML(){
+    public Map<String, Function> getKeyWordsYAML() {
         Map<String, Function> keyWordsToValueMakers = super.getKeyWordsYAML();
         keyWordsToValueMakers.put(Y_HEIGHT, Function.identity());
         keyWordsToValueMakers.put(Y_COMMANDS, Function.identity());
@@ -37,10 +39,10 @@ public class ChannelObjectParser extends UIComponentObjectParser {
     protected void setParsedMQLValuesToObject(Map<String, Object> parsedValues, AbstractCI parsebleObject) {
         super.setParsedMQLValuesToObject(parsedValues, parsebleObject);
         ChannelCI ci = (ChannelCI) parsebleObject;
-        Optional.ofNullable(parsedValues.get(M_HEIGHT)).ifPresent( value -> ci.setHeight((String) value));
-        if (parsedValues.containsKey(M_COMMAND)){
+        Optional.ofNullable(parsedValues.get(M_HEIGHT)).ifPresent(value -> ci.setHeight((String) value));
+        if (parsedValues.containsKey(M_COMMAND)) {
             List commands = (List) parsedValues.get(M_COMMAND);
-            for (Object item: commands){
+            for (Object item : commands) {
                 ci.addCommand((String) item);
             }
         }
@@ -50,10 +52,10 @@ public class ChannelObjectParser extends UIComponentObjectParser {
     protected void setParsedYAMLValuesToObject(Map<String, Object> parsedValues, AbstractCI abstractCI) {
         super.setParsedYAMLValuesToObject(parsedValues, abstractCI);
         ChannelCI ci = (ChannelCI) abstractCI;
-        Optional.ofNullable(parsedValues.get(Y_HEIGHT)).ifPresent( value -> ci.setHeight((String) value));
-        if (parsedValues.containsKey(Y_COMMANDS)){
+        Optional.ofNullable(parsedValues.get(Y_HEIGHT)).ifPresent(value -> ci.setHeight((String) value));
+        if (parsedValues.containsKey(Y_COMMANDS)) {
             List commands = (List) parsedValues.get(Y_COMMANDS);
-            for (Object item: commands){
+            for (Object item : commands) {
                 ci.addCommand((String) item);
             }
         }
@@ -65,7 +67,7 @@ public class ChannelObjectParser extends UIComponentObjectParser {
         if (name == null) {
             throw new ParserException("Can't create " + M_CHANNEL + ". Name not found");
         }
-        CIDiffMode mode = CIDiffMode .valueOf((String) fieldsValues.getOrDefault(Y_MODE, "TARGET"));
+        CIDiffMode mode = CIDiffMode.valueOf((String) fieldsValues.getOrDefault(Y_MODE, "TARGET"));
         ChannelCI createdObject = new ChannelCI(name, mode);
         return createdObject;
     }

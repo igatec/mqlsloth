@@ -3,20 +3,32 @@ package com.igatec.mqlsloth.ci;
 import com.igatec.mqlsloth.ci.annotation.ModBooleanProvider;
 import com.igatec.mqlsloth.ci.annotation.ModStringProvider;
 import com.igatec.mqlsloth.ci.annotation.ModStringSetProvider;
-import com.igatec.mqlsloth.ci.constants.*;
+import com.igatec.mqlsloth.ci.constants.AccessValue;
+import com.igatec.mqlsloth.ci.constants.CIDiffMode;
+import com.igatec.mqlsloth.ci.constants.ScriptPriority;
+import com.igatec.mqlsloth.ci.constants.SlothAdminType;
 import com.igatec.mqlsloth.ci.util.CIFullName;
 import com.igatec.mqlsloth.script.ModChunk;
 import com.igatec.mqlsloth.script.MqlUtil;
 import com.igatec.mqlsloth.script.ScriptChunk;
-import com.igatec.mqlsloth.util.*;
+import com.igatec.mqlsloth.util.DiffList;
+import com.igatec.mqlsloth.util.ReversibleSet;
+import com.igatec.mqlsloth.util.SlothSet;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class PolicyCI extends AdminObjectCI {
-
     private ReversibleSet<String> types;
     private String store;
     private ReversibleSet<String> formats; // TODO add to parsers
@@ -32,8 +44,11 @@ public class PolicyCI extends AdminObjectCI {
 
     private PolicyCI(String name, CIDiffMode diffMode) {
         super(SlothAdminType.POLICY, name, diffMode);
-        if (!isDiffMode()) initTarget();
-        else initDiff();
+        if (!isDiffMode()) {
+            initTarget();
+        } else {
+            initDiff();
+        }
     }
 
     private void initTarget() {
@@ -160,56 +175,50 @@ public class PolicyCI extends AdminObjectCI {
         PolicyCI newCastedCI = (PolicyCI) newCI;
         PolicyCI diffCastedCI = (PolicyCI) diffCI;
 
-        {
-            ReversibleSet<String> oldValues = getTypes();
-            ReversibleSet<String> newValues = newCastedCI.getTypes();
-            for (String value : SlothSet.itemsToRemove(oldValues, newValues))
-                diffCastedCI.reverseType(value);
-            for (String value : SlothSet.itemsToAdd(oldValues, newValues))
-                diffCastedCI.addType(value);
+        ReversibleSet<String> oldTypes = getTypes();
+        ReversibleSet<String> newTypes = newCastedCI.getTypes();
+        for (String value : SlothSet.itemsToRemove(oldTypes, newTypes)) {
+            diffCastedCI.reverseType(value);
         }
-        {
-            String value = newCastedCI.getStore();
-            if (value != null && !value.equals(getStore()))
-                diffCastedCI.setStore(value);
+        for (String value : SlothSet.itemsToAdd(oldTypes, newTypes)) {
+            diffCastedCI.addType(value);
         }
-        {
-            ReversibleSet<String> oldValues = getFormats();
-            ReversibleSet<String> newValues = newCastedCI.getFormats();
-            for (String value : SlothSet.itemsToRemove(oldValues, newValues))
-                diffCastedCI.reverseFormat(value);
-            for (String value : SlothSet.itemsToAdd(oldValues, newValues))
-                diffCastedCI.addFormat(value);
+        String store = newCastedCI.getStore();
+        if (store != null && !store.equals(getStore())) {
+            diffCastedCI.setStore(store);
         }
-        {
-            String value = newCastedCI.getDefaultFormat();
-            if (value != null && !value.equals(getDefaultFormat()))
-                diffCastedCI.setDefaultFormat(value);
+
+        ReversibleSet<String> oldFormats = getFormats();
+        ReversibleSet<String> newFormats = newCastedCI.getFormats();
+
+        for (String value : SlothSet.itemsToRemove(oldFormats, newFormats)) {
+            diffCastedCI.reverseFormat(value);
         }
-        {
-            Boolean value = newCastedCI.isLockingEnforced();
-            if (value != null && !value.equals(isLockingEnforced()))
-                diffCastedCI.setEnforceLocking(value);
+        for (String value : SlothSet.itemsToAdd(oldFormats, newFormats)) {
+            diffCastedCI.addFormat(value);
         }
-        {
-            String value = newCastedCI.getMinorSequence();
-            if (value != null && !value.equals(getMinorSequence()))
-                diffCastedCI.setMinorSequence(value);
+        String defaultFormat = newCastedCI.getDefaultFormat();
+        if (defaultFormat != null && !defaultFormat.equals(getDefaultFormat())) {
+            diffCastedCI.setDefaultFormat(defaultFormat);
         }
-        {
-            List<PolicyState> sl1 = getStates();
-            List<PolicyState> sl2 = newCastedCI.getStates();
-            diffCastedCI.states = new DiffList<>(
-                    sl1, sl2, PolicyState::getName, PolicyState::buildDiff
-            );
+        Boolean isLockingInforce = newCastedCI.isLockingEnforced();
+        if (isLockingInforce != null && !isLockingInforce.equals(isLockingEnforced())) {
+            diffCastedCI.setEnforceLocking(isLockingInforce);
         }
-        {
-            List<PolicyAllstateRules> allStates1 = getAllStatesRules();
-            List<PolicyAllstateRules> allStates2 = newCastedCI.getAllStatesRules();
-            diffCastedCI.allStates = new DiffList<>(
-                    allStates1, allStates2, item -> 0, PolicyAllstateRules::buildDiff
-            );
+        String minorSequence = newCastedCI.getMinorSequence();
+        if (minorSequence != null && !minorSequence.equals(getMinorSequence())) {
+            diffCastedCI.setMinorSequence(minorSequence);
         }
+        List<PolicyState> sl1 = getStates();
+        List<PolicyState> sl2 = newCastedCI.getStates();
+        diffCastedCI.states = new DiffList<>(
+                sl1, sl2, PolicyState::getName, PolicyState::buildDiff
+        );
+        List<PolicyAllstateRules> allStates1 = getAllStatesRules();
+        List<PolicyAllstateRules> allStates2 = newCastedCI.getAllStatesRules();
+        diffCastedCI.allStates = new DiffList<>(
+                allStates1, allStates2, item -> 0, PolicyAllstateRules::buildDiff
+        );
     }
 
     @Override
@@ -225,15 +234,14 @@ public class PolicyCI extends AdminObjectCI {
         return new PolicyCI(getName());
     }
 
+    // todo uncomment checkstyle ignore and refactor
+    // CHECKSTYLE.OFF: MethodLength
     @Override
     public List<ScriptChunk> buildUpdateScript() {
         CIFullName fName = getCIFullName();
         List<ScriptChunk> chunks = super.buildUpdateScript();
 
-        /* STATES */
-
         DiffList<PolicyState> states = (DiffList<PolicyState>) this.states;
-
         int lastIndex = states.size() - 1;
         int createAndRemoveStatePriority = ScriptPriority.SP_AFTER_ADMIN_CREATION_1;
         for (int i = lastIndex; i >= 0; i--) {
@@ -241,11 +249,11 @@ public class PolicyCI extends AdminObjectCI {
             DiffList.Mode mode = states.getMode(i);
             if (mode == DiffList.Mode.CREATE) {
                 ScriptChunk chunk;
-                if (i == lastIndex)
+                if (i == lastIndex) {
                     chunk = new ModChunk(fName, createAndRemoveStatePriority++,
                             M_ADD, M_STATE, state.getName()
                     );
-                else {
+                } else {
                     PolicyState nextState = states.get(i + 1);
                     String nextStateName = nextState.getName();
                     chunk = new ModChunk(fName, createAndRemoveStatePriority++,
@@ -310,14 +318,15 @@ public class PolicyCI extends AdminObjectCI {
             Map<TriggerKey, TriggerValue> triggers = state.getTriggers();
             for (TriggerKey key : triggers.keySet()) {
                 TriggerValue value = triggers.get(key);
-                if (value == null)
+                if (value == null) {
                     chunks.add(modStateChunk(state, ScriptPriority.SP_AFTER_ADMIN_CREATION_503,
                             M_REMOVE, M_TRIGGER, key.getAction().toString(), key.getPhase().toString()));
-                else
+                } else {
                     chunks.add(modStateChunk(state, ScriptPriority.SP_AFTER_ADMIN_CREATION_503,
                             M_ADD, M_TRIGGER, key.getAction().toString(), key.getPhase().toString(),
                             MqlUtil.qWrap(value.getProgram()), M_INPUT, MqlUtil.qWrap(value.getInput())
                     ));
+                }
             }
 
             List<PolicySignature> sigs = state.getSignatures();
@@ -405,20 +414,33 @@ public class PolicyCI extends AdminObjectCI {
                 Map<TriggerKey, TriggerValue> triggers = state.getTriggers();
                 for (TriggerKey key : triggers.keySet()) {
                     TriggerValue value = triggers.get(key);
-                    if (value == null)
-                        chunks.add(modAllStateChunk(ScriptPriority.SP_AFTER_ADMIN_CREATION_503,
-                                M_REMOVE, M_TRIGGER, key.getAction().toString(), key.getPhase().toString()));
-                    else
-                        chunks.add(modAllStateChunk(ScriptPriority.SP_AFTER_ADMIN_CREATION_503,
-                                M_ADD, M_TRIGGER, key.getAction().toString(), key.getPhase().toString(),
-                                MqlUtil.qWrap(value.getProgram()), M_INPUT, MqlUtil.qWrap(value.getInput())
+                    if (value == null) {
+                        chunks.add(
+                                modAllStateChunk(
+                                        ScriptPriority.SP_AFTER_ADMIN_CREATION_503,
+                                        M_REMOVE,
+                                        M_TRIGGER,
+                                        key.getAction().toString(),
+                                        key.getPhase().toString()
+                                )
+                        );
+                    } else {
+                        chunks.add(modAllStateChunk(
+                                ScriptPriority.SP_AFTER_ADMIN_CREATION_503,
+                                M_ADD, M_TRIGGER,
+                                key.getAction().toString(),
+                                key.getPhase().toString(),
+                                MqlUtil.qWrap(value.getProgram()),
+                                M_INPUT,
+                                MqlUtil.qWrap(value.getInput())
                         ));
+                    }
                 }
-
             }
         }
         return chunks;
     }
+    // CHECKSTYLE.OFF: MethodLength
 
     private ModChunk modStateChunk(PolicyState state, String... cmdParam) {
         return modStateChunk(state, ScriptPriority.SP_AFTER_ADMIN_CREATION_502, cmdParam);
@@ -471,11 +493,13 @@ public class PolicyCI extends AdminObjectCI {
         for (StateRecordKey recordKey : accessRecords.keySet()) {
             String k = "";
             List<String> modifs = recordKey.getModifiers();
-            if (modifs.size() > 0)
+            if (modifs.size() > 0) {
                 k = StringUtils.join(modifs, " ");
+            }
             String user = recordKey.getUser();
-            if (k != null && !k.isEmpty() && user != null)
+            if (k != null && !k.isEmpty() && user != null) {
                 k += " ";
+            }
             if (user != null) {
                 k += Y_USER + " " + user;
             }
@@ -500,8 +524,9 @@ public class PolicyCI extends AdminObjectCI {
                 line.append(filter);
             });
 
-            if (!aRecords.containsKey(k))
+            if (!aRecords.containsKey(k)) {
                 aRecords.put(k, new LinkedList<>());
+            }
             aRecords.get(k).add(line.toString());
         }
         result.put(Y_ACCESS, aRecords);
@@ -513,8 +538,9 @@ public class PolicyCI extends AdminObjectCI {
             TriggerValue tValue = triggers.get(tKey);
             triggersList.add(String.format("%s %s %s %s", key, tValue.getInput(), Y_PROGRAM, tValue.getProgram()));
         }
-        if (!triggersList.isEmpty())
+        if (!triggersList.isEmpty()) {
             result.put(Y_TRIGGERS, triggersList);
+        }
 
         if (state instanceof PolicyState) {
             PolicyState st = (PolicyState) state;
@@ -533,8 +559,9 @@ public class PolicyCI extends AdminObjectCI {
                 Optional.ofNullable(sig.getFilter()).ifPresent(v -> sigMap.put(Y_FILTER, v));
                 sigMaps.add(sigMap);
             }
-            if (!sigMaps.isEmpty())
+            if (!sigMaps.isEmpty()) {
                 result.put(Y_SIGNATURES, sigMaps);
+            }
         }
         return result;
     }

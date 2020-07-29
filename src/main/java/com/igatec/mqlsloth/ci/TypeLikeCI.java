@@ -38,7 +38,6 @@ public abstract class TypeLikeCI extends AdminObjectCI {
         attributes = new SlothSet<>(true);
     }
 
-
     @ModBooleanProvider(value = M_ABSTRACT, useTrueFalse = true)
     public Boolean isAbstract() {
         return isAbstract;
@@ -63,7 +62,6 @@ public abstract class TypeLikeCI extends AdminObjectCI {
         setParentType(new SlothString(null));
     }
 
-
     @ModStringSetProvider(value = M_ATTRIBUTE, addPriority = SP_ADD_ATTRIBUTE_TO)
     public ReversibleSet<String> getAttributes() {
         return new SlothSet<>(attributes, isDiffMode());
@@ -83,41 +81,36 @@ public abstract class TypeLikeCI extends AdminObjectCI {
         super.fillDiffCI(newCI, diffCI);
         TypeLikeCI newCastedCI = (TypeLikeCI) newCI;
         TypeLikeCI diffCastedCI = (TypeLikeCI) diffCI;
-        {
-            Boolean value = newCastedCI.isAbstract();
-            if (value != null && !value.equals(isAbstract())) {
-                diffCastedCI.setAbstract(value);
-            }
+        Boolean isAbstract = newCastedCI.isAbstract();
+        if (isAbstract != null && !isAbstract.equals(isAbstract())) {
+            diffCastedCI.setAbstract(isAbstract);
         }
-        {
-            SlothString value = newCastedCI.getParentType();
-            if (value != null && !value.equals(getParentType())) {
-                diffCastedCI.setParentType(value);
-            }
+        SlothString parentType = newCastedCI.getParentType();
+        if (parentType != null && !parentType.equals(getParentType())) {
+            diffCastedCI.setParentType(parentType);
         }
-        {
-            ReversibleSet<String> oldValues = getAttributes();
-            ReversibleSet<String> newValues = newCastedCI.getAttributes();
-            for (String value : SlothSet.itemsToRemove(oldValues, newValues))
-                diffCastedCI.reverseAttribute(value);
-            for (String value : SlothSet.itemsToAdd(oldValues, newValues))
-                diffCastedCI.addAttribute(value);
+        ReversibleSet<String> attrOldValues = getAttributes();
+        ReversibleSet<String> attrNewValues = newCastedCI.getAttributes();
+        for (String value : SlothSet.itemsToRemove(attrOldValues, attrNewValues)) {
+            diffCastedCI.reverseAttribute(value);
+        }
+        for (String value : SlothSet.itemsToAdd(attrOldValues, attrNewValues)) {
+            diffCastedCI.addAttribute(value);
         }
     }
 
     public boolean isEmpty() {
-        if (!super.isEmpty()) return false;
+        if (!super.isEmpty()) {
+            return false;
+        }
         return isAbstract == null && parentType == null && attributes.isEmpty();
     }
 
-
     public Map<String, Object> toMap() {
         Map<String, Object> fieldsValues = super.toMap();
-
         fieldsValues.put(Y_ABSTRACT, isAbstract());
         fieldsValues.put(Y_DERIVED, (getParentType() == null) ? null : getParentType().toString());
         fieldsValues.put(Y_ATTRIBUTES, getAttributes());
-
         return fieldsValues;
     }
 }

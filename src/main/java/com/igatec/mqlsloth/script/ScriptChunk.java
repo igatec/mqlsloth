@@ -52,14 +52,16 @@ public abstract class ScriptChunk {
     }
 
     public void addPreAssertion(Assertion assertion) {
-        if (preAsserions == null)
+        if (preAsserions == null) {
             preAsserions = new LinkedList<>();
+        }
         preAsserions.add(assertion);
     }
 
     public void addPostAssertion(Assertion assertion) {
-        if (postAsserions == null)
+        if (postAsserions == null) {
             postAsserions = new LinkedList<>();
+        }
         postAsserions.add(assertion);
     }
 

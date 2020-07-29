@@ -48,11 +48,9 @@ public class TypeCI extends TypeLikeCI {
         super.fillDiffCI(newCI, diffCI);
         TypeCI newCastedCI = (TypeCI) newCI;
         TypeCI diffCastedCI = (TypeCI) diffCI;
-        {
-            Boolean value = newCastedCI.isComposed();
-            if (value != null && !value.equals(isComposed())) {
-                diffCastedCI.setComposed(value);
-            }
+        Boolean isComposed = newCastedCI.isComposed();
+        if (isComposed != null && !isComposed.equals(isComposed())) {
+            diffCastedCI.setComposed(isComposed);
         }
     }
 
@@ -65,7 +63,9 @@ public class TypeCI extends TypeLikeCI {
     }
 
     public boolean isEmpty() {
-        if (!super.isEmpty()) return false;
+        if (!super.isEmpty()) {
+            return false;
+        }
         return isComposed == null;
     }
 
@@ -74,11 +74,9 @@ public class TypeCI extends TypeLikeCI {
         return new TypeCI(getName());
     }
 
-
     public Map<String, Object> toMap() {
         Map<String, Object> fieldsValues = super.toMap();
         fieldsValues.put(Y_COMPOSED, isComposed());
-
         return fieldsValues;
     }
 }

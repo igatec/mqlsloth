@@ -67,8 +67,9 @@ public enum SlothAdminType {
         }
         typesByAlias = new HashMap<>();
         for (SlothAdminType aType : SlothAdminType.values()) {
-            for (String alias : aType.aliases)
+            for (String alias : aType.aliases) {
                 typesByAlias.put(alias, aType);
+            }
         }
     }
 
@@ -103,6 +104,8 @@ public enum SlothAdminType {
     private final String[] aliases;
     private final String mqlBusType;
 
+    // todo remove ignorance and refactor
+    // CHECKSTYLE.OFF: ParameterNumber
     SlothAdminType(String mqlBusType, int order, String key, String mqlKey, MqlAdminType mqlAdminType, String... aliases) {
         this.order = order;
         this.key = key;
@@ -111,6 +114,7 @@ public enum SlothAdminType {
         this.aliases = aliases;
         this.mqlBusType = mqlBusType;
     }
+    // CHECKSTYLE.ON: ParameterNumber
 
     SlothAdminType(int order, String key, String... aliases) {
         this(null, order, key, null, null, aliases);

@@ -34,8 +34,9 @@ public class SlothDiffMap<V> extends HashMap<String, V> implements ReversibleMap
         Map<String, V> result = new HashMap<>();
         for (String key : keySet()) {
             V val = get(key);
-            if (val != null)
+            if (val != null) {
                 result.put(key, val);
+            }
         }
         return result;
     }

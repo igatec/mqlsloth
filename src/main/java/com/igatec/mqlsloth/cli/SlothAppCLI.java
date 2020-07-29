@@ -14,10 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
 
-;
-
 public class SlothAppCLI implements CLIConstants {
-
     private Context context = null;
     private final InteractiveSession interactiveSession = new InteractiveSession();
     private static boolean isMql = false;
@@ -36,19 +33,22 @@ public class SlothAppCLI implements CLIConstants {
     }
 
     private void run(Context context, String[] args) throws Exception {
-        if (context != null)
+        if (context != null) {
             isMql = true;
+        }
         boolean keep = false;
         Scanner clScanner = null;
-        if (!isMql)
+        if (!isMql) {
             clScanner = new Scanner(System.in); // This line kills MQL
+        }
         do {
             this.context = context;
             Options options = getOptions();
             try {
                 CommandLine cmd = new GnuParser().parse(options, args);
-                if (cmd.hasOption(CONTEXT_OPT))
+                if (cmd.hasOption(CONTEXT_OPT)) {
                     interactiveSession.setContextArgValue(cmd.getOptionValue(CONTEXT_OPT));
+                }
                 if (cmd.hasOption(HELP_OPT)) {
                     HelpFormatter formatter = new HelpFormatter();
                     try (InputStream is = getClass().getResourceAsStream("/sloth_help_message.txt")) {
@@ -59,14 +59,14 @@ public class SlothAppCLI implements CLIConstants {
                     formatter.printHelp("ant", options);
                 } else {
                     AbstractExecutor executor = getExecutor(cmd);
-                    if (executor != null)
+                    if (executor != null) {
                         executor.run(context, cmd);
+                    }
                     flushWriter();
                 }
-
-                if (cmd.hasOption(KEEP_OPT) && !isMql)
+                if (cmd.hasOption(KEEP_OPT) && !isMql) {
                     keep = !keep;
-
+                }
             } catch (Exception ex) {
                 if (keep) {
                     System.out.println(ex.getMessage());
@@ -82,14 +82,16 @@ public class SlothAppCLI implements CLIConstants {
                 System.out.print(" > ");
                 String next = clScanner.nextLine();
                 String contextValue = interactiveSession.getContextArgValue();
-                if (contextValue != null)
+                if (contextValue != null) {
                     next += String.format(" -%s %s", CONTEXT_OPT, contextValue);
+                }
                 args = Commandline.translateCommandline(next);
             }
 
         } while (keep);
-        if (!isMql)
+        if (!isMql) {
             clScanner.close();
+        }
         flushWriter();
         closeWriter();
     }
@@ -100,22 +102,30 @@ public class SlothAppCLI implements CLIConstants {
 
     private AbstractExecutor getExecutor(CommandLine cmd) {
         AbstractExecutor executor = null;
-        if (cmd.hasOption(EXPORT_OPT))
+        if (cmd.hasOption(EXPORT_OPT)) {
             executor = returnExecutorOrThrow(executor, new ExportExecutor(this));
-        if (cmd.hasOption(IMPORT_OPT) || cmd.hasOption(DIFF_OPT))
+        }
+        if (cmd.hasOption(IMPORT_OPT) || cmd.hasOption(DIFF_OPT)) {
             executor = returnExecutorOrThrow(executor, new DiffExecutor(this));
-        if (cmd.hasOption(UPDATE_OPT))
+        }
+        if (cmd.hasOption(UPDATE_OPT)) {
             executor = returnExecutorOrThrow(executor, new UpdateExecutor(this));
-        if (cmd.hasOption(EXEC_OPT))
+        }
+        if (cmd.hasOption(EXEC_OPT)) {
             executor = returnExecutorOrThrow(executor, new ExecExecutor(this));
-        if (cmd.hasOption(NEW_OPT))
+        }
+        if (cmd.hasOption(NEW_OPT)) {
             executor = returnExecutorOrThrow(executor, new CreateNewExecutor());
+        }
         return executor;
     }
 
     private AbstractExecutor returnExecutorOrThrow(AbstractExecutor ex1, AbstractExecutor ex2) {
-        if (ex1 != null)
-            throw new RuntimeException("Command line error: Two tasks cannot be executed within one command: " + ex1 + ", " + ex2);
+        if (ex1 != null) {
+            throw new RuntimeException(
+                    "Command line error: Two tasks cannot be executed within one command: " + ex1 + ", " + ex2
+            );
+        }
         return ex2;
     }
 
@@ -196,8 +206,9 @@ public class SlothAppCLI implements CLIConstants {
     }
 
     private void initMatrixWriter() {
-        if (matrixWriter == null)
+        if (matrixWriter == null) {
             matrixWriter = new MatrixWriter(context);
+        }
     }
 
     private static class InteractiveSession {
@@ -212,5 +223,4 @@ public class SlothAppCLI implements CLIConstants {
             this.contextArgValue = contextArgValue;
         }
     }
-
 }

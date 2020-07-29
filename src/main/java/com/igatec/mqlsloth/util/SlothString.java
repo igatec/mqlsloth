@@ -31,8 +31,12 @@ public class SlothString implements ReversibleString {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         SlothString that = (SlothString) o;
         return Objects.equals(value, that.value);
     }

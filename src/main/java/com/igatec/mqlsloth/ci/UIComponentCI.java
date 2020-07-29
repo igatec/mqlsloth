@@ -100,36 +100,32 @@ public abstract class UIComponentCI extends AdminObjectCI {
         super.fillDiffCI(newCI, diffCI);
         UIComponentCI newCastedCI = (UIComponentCI) newCI;
         UIComponentCI diffCastedCI = (UIComponentCI) diffCI;
-        {
-            String value = newCastedCI.getLabel();
-            if (value != null && !value.equals(getLabel())) {
-                diffCastedCI.setLabel(value);
-            }
+        String label = newCastedCI.getLabel();
+        if (label != null && !label.equals(getLabel())) {
+            diffCastedCI.setLabel(label);
         }
-        {
-            String value = newCastedCI.getAlt();
-            if (value != null && !value.equals(getAlt())) {
-                diffCastedCI.setAlt(value);
-            }
+        String alt = newCastedCI.getAlt();
+        if (alt != null && !alt.equals(getAlt())) {
+            diffCastedCI.setAlt(alt);
         }
-        {
-            String value = newCastedCI.getHref();
-            if (value != null && !value.equals(getHref())) {
-                diffCastedCI.setHref(value);
-            }
+        String href = newCastedCI.getHref();
+        if (href != null && !href.equals(getHref())) {
+            diffCastedCI.setHref(href);
         }
-        {
-            ReversibleMap<String> oldValues = getSettings();
-            ReversibleMap<String> newValues = newCastedCI.getSettings();
-            for (String key : SlothMapUtil.keysToRemove(oldValues, newValues))
-                diffCastedCI.setSetting(key, null);
-            for (Map.Entry<String, String> entry : SlothMapUtil.mapToAdd(oldValues, newValues).entrySet())
-                diffCastedCI.setSetting(entry.getKey(), entry.getValue());
+        ReversibleMap<String> oldSettings = getSettings();
+        ReversibleMap<String> newSettings = newCastedCI.getSettings();
+        for (String key : SlothMapUtil.keysToRemove(oldSettings, newSettings)) {
+            diffCastedCI.setSetting(key, null);
+        }
+        for (Map.Entry<String, String> entry : SlothMapUtil.mapToAdd(oldSettings, newSettings).entrySet()) {
+            diffCastedCI.setSetting(entry.getKey(), entry.getValue());
         }
     }
 
     public boolean isEmpty() {
-        if (!super.isEmpty()) return false;
+        if (!super.isEmpty()) {
+            return false;
+        }
         return label == null && alt == null && href == null && settings.isEmpty();
     }
 
@@ -137,27 +133,29 @@ public abstract class UIComponentCI extends AdminObjectCI {
     public List<ScriptChunk> buildUpdateScript() {
         List<ScriptChunk> chunks = super.buildUpdateScript();
         CIFullName fName = getCIFullName();
-
-        /* SETTINGS */
         SlothDiffMap<String> settings = (SlothDiffMap) getSettings();
-        for (String key : settings.keysToRemove())
+        for (String key : settings.keysToRemove()) {
             chunks.add(new ModChunk(fName, ScriptPriority.SP_AFTER_ADMIN_CREATION_1, M_REMOVE, M_SETTING, MqlUtil.qWrap(key)));
+        }
         Map<String, String> mapToAdd = settings.mapToAdd();
-        for (String key : mapToAdd.keySet())
-            chunks.add(new ModChunk(fName, ScriptPriority.SP_AFTER_ADMIN_CREATION_1, M_ADD, M_SETTING, MqlUtil.qWrap(key), MqlUtil.qWrap(mapToAdd.get(key))));
-
+        for (String key : mapToAdd.keySet()) {
+            chunks.add(
+                    new ModChunk(
+                            fName,
+                            ScriptPriority.SP_AFTER_ADMIN_CREATION_1, M_ADD, M_SETTING, MqlUtil.qWrap(key),
+                            MqlUtil.qWrap(mapToAdd.get(key))
+                    )
+            );
+        }
         return chunks;
     }
 
     public Map<String, Object> toMap() {
         Map<String, Object> fieldsValues = super.toMap();
-
         fieldsValues.put(Y_LABEL, getLabel());
         fieldsValues.put(Y_ALT, getAlt());
         fieldsValues.put(Y_HREF, getHref());
         fieldsValues.put(Y_SETTINGS, getSettings());
-
         return fieldsValues;
     }
-
 }

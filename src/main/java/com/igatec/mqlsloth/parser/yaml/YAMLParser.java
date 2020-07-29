@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class YAMLParser extends Parser {
+public final class YAMLParser extends Parser {
     private Map<String, Object> parsedValues;
     private ObjectMapper mapper;
 
@@ -48,7 +48,6 @@ public class YAMLParser extends Parser {
     private void initObjectMapper() {
         this.mapper = new ObjectMapper(new YAMLFactory().enable(YAMLGenerator.Feature.LITERAL_BLOCK_STYLE));
     }
-
 
     @Override
     protected void beforeParseObject() throws Exception {

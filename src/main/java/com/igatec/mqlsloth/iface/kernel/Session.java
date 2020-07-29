@@ -3,10 +3,7 @@ package com.igatec.mqlsloth.iface.kernel;
 import com.igatec.mqlsloth.framework.Context;
 import com.igatec.mqlsloth.kernel.SlothException;
 
-;
-
 public interface Session {
-
     void run() throws SlothException;
 
     RealtimeExecutionController getExecutionController();
@@ -15,6 +12,5 @@ public interface Session {
 
     boolean hasCommand();
 
-    public Context getContext();
-
+    Context getContext();
 }

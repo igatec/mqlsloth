@@ -103,7 +103,10 @@ public class RelationshipObjectParser extends TypeLikeObjectParser {
 
     private RelCIEnd makeRelCIEndMQL(String ciEndMql, RelationshipCI.End end) {
         try {
-            Parser<RelCIEnd> parser = MqlParser.fromStringAndObjectParser(ciEndMql, new RelObjectEndParser(format, end.toString()));
+            Parser<RelCIEnd> parser = MqlParser.fromStringAndObjectParser(
+                    ciEndMql,
+                    new RelObjectEndParser(format, end.toString())
+            );
             RelCIEnd relCIEnd = parser.parse();
             return relCIEnd;
         } catch (ParserException e) {
@@ -143,7 +146,10 @@ public class RelationshipObjectParser extends TypeLikeObjectParser {
 
     private RelCIEnd makeRelCIEndYAML(Map<String, Object> ciEndYAML, RelationshipCI.End end) {
         try {
-            Parser<RelCIEnd> parser = YAMLParser.fromMapAndObjectParser(ciEndYAML, new RelObjectEndParser(format, end.toString()));
+            Parser<RelCIEnd> parser = YAMLParser.fromMapAndObjectParser(
+                    ciEndYAML,
+                    new RelObjectEndParser(format, end.toString())
+            );
             RelCIEnd relCIEnd = parser.parse();
             return relCIEnd;
         } catch (ParserException e) {
@@ -155,11 +161,8 @@ public class RelationshipObjectParser extends TypeLikeObjectParser {
     @Override
     protected void setParsedJSONValuesToObject(Map<String, Object> parsedValues, AbstractCI parsebleObject) {
         super.setParsedJSONValuesToObject(parsedValues, parsebleObject);
-
         //todo
-        return;
     }
-
 
     public class RelObjectEndParser implements ObjectParser<RelCIEnd> {
         AbstractObjectParser.Format format;
@@ -251,7 +254,9 @@ public class RelationshipObjectParser extends TypeLikeObjectParser {
         }
 
         protected RelCIEnd createObject(Map<String, Object> fieldsValues) {
-            RelCIEnd relCIEnd = RelationshipObjectParser.this.createdObject.getEnd(RelationshipCI.End.valueOf(name.toUpperCase()));
+            RelCIEnd relCIEnd = RelationshipObjectParser.this.createdObject.getEnd(
+                    RelationshipCI.End.valueOf(name.toUpperCase())
+            );
             return relCIEnd;
         }
 
@@ -272,70 +277,69 @@ public class RelationshipObjectParser extends TypeLikeObjectParser {
         }
 
         protected void setParsedMQLValuesToObject(Map<String, Object> parsedValues, RelCIEnd parsebleObject) {
-            if (parsedValues.containsKey(M_TYPE)) {
-                // Do nothing because of inheritance problem
-            }
-
-            if (parsedValues.containsKey(M_RELATIONSHIP)) {
-                // Do nothing because of inheritance problem
-            }
-
             if (parsedValues.containsKey(M_MEANING)) {
                 String meaning = (String) parsedValues.get(M_MEANING);
                 parsebleObject.setMeaning(meaning);
             }
-
             if (parsedValues.containsKey(M_REVISION)) {
-                RelationshipCI.CloneBehaviour revisionBehaviour = (RelationshipCI.CloneBehaviour) parsedValues.get(M_REVISION);
+                RelationshipCI.CloneBehaviour revisionBehaviour =
+                        (RelationshipCI.CloneBehaviour) parsedValues.get(M_REVISION);
                 parsebleObject.setRevisionBehaviour(revisionBehaviour);
             }
-
             if (parsedValues.containsKey(M_CLONE)) {
                 RelationshipCI.CloneBehaviour cloneBehaviour = (RelationshipCI.CloneBehaviour) parsedValues.get(M_CLONE);
                 parsebleObject.setCloneBehaviour(cloneBehaviour);
             }
-
             if (parsedValues.containsKey(M_PROPAGATE_MODIFY)) {
                 Boolean propagateModify = (Boolean) parsedValues.get(M_PROPAGATE_MODIFY);
                 parsebleObject.setPropagateModify(propagateModify);
             }
-
             if (parsedValues.containsKey(M_PROPAGATE_CONNECTION)) {
                 Boolean propagateConnection = (Boolean) parsedValues.get(M_PROPAGATE_CONNECTION);
                 parsebleObject.setPropagateConnection(propagateConnection);
             }
-
             if (parsedValues.containsKey(M_CARDINALITY)) {
                 RelationshipCI.Cardinality cardinality = (RelationshipCI.Cardinality) parsedValues.get(M_CARDINALITY);
                 parsebleObject.setCardinality(cardinality);
             }
-
             return;
         }
 
         protected void setParsedYAMLValuesToObject(Map<String, Object> parsedValues, RelCIEnd parsebleObject) {
             if (parsedValues.containsKey(Y_TYPES)) {
-                Collection<String> types = (Collection<String>) parsedValues.getOrDefault(Y_TYPES, Collections.EMPTY_SET);
+                Collection<String> types = (Collection<String>) parsedValues.getOrDefault(
+                        Y_TYPES,
+                        Collections.EMPTY_SET
+                );
                 if (!types.contains(Y_NONE)) {
                     types.forEach(parsebleObject::addType);
                 }
             }
 
             if (parsedValues.containsKey(Y_REMOVE_PREFIX + Y_TYPES)) {
-                Collection<String> typesToRemove = (Collection<String>) parsedValues.getOrDefault(Y_REMOVE_PREFIX + Y_TYPES, Collections.EMPTY_SET);
+                Collection<String> typesToRemove = (Collection<String>) parsedValues.getOrDefault(
+                        Y_REMOVE_PREFIX + Y_TYPES,
+                        Collections.EMPTY_SET
+                );
                 typesToRemove.forEach(parsebleObject::reverseType);
             }
 
 
             if (parsedValues.containsKey(Y_RELATIONSHIPS)) {
-                Collection<String> relationships = (Collection<String>) parsedValues.getOrDefault(Y_RELATIONSHIPS, Collections.EMPTY_SET);
+                Collection<String> relationships = (Collection<String>) parsedValues.getOrDefault(
+                        Y_RELATIONSHIPS,
+                        Collections.EMPTY_SET
+                );
                 if (!relationships.contains(Y_NONE)) {
                     relationships.forEach(parsebleObject::addRelationship);
                 }
             }
 
             if (parsedValues.containsKey(Y_REMOVE_PREFIX + Y_RELATIONSHIPS)) {
-                Collection<String> relationshipsToRemove = (Collection<String>) parsedValues.getOrDefault(Y_REMOVE_PREFIX + Y_RELATIONSHIPS, Collections.EMPTY_SET);
+                Collection<String> relationshipsToRemove = (Collection<String>) parsedValues.getOrDefault(
+                        Y_REMOVE_PREFIX + Y_RELATIONSHIPS,
+                        Collections.EMPTY_SET
+                );
                 relationshipsToRemove.forEach(parsebleObject::reverseRelationship);
             }
 
@@ -345,12 +349,16 @@ public class RelationshipObjectParser extends TypeLikeObjectParser {
             }
 
             if (parsedValues.containsKey(Y_REVISION)) {
-                RelationshipCI.CloneBehaviour revisionBehaviour = RelationshipCI.CloneBehaviour.valueOf(((String) parsedValues.get(Y_REVISION)).toUpperCase());
+                RelationshipCI.CloneBehaviour revisionBehaviour = RelationshipCI.CloneBehaviour.valueOf(
+                        ((String) parsedValues.get(Y_REVISION)).toUpperCase()
+                );
                 parsebleObject.setRevisionBehaviour(revisionBehaviour);
             }
 
             if (parsedValues.containsKey(Y_CLONE)) {
-                RelationshipCI.CloneBehaviour cloneBehaviour = RelationshipCI.CloneBehaviour.valueOf(((String) parsedValues.get(Y_CLONE)).toUpperCase());
+                RelationshipCI.CloneBehaviour cloneBehaviour = RelationshipCI.CloneBehaviour.valueOf(
+                        ((String) parsedValues.get(Y_CLONE)).toUpperCase()
+                );
                 parsebleObject.setCloneBehaviour(cloneBehaviour);
             }
 
@@ -365,7 +373,9 @@ public class RelationshipObjectParser extends TypeLikeObjectParser {
             }
 
             if (parsedValues.containsKey(Y_CARDINALITY)) {
-                RelationshipCI.Cardinality cardinality = RelationshipCI.Cardinality.valueOf(((String) parsedValues.get(Y_CARDINALITY)).toUpperCase());
+                RelationshipCI.Cardinality cardinality = RelationshipCI.Cardinality.valueOf(
+                        ((String) parsedValues.get(Y_CARDINALITY)).toUpperCase()
+                );
                 parsebleObject.setCardinality(cardinality);
             }
 
@@ -374,8 +384,6 @@ public class RelationshipObjectParser extends TypeLikeObjectParser {
 
         protected void setParsedJSONValuesToObject(Map<String, Object> parsedValues, RelCIEnd parsebleObject) {
             //todo
-            return;
         }
-
     }
 }

@@ -18,8 +18,9 @@ public class StateRecordValue {
         this.accessValues = new HashSet<>();
         for (String s : accessValues) {
             AccessValue value = AccessValue.get(s);
-            if (value == null)
+            if (value == null) {
                 throw new IllegalArgumentException("Access value '" + s + "' is not valid");
+            }
             this.accessValues.add(value);
         }
         this.extraInfo = extraInfo;
@@ -40,12 +41,16 @@ public class StateRecordValue {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         StateRecordValue that = (StateRecordValue) o;
-        return Objects.equals(accessValues, that.accessValues) &&
-                Objects.equals(extraInfo, that.extraInfo) &&
-                Objects.equals(filter, that.filter);
+        return Objects.equals(accessValues, that.accessValues)
+                && Objects.equals(extraInfo, that.extraInfo)
+                && Objects.equals(filter, that.filter);
     }
 
     @Override

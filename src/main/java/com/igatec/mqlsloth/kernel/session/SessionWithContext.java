@@ -5,8 +5,6 @@ import com.igatec.mqlsloth.iface.kernel.RealtimeExecutionController;
 import com.igatec.mqlsloth.iface.kernel.Session;
 import com.igatec.mqlsloth.kernel.SlothException;
 
-;
-
 public class SessionWithContext implements Session {
 
     protected GlobalCommand command;
@@ -70,8 +68,9 @@ public class SessionWithContext implements Session {
 
     @Override
     public GlobalCommand getCommand() throws SlothException {
-        if (command == null)
+        if (command == null) {
             throw new SlothException("MQL context is not connected");
+        }
         return command;
     }
 }

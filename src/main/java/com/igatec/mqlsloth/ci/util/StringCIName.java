@@ -21,8 +21,12 @@ public class StringCIName extends AbstractCIName {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         StringCIName that = (StringCIName) o;
         return Objects.equals(name, that.name);
     }
@@ -35,8 +39,9 @@ public class StringCIName extends AbstractCIName {
     @Override
     public int compareTo(AbstractCIName o) {
         int c = super.compareTo(o);
-        if (c != 0)
+        if (c != 0) {
             return c;
+        }
         StringCIName that = (StringCIName) o;
         return name.compareTo(that.name);
     }

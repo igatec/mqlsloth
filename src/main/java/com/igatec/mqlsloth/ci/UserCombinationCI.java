@@ -42,17 +42,17 @@ public abstract class UserCombinationCI extends AdminObjectCI {
         super.fillDiffCI(newCI, diffCI);
         UserCombinationCI newCastedCI = (UserCombinationCI) newCI;
         UserCombinationCI diffCastedCI = (UserCombinationCI) diffCI;
-        {
-            String value = newCastedCI.getParent();
-            if (value != null && !value.equals(getParent())) {
-                diffCastedCI.setParent(value);
-            }
+        String parent = newCastedCI.getParent();
+        if (parent != null && !parent.equals(getParent())) {
+            diffCastedCI.setParent(parent);
         }
     }
 
     @Override
     public boolean isEmpty() {
-        if (!super.isEmpty()) return false;
+        if (!super.isEmpty()) {
+            return false;
+        }
         return parent == null;
     }
 
@@ -60,7 +60,6 @@ public abstract class UserCombinationCI extends AdminObjectCI {
     public Map<String, Object> toMap() {
         Map<String, Object> fieldsValues = super.toMap();
         fieldsValues.put(Y_PARENT, getParent());
-
         return fieldsValues;
     }
 }

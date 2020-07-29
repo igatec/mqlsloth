@@ -21,8 +21,9 @@ public abstract class SlothApp {
 
     static synchronized void registerSession(Session session) {
         Thread t = Thread.currentThread();
-        if (runningSessions.containsKey(t))
+        if (runningSessions.containsKey(t)) {
             throw new RuntimeException("Session is already registered");
+        }
         runningSessions.put(t, session);
     }
 

@@ -12,10 +12,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class Workspace {
-
+public final class Workspace {
     private final File dir;
-    private static final Map<Integer, Map<UUID, Workspace>> workspaces = new HashMap<>();
+    private static final Map<Integer, Map<UUID, Workspace>> WORKSPACES = new HashMap<>();
 
     private Workspace(String dir) {
         this.dir = new File(dir);
@@ -31,13 +30,13 @@ public class Workspace {
 
     public static void deleteAll(Session session) {
         int sessionHash = session.hashCode();
-        Map<UUID, Workspace> wss = workspaces.get(sessionHash);
+        Map<UUID, Workspace> wss = WORKSPACES.get(sessionHash);
         if (wss != null) {
             for (Workspace ws : wss.values()) {
                 ws.delete();
             }
         }
-        workspaces.remove(sessionHash);
+        WORKSPACES.remove(sessionHash);
     }
 
     public static Workspace create(Session session) throws SlothException {
@@ -52,10 +51,10 @@ public class Workspace {
         }
         Workspace ws = new Workspace(dirName);
         int sessionHash = session.hashCode();
-        if (!workspaces.containsKey(sessionHash)) {
-            workspaces.put(sessionHash, new HashMap<>());
+        if (!WORKSPACES.containsKey(sessionHash)) {
+            WORKSPACES.put(sessionHash, new HashMap<>());
         }
-        workspaces.get(sessionHash).put(key, ws);
+        WORKSPACES.get(sessionHash).put(key, ws);
         return ws;
     }
 
@@ -65,12 +64,12 @@ public class Workspace {
 
     private void delete() {
         try {
-            if (dir.exists())
+            if (dir.exists()) {
                 FileUtils.cleanDirectory(dir);
+            }
         } catch (IOException e) {
+            e.printStackTrace();
         }
         FileUtils.deleteQuietly(dir);
     }
-
-
 }

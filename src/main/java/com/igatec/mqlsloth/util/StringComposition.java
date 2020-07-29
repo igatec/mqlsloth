@@ -16,8 +16,9 @@ public class StringComposition {
     }
 
     public static StringComposition parse(String string) {
-        if (!isParsable(string))
+        if (!isParsable(string)) {
             throw new RuntimeException("StringComposition parsing error");
+        }
         StringComposition sc = new StringComposition();
         String delimiter = string.substring(DELIMITER_KEY.length(), string.indexOf(DELIMITER_END));
         String[] parts = string.split(delimiter);
@@ -43,11 +44,13 @@ public class StringComposition {
         while (true) {
             boolean contains = false;
             for (String text : parts.values()) {
-                if (text.contains(delim))
+                if (text.contains(delim)) {
                     contains = true;
+                }
             }
-            if (!contains)
+            if (!contains) {
                 break;
+            }
             delim = "<" + DEFAULT_DELIMITER + ">";
         }
         StringBuilder content = new StringBuilder();
@@ -62,6 +65,4 @@ public class StringComposition {
         }
         return content.toString();
     }
-
-
 }

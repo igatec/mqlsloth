@@ -12,6 +12,10 @@ import java.util.Queue;
 
 public class TextScriptBuilder implements Readable {
 
+    public static final int DWFAULT_COMMENTS_WIDTH = 80;
+    public static final int COMMENT_MIN_SIZE = 30;
+    public static final int COMMENT_MAX_SIZE = 255;
+    public static final int SOME_MAGIC_NUMBER = 100; // todo rename
     private Iterator<MqlAction> it;
     private int commentsWidth;
     private Queue<String> buffer = new LinkedList<>();
@@ -20,7 +24,7 @@ public class TextScriptBuilder implements Readable {
 
     public TextScriptBuilder(Iterator<MqlAction> iterator) {
         it = iterator;
-        setCommentsWidth(80);
+        setCommentsWidth(DWFAULT_COMMENTS_WIDTH);
     }
 
     private static String buildCommentLine(String text) {
@@ -32,15 +36,17 @@ public class TextScriptBuilder implements Readable {
         int length = strings.length;
         for (int i = 0; i < length; i++) {
             sb.append(strings[i]);
-            if (i < length - 1)
+            if (i < length - 1) {
                 sb.append(" ");
+            }
         }
         return sb.toString();
     }
 
     public void setCommentsWidth(int charCount) {
-        if (charCount < 30 || charCount > 255)
+        if (charCount < COMMENT_MIN_SIZE || charCount > COMMENT_MAX_SIZE) {
             throw new RuntimeException("MQL script comment width must be between 30 and 255");
+        }
         commentsWidth = charCount;
     }
 
@@ -61,8 +67,9 @@ public class TextScriptBuilder implements Readable {
                 } else {
                     buffer.addAll(buildCommentBlock("Unknown script action: " + action));
                 }
-                if (emptyLineBetweenItems)
+                if (emptyLineBetweenItems) {
                     buffer.add("");
+                }
             } else {
                 return null;
             }
@@ -81,7 +88,7 @@ public class TextScriptBuilder implements Readable {
             nextStart += width;
             nextEnd = Math.min(nextStart + width, text.length());
             result.add(buildCommentLine(text.substring(nextStart, nextEnd)));
-        } while (nextEnd < text.length() && counter < 100);
+        } while (nextEnd < text.length() && counter < SOME_MAGIC_NUMBER);
         return result;
     }
 

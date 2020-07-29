@@ -9,12 +9,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class YAMLKeysComparator implements Comparator<String> {
-
-    private static final YAMLKeysComparator instance;
+public final class YAMLKeysComparator implements Comparator<String> {
+    private static final YAMLKeysComparator INSTANCE;
 
     static {
-        instance = new YAMLKeysComparator();
+        INSTANCE = new YAMLKeysComparator();
     }
 
     private YAMLKeysComparator() {
@@ -39,7 +38,7 @@ public class YAMLKeysComparator implements Comparator<String> {
     private final List<String> keys;
 
     public static YAMLKeysComparator getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
     @Override
@@ -47,15 +46,15 @@ public class YAMLKeysComparator implements Comparator<String> {
         int index1 = keys.indexOf(o1);
         int index2 = keys.indexOf(o2);
         if (index1 != -1) {
-            if (index2 == -1)
+            if (index2 == -1) {
                 return -1;
-            else {
+            } else {
                 return Integer.compare(index1, index2);
             }
         } else {
-            if (index2 == -1)
+            if (index2 == -1) {
                 return o1.compareTo(o2);
-            else {
+            } else {
                 return 1;
             }
         }

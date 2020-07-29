@@ -34,8 +34,9 @@ public class SlothSet<E> extends HashSet<E> implements ReversibleSet<E> {
 
     public SlothSet(Collection<E> items, Collection<E> reversedItems) {
         for (E e : reversedItems) {
-            if (items.contains(e))
+            if (items.contains(e)) {
                 throw new ReversibleSetException(MATCHING_EXCEPTION_TEXT);
+            }
         }
         reversed.addAll(reversedItems);
         this.diffMode = true;
@@ -45,8 +46,9 @@ public class SlothSet<E> extends HashSet<E> implements ReversibleSet<E> {
     public static <C> Set<C> itemsToRemove(ReversibleSet<C> state1, ReversibleSet<C> state2) {
         HashSet<C> result = new HashSet<>();
         for (C c : state1) {
-            if (state2.shouldRemove(c))
+            if (state2.shouldRemove(c)) {
                 result.add(c);
+            }
         }
         return result;
     }
@@ -64,8 +66,9 @@ public class SlothSet<E> extends HashSet<E> implements ReversibleSet<E> {
     public static <C> Set<C> itemsToAdd(ReversibleSet<C> state1, ReversibleSet<C> state2) {
         HashSet<C> result = new HashSet<>();
         for (C c : state2) {
-            if (!state1.contains(c))
+            if (!state1.contains(c)) {
                 result.add(c);
+            }
         }
         return result;
     }
@@ -122,26 +125,30 @@ public class SlothSet<E> extends HashSet<E> implements ReversibleSet<E> {
     @Override
     public boolean reverseAll(Collection<? extends E> c) {
         boolean r = false;
-        for (E e : c)
+        for (E e : c) {
             r |= reverse(e);
+        }
         return r;
     }
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
         boolean r = false;
-        for (E e : c)
+        for (E e : c) {
             r |= add(e);
+        }
         return r;
     }
 
     @Override
     public Map<E, Boolean> toMap() {
         Map<E, Boolean> result = new HashMap<>();
-        for (E e : this)
+        for (E e : this) {
             result.put(e, true);
-        for (E e : reversed)
+        }
+        for (E e : reversed) {
             result.put(e, false);
+        }
         return result;
     }
 
@@ -167,9 +174,15 @@ public class SlothSet<E> extends HashSet<E> implements ReversibleSet<E> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
         SlothSet<?> slothSet = (SlothSet<?>) o;
         return Objects.equals(reversed, slothSet.reversed);
     }

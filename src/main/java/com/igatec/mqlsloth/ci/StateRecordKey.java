@@ -52,23 +52,32 @@ public class StateRecordKey implements Comparable<StateRecordKey> {
     @Override
     public int compareTo(StateRecordKey o) {
         int c = new CollectionComparator<String>().compare(modifiers, o.modifiers);
-        if (c != 0)
+        if (c != 0) {
             return c;
-        if (!Objects.equals(key, o.key))
+        }
+        if (!Objects.equals(key, o.key)) {
             return Objects.compare(key, o.key, String::compareTo);
-        if (Objects.equals(key, o.key))
+        }
+        if (Objects.equals(key, o.key)) {
             return 0;
-        if (key == null)
+        }
+        if (key == null) {
             return -1;
-        if (o.key == null)
+        }
+        if (o.key == null) {
             return 1;
+        }
         return key.compareTo(o.key);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         StateRecordKey that = (StateRecordKey) o;
         return compareTo(that) == 0;
     }

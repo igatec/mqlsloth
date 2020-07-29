@@ -29,17 +29,14 @@ public class RichMqlScript implements Iterable<MqlAction> {
     private int version = Integer.MIN_VALUE;
     private boolean hasItems = false;
 
-    public RichMqlScript addChunk(ScriptChunk chunk) {
-        version++;
-        hasItems = true;
-        int priority = chunk.getPriority();
-        Map<CIFullName, NavigableMap<CmdType, List<ScriptChunk>>> onePriorityMap = content.computeIfAbsent(priority, k -> new HashMap<>());
-        CIFullName ci = chunk.getRelatedCI();
-        SortedMap<CmdType, List<ScriptChunk>> oneCIMap = onePriorityMap.computeIfAbsent(ci, k -> new TreeMap<>());
-        CmdType cmdType = getCmdType(chunk);
-        List<ScriptChunk> oneCmdTypeChunks = oneCIMap.computeIfAbsent(cmdType, k -> new LinkedList<>());
-        oneCmdTypeChunks.add(chunk);
-        return this;
+    private static CmdType getCmdType(ScriptChunk chunk) {
+        if (chunk instanceof CreatingChunk) {
+            return CmdType.CREATE;
+        }
+        if (chunk instanceof DeletingChunk) {
+            return CmdType.DELETE;
+        }
+        return CmdType.MODIFY;
     }
 
     public RichMqlScript addChunks(Collection<ScriptChunk> chunks) {
@@ -49,12 +46,20 @@ public class RichMqlScript implements Iterable<MqlAction> {
         return this;
     }
 
-    private static CmdType getCmdType(ScriptChunk chunk) {
-        if (chunk instanceof CreatingChunk)
-            return CmdType.CREATE;
-        if (chunk instanceof DeletingChunk)
-            return CmdType.DELETE;
-        return CmdType.MODIFY;
+    public RichMqlScript addChunk(ScriptChunk chunk) {
+        version++;
+        hasItems = true;
+        int priority = chunk.getPriority();
+        Map<
+                CIFullName,
+                NavigableMap<CmdType, List<ScriptChunk>>
+                > onePriorityMap = content.computeIfAbsent(priority, k -> new HashMap<>());
+        CIFullName ci = chunk.getRelatedCI();
+        SortedMap<CmdType, List<ScriptChunk>> oneCIMap = onePriorityMap.computeIfAbsent(ci, k -> new TreeMap<>());
+        CmdType cmdType = getCmdType(chunk);
+        List<ScriptChunk> oneCmdTypeChunks = oneCIMap.computeIfAbsent(cmdType, k -> new LinkedList<>());
+        oneCmdTypeChunks.add(chunk);
+        return this;
     }
 
     @Override
@@ -67,7 +72,12 @@ public class RichMqlScript implements Iterable<MqlAction> {
         private int iterVersion = version;
         private boolean hasNext;
 
-        private Iterator<Map<CIFullName, NavigableMap<CmdType, List<ScriptChunk>>>> prioritiesMapIter = content.values().iterator();
+        private Iterator<
+                Map<
+                        CIFullName,
+                        NavigableMap<CmdType, List<ScriptChunk>>
+                        >
+                > prioritiesMapIter = content.values().iterator();
         private Iterator<NavigableMap<CmdType, List<ScriptChunk>>> cisMapIter;
         private NavigableMap<CmdType, List<ScriptChunk>> currentCIMap;
 
@@ -83,11 +93,12 @@ public class RichMqlScript implements Iterable<MqlAction> {
 
         @Override
         public MqlAction next() {
-            if (iterVersion != version)
+            if (iterVersion != version) {
                 throw new ConcurrentModificationException();
-            if (!hasNext())
+            }
+            if (!hasNext()) {
                 throw new NoSuchElementException();
-
+            }
             if (currentActions.isEmpty()) {
                 List<ScriptChunk> createAndModChunks = new ArrayList<>();
                 if (currentCIMap.containsKey(CmdType.CREATE)) {
@@ -98,29 +109,29 @@ public class RichMqlScript implements Iterable<MqlAction> {
                 }
 
                 int createAndModifyChunksLength = createAndModChunks.size();
-                for (int i = 0; i < createAndModifyChunksLength; i++) { // TODO modify this piece of code to concatenate commands that can be joined
+                // TODO modify this piece of code to concatenate commands that can be joined
+                for (int i = 0; i < createAndModifyChunksLength; i++) {
                     ScriptChunk chunk = createAndModChunks.get(i);
-
-                    // JPO
                     if (chunk instanceof JPOCompileChunk) {
                         JPOCompileChunk ch = (JPOCompileChunk) chunk;
                         currentActions.add(new JPOCompileAction(ch.getName(), ch.getCode()));
                         continue;
                     }
-
-                    // Symbolic name
                     if (chunk instanceof ModSymbolicNameChunk) {
                         ModSymbolicNameChunk ch = (ModSymbolicNameChunk) chunk;
                         currentActions.add(new ModSymbolicNameAction(ch.getCiType(), ch.getCiName(), ch.getSymbolicName()));
                         continue;
                     }
-
                     List<AttachableChunk> chunksToAttach = new LinkedList<>();
                     if (chunk instanceof HeadChunk && !chunk.hasPostAsserions()) {
                         while (i < createAndModifyChunksLength - 1) {
                             i++;
                             ScriptChunk nextChunk = createAndModChunks.get(i);
-                            if (nextChunk instanceof AttachableChunk && ((AttachableChunk) nextChunk).canBeAttached() && !nextChunk.hasPreAsserions()) {
+                            if (
+                                    nextChunk instanceof AttachableChunk
+                                            && ((AttachableChunk) nextChunk).canBeAttached()
+                                            && !nextChunk.hasPreAsserions()
+                            ) {
                                 chunksToAttach.add((AttachableChunk) nextChunk);
                             } else {
                                 i--;
@@ -128,7 +139,6 @@ public class RichMqlScript implements Iterable<MqlAction> {
                             }
                         }
                     }
-
                     boolean hasAssertions = chunk.hasAssertions();
                     if (hasAssertions) {
                         currentActions.addAll(chunk.getPreAsserions());
@@ -139,11 +149,14 @@ public class RichMqlScript implements Iterable<MqlAction> {
                         String[][] params = new String[chunksToAttachCount][];
                         for (int j = 0; j < chunksToAttachCount; j++) {
                             String[] temp = chunksToAttach.get(j).getCommandParam();
-                            // todo refactor this! This is temporary solution to fix bug when new attr containing range definitions is being created
-                            if (chunk instanceof AttributeCreateChunk && M_ADD.equals(temp[0]) && temp.length > 1 && M_RANGE.equals(temp[1]))
+                            // todo refactor this! This is temporary solution to fix bug when new attr
+                            //  containing range definitions is being created
+                            if (chunk instanceof AttributeCreateChunk && M_ADD.equals(temp[0])
+                                    && temp.length > 1 && M_RANGE.equals(temp[1])) {
                                 params[j] = Arrays.copyOfRange(temp, 1, temp.length);
-                            else
+                            } else {
                                 params[j] = temp;
+                            }
                         }
                         command.setParams(params);
                     }
@@ -152,7 +165,6 @@ public class RichMqlScript implements Iterable<MqlAction> {
                         currentActions.addAll(chunk.getPostAsserions());
                     }
                 }
-
                 if (currentCIMap.containsKey(CmdType.DELETE)) {
                     List<ScriptChunk> chunks = currentCIMap.get(CmdType.DELETE);
                     for (ScriptChunk chunk : chunks) {
@@ -167,29 +179,26 @@ public class RichMqlScript implements Iterable<MqlAction> {
                         }
                     }
                 }
-
-                if (cisMapIter.hasNext())
+                if (cisMapIter.hasNext()) {
                     currentCIMap = cisMapIter.next();
-                else if (prioritiesMapIter.hasNext()) {
+                } else if (prioritiesMapIter.hasNext()) {
                     cisMapIter = prioritiesMapIter.next().values().iterator();
                     currentCIMap = cisMapIter.next();
                 } else {
                     hasNext = false;
                 }
             }
-
             return currentActions.poll();
         }
 
         @Override
         public boolean hasNext() {
-            if (iterVersion != version)
+            if (iterVersion != version) {
                 throw new ConcurrentModificationException();
+            }
             return currentActions.size() > 0 || hasNext;
         }
-
     }
-
 }
 
 enum CmdType {
@@ -199,16 +208,18 @@ enum CmdType {
 class CmdTypeComparator implements Comparator<CmdType> {
     @Override
     public int compare(CmdType o1, CmdType o2) {
-        if (o1 == o2)
+        if (o1 == o2) {
             return 0;
+        }
         if (o1 == CmdType.CREATE) {
             return -1;
         }
         if (o1 == CmdType.MODIFY) {
-            if (o2 == CmdType.CREATE)
+            if (o2 == CmdType.CREATE) {
                 return 1;
-            else
+            } else {
                 return -1;
+            }
         }
         if (o1 == CmdType.DELETE) {
             return 1;

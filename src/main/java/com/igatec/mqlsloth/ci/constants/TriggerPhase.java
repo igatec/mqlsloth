@@ -11,7 +11,11 @@ public enum TriggerPhase {
     ACTION,
     OVERRIDE;
 
-    private static Set<String> stringValues = Collections.unmodifiableSet(Arrays.stream(values()).map(TriggerPhase::toString).collect(Collectors.toSet()));
+    private static Set<String> stringValues = Collections.unmodifiableSet(
+            Arrays.stream(values())
+                    .map(TriggerPhase::toString)
+                    .collect(Collectors.toSet())
+    );
 
     public static TriggerPhase get(String value) {
         return valueOf(value.toUpperCase());

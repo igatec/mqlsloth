@@ -33,9 +33,9 @@ public class TriggerCI extends AdminBusCI {
 
     static {
         ALL_ARGS_INDEXES = new TreeSet<>();
-        for (int i = FIRST_ARG; i <= LAST_ARG; i++)
+        for (int i = FIRST_ARG; i <= LAST_ARG; i++) {
             ALL_ARGS_INDEXES.add(i);
-
+        }
         ALL_ATTRS = new TreeSet<>();
         ALL_ATTRS.add(ATTR_ERROR_TYPE);
         ALL_ATTRS.add(ATTR_PROGRAM_NAME);
@@ -90,14 +90,19 @@ public class TriggerCI extends AdminBusCI {
         setErrorType(ATTR_ERROR_TYPE_DEFAULT_VALUE);
     }
 
-
     private String getProgramArgKey(int i) {
-        checkCIConstraint("Trigger can contain arguments: [" + FIRST_ARG + " ... " + LAST_ARG + "]", i >= FIRST_ARG, i <= LAST_ARG);
+        checkCIConstraint(
+                "Trigger can contain arguments: [" + FIRST_ARG + " ... " + LAST_ARG + "]",
+                i >= FIRST_ARG, i <= LAST_ARG
+        );
         return ATTR_PROGRAM_ARG_PREFIX + i;
     }
 
     private String getProgramArgDescKey(int i) {
-        checkCIConstraint("Trigger can contain arguments: [" + FIRST_ARG + " ... " + LAST_ARG + "]", i >= FIRST_ARG, i <= LAST_ARG);
+        checkCIConstraint(
+                "Trigger can contain arguments: [" + FIRST_ARG + " ... " + LAST_ARG + "]",
+                i >= FIRST_ARG, i <= LAST_ARG
+        );
         return ATTR_PROGRAM_ARG_DESC_PREFIX + i;
     }
 
@@ -118,10 +123,8 @@ public class TriggerCI extends AdminBusCI {
 
     @Override
     public void setAttribute(String key, String value) {
-//        checkCIConstraint(ALL_ATTRS.contains(key), "Trigger object does not contain attribute '"+key+"'");
         super.setAttribute(key, value);
     }
-
 
     public String getErrorType() {
         return getAttribute(ATTR_ERROR_TYPE);
@@ -132,7 +135,6 @@ public class TriggerCI extends AdminBusCI {
         setAttribute(ATTR_ERROR_TYPE, value);
     }
 
-
     public String getProgram() {
         return getAttribute(ATTR_PROGRAM_NAME);
     }
@@ -141,7 +143,6 @@ public class TriggerCI extends AdminBusCI {
         checkModeAssertion(value != null, CIDiffMode.TARGET);
         setAttribute(ATTR_PROGRAM_NAME, value);
     }
-
 
     public String getMethod() {
         return getAttribute(ATTR_METHOD_NAME);
@@ -152,7 +153,6 @@ public class TriggerCI extends AdminBusCI {
         setAttribute(ATTR_METHOD_NAME, value);
     }
 
-
     public String getTargetStates() {
         return getAttribute(ATTR_TARGET_STATES);
     }
@@ -161,7 +161,6 @@ public class TriggerCI extends AdminBusCI {
         checkModeAssertion(value != null, CIDiffMode.TARGET);
         setAttribute(ATTR_TARGET_STATES, value);
     }
-
 
     public String getSequenceNumber() {
         return getAttribute(ATTR_SEQUENCE_NUMBER);
@@ -172,7 +171,6 @@ public class TriggerCI extends AdminBusCI {
         setAttribute(ATTR_SEQUENCE_NUMBER, value);
     }
 
-
     public String getConstructorArgs() {
         return getAttribute(ATTR_CONSTRUCTOR_ARGUMENTS);
     }
@@ -181,7 +179,6 @@ public class TriggerCI extends AdminBusCI {
         checkModeAssertion(value != null, CIDiffMode.TARGET);
         setAttribute(ATTR_CONSTRUCTOR_ARGUMENTS, value);
     }
-
 
     public Boolean isActive() {
         String active = getState();
@@ -207,5 +204,4 @@ public class TriggerCI extends AdminBusCI {
         BusCIName tnr = (BusCIName) getCIName();
         return new TriggerCI(tnr.getName(), tnr.getRevision());
     }
-
 }

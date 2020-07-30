@@ -82,8 +82,6 @@ public class GlobalCommand implements IMqlCommand {
             } catch (Exception e) {
                 abort();
                 throw new CommandExecutionException(e);
-            } finally {
-                System.out.println("");
             }
         } else {
             try {

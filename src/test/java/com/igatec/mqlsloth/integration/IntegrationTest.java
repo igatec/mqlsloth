@@ -37,32 +37,14 @@ class IntegrationTest {
     }
 
     private void mockCommand(String cmd, String result) throws SlothException {
-        int i = 1;
-        StringBuilder sb = new StringBuilder();
         String[] cmdArr = cmd.split(" ");
-        for (String s : cmdArr) {
-            sb.append("$");
-            sb.append(i);
-            sb.append(" ");
-            i++;
-        }
-        sb.deleteCharAt(sb.length() -1);
 
-        when(command.executeOrThrow(any(), eq(sb.toString()), eq(Arrays.asList(cmdArr))))
+        when(command.executeOrThrow(any(), eq(generateCommandTemplate(cmdArr)), eq(Arrays.asList(cmdArr))))
                 .thenReturn(result);
     }
 
     private void mockCommandUsingFile(String cmd, String fileWithResult) throws SlothException {
-        int i = 1;
-        StringBuilder sb = new StringBuilder();
         String[] cmdArr = cmd.split(" ");
-        for (String s : cmdArr) {
-            sb.append("$");
-            sb.append(i);
-            sb.append(" ");
-            i++;
-        }
-        sb.deleteCharAt(sb.length() -1);
 
         String fileContent = new BufferedReader(new InputStreamReader(
                 getClass().getResourceAsStream("/mqloutput/" + fileWithResult)
@@ -70,8 +52,21 @@ class IntegrationTest {
                 .lines()
                 .collect(Collectors.joining("\n"));
 
-        when(command.executeOrThrow(any(), eq(sb.toString()), eq(Arrays.asList(cmdArr))))
+        when(command.executeOrThrow(any(), eq(generateCommandTemplate(cmdArr)), eq(Arrays.asList(cmdArr))))
                 .thenReturn(fileContent);
+    }
+
+    private static String generateCommandTemplate(String[] cmd) {
+        int i = 1;
+        StringBuilder sb = new StringBuilder();
+        for (String s : cmd) {
+            sb.append("$");
+            sb.append(i);
+            sb.append(" ");
+            i++;
+        }
+        sb.deleteCharAt(sb.length() -1);
+        return sb.toString();
     }
 
     private static String[] args(String args) {

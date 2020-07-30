@@ -1,5 +1,6 @@
 package com.igatec.mqlsloth.kernel.session;
 
+import com.igatec.mqlsloth.context.ApplicationContext;
 import com.igatec.mqlsloth.framework.Context;
 import com.igatec.mqlsloth.framework.ContextUtil;
 import com.igatec.mqlsloth.framework.MQLCommand;
@@ -8,11 +9,11 @@ import com.igatec.mqlsloth.kernel.CommandExecutionException;
 import com.igatec.mqlsloth.kernel.SlothException;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -35,7 +36,7 @@ public class GlobalCommand implements IMqlCommand {
     public GlobalCommand(Context context, TransactionMode transactionMode) {
         this.context = context;
         this.transactionMode = transactionMode;
-        command = MQLCommand.instance();
+        command = ApplicationContext.instance().getMqlCommand();
         if (SYNCHRONOUS) {
             executorService = null;
         } else {
@@ -72,34 +73,21 @@ public class GlobalCommand implements IMqlCommand {
         String cmdWithQuotes = String.join(" ", args);
         unpackQuotes(args);
         String result;
+        List<String> argsList = Arrays.asList(args);
 
         if (SYNCHRONOUS) {
             try {
-                MQLCommand com = MQLCommand.instance();
-                com.executeCommand(context, cmd, args);
-                com.close(context);
-                String error = com.getError();
-                if (error == null || error.equals("")) {
-                    result = com.getResult();
-                } else {
-                    throw new SlothException(error);
-                }
+//                MQLCommand com = MQLCommand.instance();
+                result = command.executeOrThrow(context, cmd, argsList);
             } catch (Exception e) {
                 abort();
                 throw new CommandExecutionException(e);
+            } finally {
+                System.out.println("");
             }
         } else {
             try {
-                Callable<String> tCallable = () -> {
-                    command.executeCommand(context, cmd, args);
-                    String error = command.getError();
-                    if (error == null || error.equals("")) {
-                        return command.getResult();
-                    } else {
-                        throw new SlothException(error);
-                    }
-                };
-                Future<String> future = executorService.submit(tCallable);
+                Future<String> future = executorService.submit(() -> command.executeOrThrow(context, cmd, argsList));
                 try {
                     result = future.get(TIMEOUT, TimeUnit.MILLISECONDS);
                 } catch (InterruptedException e) {

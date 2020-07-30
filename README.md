@@ -31,5 +31,5 @@ exec prog Sloth -n type MyPart -l /Customizations/;
 ``` 
 
 ##  Contribution     
-If you want to contribute and you are now a member of the organization please make a fork and create a pull request to merge your changes.   
+If you want to contribute and you are not a member of the organization please make a fork and create a pull request to merge your changes.   
 Please use number of issue in commit message to make a link to the issue, e.g. `#7 checkstyle config file was added`.   

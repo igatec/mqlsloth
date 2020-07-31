@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -44,7 +45,7 @@ class IntegrationTest {
 
         SlothAppCLI.main(generateContext(), args("-e -p type Document -t ."));
 
-        verifyFileExport(".\\dataModel\\type\\Document.yml", "dataModel/type/Document.yml");
+        verifyFileExport("./dataModel/type/Document.yml", "dataModel/type/Document.yml");
     }
 
     private void verifyFileExport(String expectedFilePath, String expectedContentPath) throws IOException {
@@ -53,7 +54,7 @@ class IntegrationTest {
         verify(fileWriterService).writeNewFile(fileCaptor.capture(), contentCaptor.capture());
 
         String actualExportPath = fileCaptor.getValue().getPath();
-        assertThat(actualExportPath, equalTo(expectedFilePath));
+        assertThat(Paths.get(actualExportPath), equalTo(Paths.get(expectedFilePath)));
 
         String actualContent = contentCaptor.getValue();
         assertThat(

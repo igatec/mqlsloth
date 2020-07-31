@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface MQLCommand {
 
-    String executeOrThrow(Context context, String cmd, List<String> args) throws SlothException;
+    String executeOrThrow(String cmd, List<String> args) throws SlothException;
 }

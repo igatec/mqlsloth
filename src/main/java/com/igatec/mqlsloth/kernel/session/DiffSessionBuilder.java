@@ -32,7 +32,6 @@ public class DiffSessionBuilder extends AbstractSessionBuilder {
     public void setIsImport(boolean isImport) {
         this.isImport = isImport;
     }
-
 }
 
 class DefaultDiffSessionConfig extends DefaultConfig {

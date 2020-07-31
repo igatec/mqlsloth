@@ -6,17 +6,14 @@ import java.util.List;
 
 public class MQLCommandImpl implements MQLCommand {
 
-    private final static MQLCommand INSTANCE = new MQLCommandImpl();
+    private Context context;
 
-    public static MQLCommand instance() {
-        return INSTANCE;
-    }
-
-    private MQLCommandImpl() {
+    public void setContext(Context context) {
+        this.context = context;
     }
 
     @Override
-    public String executeOrThrow(Context context, String cmd, List<String> args) throws SlothException {
+    public String executeOrThrow(String cmd, List<String> args) throws SlothException {
         executeCommand(context, cmd, args.toArray(new String[]{}));
         close(context);
         String error = getError();

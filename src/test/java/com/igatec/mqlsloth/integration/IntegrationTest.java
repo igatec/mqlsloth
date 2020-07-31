@@ -66,7 +66,7 @@ class IntegrationTest {
     private void mockCommand(String cmd, String result) throws SlothException {
         String[] cmdArr = cmd.split(" ");
 
-        when(command.executeOrThrow(any(), eq(generateCommandTemplate(cmdArr)), eq(Arrays.asList(cmdArr))))
+        when(command.executeOrThrow(eq(generateCommandTemplate(cmdArr)), eq(Arrays.asList(cmdArr))))
                 .thenReturn(result);
     }
 
@@ -75,7 +75,7 @@ class IntegrationTest {
 
         String fileContent = readFileFromClasspath("/mqloutput/" + fileWithResult);
 
-        when(command.executeOrThrow(any(), eq(generateCommandTemplate(cmdArr)), eq(Arrays.asList(cmdArr))))
+        when(command.executeOrThrow(eq(generateCommandTemplate(cmdArr)), eq(Arrays.asList(cmdArr))))
                 .thenReturn(fileContent);
     }
 

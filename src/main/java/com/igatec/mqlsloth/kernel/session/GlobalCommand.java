@@ -78,14 +78,14 @@ public class GlobalCommand implements IMqlCommand {
         if (SYNCHRONOUS) {
             try {
 //                MQLCommand com = MQLCommand.instance();
-                result = command.executeOrThrow(context, cmd, argsList);
+                result = command.executeOrThrow(cmd, argsList);
             } catch (Exception e) {
                 abort();
                 throw new CommandExecutionException(e);
             }
         } else {
             try {
-                Future<String> future = executorService.submit(() -> command.executeOrThrow(context, cmd, argsList));
+                Future<String> future = executorService.submit(() -> command.executeOrThrow(cmd, argsList));
                 try {
                     result = future.get(TIMEOUT, TimeUnit.MILLISECONDS);
                 } catch (InterruptedException e) {
@@ -141,11 +141,6 @@ public class GlobalCommand implements IMqlCommand {
         if (executorService != null) {
             executorService.shutdown();
         }
-    }
-
-    @Override
-    public Context getContext() {
-        return context;
     }
 
     private void unpackQuotes(String[] arr) {

@@ -1,5 +1,6 @@
 package com.igatec.mqlsloth.cli;
 
+import com.igatec.mqlsloth.context.ApplicationContext;
 import com.igatec.mqlsloth.framework.Context;
 import com.igatec.mqlsloth.framework.MatrixWriter;
 import org.apache.commons.cli.CommandLine;
@@ -36,6 +37,7 @@ public class SlothAppCLI implements CLIConstants {
         if (context != null) {
             isMql = true;
         }
+        ApplicationContext.instance().setFrameworkContext(context);
         boolean keep = false;
         Scanner clScanner = null;
         if (!isMql) {

@@ -12,6 +12,7 @@ import com.igatec.mqlsloth.ci.util.AbstractCIName;
 import com.igatec.mqlsloth.ci.util.BusCIName;
 import com.igatec.mqlsloth.ci.util.CIFullName;
 import com.igatec.mqlsloth.ci.util.StringCIName;
+import com.igatec.mqlsloth.context.ApplicationContext;
 import com.igatec.mqlsloth.framework.Context;
 import com.igatec.mqlsloth.framework.Page;
 import com.igatec.mqlsloth.iface.kernel.IMqlCommand;
@@ -348,7 +349,7 @@ public class DBInputProvider extends AbstractInputProviderPatternInterpreter {
             } else if (aType == SlothAdminType.PAGE) {
                 PageCI ciCast = (PageCI) ci;
                 Page apiPage = new Page(fullName.getCIName().toString());
-                Context ctx = mqlCommand.getContext();
+                Context ctx = ApplicationContext.instance().getFrameworkContext();
                 apiPage.open(ctx);
                 String content = apiPage.getContents(ctx);
                 apiPage.close(ctx);

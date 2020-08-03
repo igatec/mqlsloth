@@ -1,37 +1,10 @@
 package com.igatec.mqlsloth.framework;
 
+import com.igatec.mqlsloth.kernel.SlothException;
+
+import java.util.List;
+
 public interface MQLCommand {
-    static MQLCommand instance() {
-        return new MQLCommand() {
-            @Override
-            public void executeCommand(Context context, String cmd, String... args) {
-                // todo
-            }
 
-            @Override
-            public void close(Context context) {
-                // todo
-            }
-
-            @Override
-            public String getError() {
-                // todo
-                return null;
-            }
-
-            @Override
-            public String getResult() {
-                // todo
-                return null;
-            }
-        };
-    }
-
-    void executeCommand(Context context, String cmd, String... args);
-
-    void close(Context context);
-
-    String getError();
-
-    String getResult();
+    String executeOrThrow(String cmd, List<String> args) throws SlothException;
 }

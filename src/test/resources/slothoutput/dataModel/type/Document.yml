@@ -1,0 +1,10 @@
+adminType: "type"
+name: "Document"
+symbolicName: ""
+description: ""
+attributes: []
+abstract: false
+composed: false
+derived: null
+hidden: false
+properties: {}

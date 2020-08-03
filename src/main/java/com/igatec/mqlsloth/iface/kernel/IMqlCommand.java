@@ -1,6 +1,5 @@
 package com.igatec.mqlsloth.iface.kernel;
 
-import com.igatec.mqlsloth.framework.Context;
 import com.igatec.mqlsloth.kernel.CommandExecutionException;
 import com.igatec.mqlsloth.kernel.SlothException;
 
@@ -14,6 +13,4 @@ public interface IMqlCommand {
     void commit() throws SlothException;
 
     void close();
-
-    Context getContext();
 }

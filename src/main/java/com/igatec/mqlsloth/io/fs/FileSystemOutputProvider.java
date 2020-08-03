@@ -6,6 +6,7 @@ import com.igatec.mqlsloth.ci.ProgramCI;
 import com.igatec.mqlsloth.ci.constants.CIDiffMode;
 import com.igatec.mqlsloth.ci.constants.SlothAdminType;
 import com.igatec.mqlsloth.ci.util.CIFullName;
+import com.igatec.mqlsloth.context.ApplicationContext;
 import com.igatec.mqlsloth.iface.io.PersistenceFormat;
 import com.igatec.mqlsloth.iface.util.Readable;
 import com.igatec.mqlsloth.io.AbstractOutputProvider;
@@ -30,9 +31,11 @@ public class FileSystemOutputProvider extends AbstractOutputProvider {
     );
 
     private final String directory;
+    private final FileWriterService fileWriterService;
 
     public FileSystemOutputProvider(String directory) {
         this.directory = directory;
+        this.fileWriterService = ApplicationContext.instance().getFileWriterService();
     }
 
     @Override
@@ -62,7 +65,7 @@ public class FileSystemOutputProvider extends AbstractOutputProvider {
                 progCI.setCode(code);
                 if (progCI.getProgramType() == ProgramCI.Type.JAVA) {
                     String contentFilePath = FSUtil.buildContentFilePath(directory, fullName, ProgramCI.Type.JAVA);
-                    FileUtils.writeStringToFile(new File(contentFilePath), code, false);
+                    fileWriterService.writeNewFile(new File(contentFilePath), code);
                 }
             } else if (ci instanceof PageCI) {
                 String content = ((PageCI) ci).getContent();
@@ -73,11 +76,11 @@ public class FileSystemOutputProvider extends AbstractOutputProvider {
                         directory, FSUtil.REL_PATHS.getValue(SlothAdminType.PAGE),
                         "content", fullName.getName()
                 );
-                FileUtils.writeStringToFile(new File(contentFilePath), content, false);
+                fileWriterService.writeNewFile(new File(contentFilePath), content);
             } else {
                 ciString = writer.stringify(ci);
             }
-            FileUtils.writeStringToFile(ciFile, ciString, false);
+            fileWriterService.writeNewFile(ciFile, ciString);
         } catch (ParserException | IOException e) {
             throw new SlothException(e);
         }

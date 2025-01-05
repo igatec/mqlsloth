@@ -1,9 +1,12 @@
 ![Java CI](https://github.com/igatec/mqlsloth/workflows/Java%20CI/badge.svg?branch=master) 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/igatec/mqlsloth/blob/master/LICENSE.txt)     
+
+# NOT SUPPORTED ANYMORE  
+Not all functionality is working! Please stay tuned!  
   
 #   MQLSloth
-**WIP**  
-Now library is under migration. Not all functionality is working! Please stay tuned!  
+Tool to develop data model.  
+
 ##  Install
 *   package library
 ```cmd
